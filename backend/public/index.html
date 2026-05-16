@@ -151,6 +151,13 @@
             color: #666;
             margin-top: 5px;
         }
+
+        .battery-percent {
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            text-align: center;
+        }
         
         .update-time {
             text-align: center;
@@ -231,6 +238,21 @@
             <div class="card">
                 <h2>📍 Devices</h2>
                 <div id="devices"></div>
+            </div>
+
+            <div class="card">
+                <h2>Gateway Battery</h2>
+                <div id="gatewayBattery">
+                    <div class="battery-percent">-</div>
+                    <div class="info-row">
+                        <span class="info-label">Voltage:</span>
+                        <span class="info-value">-</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">Status:</span>
+                        <span class="info-value">-</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -367,6 +389,9 @@
                 // Fetch stats
                 const statsResponse = await fetch(`${BACKEND_URL}/stats`);
                 const stats = await statsResponse.json();
+
+                const gatewayResponse = await fetch(`${BACKEND_URL}/gateway/status`);
+                const gatewayStatus = await gatewayResponse.json();
                 
                 // Update map
                 let centerLat = 0, centerLon = 0, count = 0;
@@ -390,6 +415,7 @@
                 // Update sidebar
                 updateDevices(positions);
                 updateStats(stats);
+                updateGatewayBattery(gatewayStatus);
                 
                 // Center map on average position
                 if (count > 0) {
@@ -483,10 +509,40 @@
                                 ${'▂'.repeat(signalBars)}${'▂'.repeat(5-signalBars)} ${data.signal_strength} dBm
                             </span>
                         </div>
+                        <div class="info-row">
+                            <span class="info-label">Battery:</span>
+                            <span class="info-value">${data.battery !== undefined ? data.battery + '%' : '-'}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">HaLow:</span>
+                            <span class="info-value">0x${(data.halow_status || 0).toString(16).padStart(2, '0')}</span>
+                        </div>
                     </div>
                 `;
             }
             devicesDiv.innerHTML = html;
+        }
+
+        function updateGatewayBattery(status) {
+            const batteryDiv = document.getElementById('gatewayBattery');
+            const lastUpdate = status.last_update ? new Date(status.last_update) : null;
+            const ageSeconds = lastUpdate ? Math.round((Date.now() - lastUpdate.getTime()) / 1000) : null;
+            const stateText = status.is_active ? `Active (${ageSeconds}s ago)` : 'Stale';
+            const statusClass = status.is_active ? 'status-active' : 'status-inactive';
+            const batteryText = status.battery !== undefined ? `${status.battery}%` : '-';
+            const voltageText = status.battery_mv ? `${status.battery_mv} mV` : '-';
+
+            batteryDiv.innerHTML = `
+                <div class="battery-percent">${batteryText}</div>
+                <div class="info-row">
+                    <span class="info-label">Voltage:</span>
+                    <span class="info-value">${voltageText}</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Status:</span>
+                    <span class="info-value"><span class="status-badge ${statusClass}"></span>${stateText}</span>
+                </div>
+            `;
         }
         
         function updateStats(stats) {

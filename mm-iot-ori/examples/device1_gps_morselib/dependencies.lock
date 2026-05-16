@@ -4,7 +4,7 @@ dependencies:
     - name: idf
       version: '>=5.1.1'
     source:
-      path: C:\mm-iot-ori\framework\src\hostap
+      path: C:\Code\RUSC\mm-iot-ori\framework\src\hostap
       type: local
     targets:
     - esp32s3
@@ -24,7 +24,7 @@ dependencies:
       path: ../src/mmutils
       version: ==2.10.4-esp32
     source:
-      path: C:\mm-iot-ori\framework\mm_shims
+      path: C:\Code\RUSC\mm-iot-ori\framework\mm_shims
       type: local
     targets:
     - esp32s3
@@ -40,7 +40,7 @@ dependencies:
       path: ../mmutils
       version: ==2.10.4-esp32
     source:
-      path: C:\mm-iot-ori\framework\src\mmipal
+      path: C:\Code\RUSC\mm-iot-ori\framework\src\mmipal
       type: local
     targets:
     - esp32s3
@@ -56,7 +56,7 @@ dependencies:
       path: ../mmipal
       version: ==2.10.4-esp32
     source:
-      path: C:\mm-iot-ori\framework\src\mmiperf
+      path: C:\Code\RUSC\mm-iot-ori\framework\src\mmiperf
       type: local
     targets:
     - esp32s3
@@ -69,7 +69,7 @@ dependencies:
     - name: idf
       version: '>=5.1.1'
     source:
-      path: C:\mm-iot-ori\framework\src\mmpktmem
+      path: C:\Code\RUSC\mm-iot-ori\framework\src\mmpktmem
       type: local
     targets:
     - esp32s3
@@ -82,7 +82,7 @@ dependencies:
     - name: idf
       version: '>=5.1.1'
     source:
-      path: C:\mm-iot-ori\framework\src\mmregdb
+      path: C:\Code\RUSC\mm-iot-ori\framework\src\mmregdb
       type: local
     targets:
     - esp32s3
@@ -95,7 +95,7 @@ dependencies:
     - name: idf
       version: '>=5.1.1'
     source:
-      path: C:\mm-iot-ori\framework\src\mmutils
+      path: C:\Code\RUSC\mm-iot-ori\framework\src\mmutils
       type: local
     targets:
     - esp32s3
@@ -114,7 +114,7 @@ dependencies:
       path: ../src/hostap
       version: ==2.10.4-esp32
     source:
-      path: C:\mm-iot-ori\framework\morselib
+      path: C:\Code\RUSC\mm-iot-ori\framework\morselib
       type: local
     targets:
     - esp32s3

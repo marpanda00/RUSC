@@ -30,6 +30,7 @@
 #include "lwip/sys.h"
 #include "lwip/netdb.h"
 #include "driver/gpio.h"
+#include "esp_adc/adc_oneshot.h"
 #include "esp_bt.h"
 #include "esp_gap_ble_api.h"
 #include "esp_gatts_api.h"
@@ -58,11 +59,12 @@ extern "C" {
 #define LOG_ERROR(fmt, ...)  ESP_LOGE(LOG_TAG, fmt, ##__VA_ARGS__)
 #define LOG_DEBUG(fmt, ...)  ESP_LOGD(LOG_TAG, fmt, ##__VA_ARGS__)
 
-// Battery monitoring - DISABLED (ADC driver not available in build)
-// #define BATTERY_PIN ADC1_CHANNEL_2  // GPIO 2 for battery
-// #define BATTERY_MIN_MV 2800         // Empty battery (3.0V)
-// #define BATTERY_MAX_MV 4200         // Full battery (4.2V)
-// #define BATTERY_UPDATE_INTERVAL_MS 5000
+// HT-HC33 battery sense: VBAT -> 100K -> ADC_IN/GPIO1 -> 100K -> GND.
+#define BATTERY_ADC_CHANNEL ADC_CHANNEL_0
+#define BATTERY_ADC_ATTEN ADC_ATTEN_DB_12
+#define BATTERY_EMPTY_MV 3000
+#define BATTERY_FULL_MV 4200
+#define GATEWAY_STATUS_INTERVAL_MS 30000
 
 // UDP/HaLow configuration
 #define UDP_PORT 5001
@@ -93,6 +95,31 @@ extern "C" {
 #define STATIC_LOCAL_IP "192.168.1.1"
 #define STATIC_NETMASK "255.255.255.0"
 #define STATIC_GATEWAY "192.168.1.1"
+
+#define RUSC_TELEMETRY_MAGIC 0x5254
+#define RUSC_TELEMETRY_VERSION 1
+#define RUSC_DEVICE1_ID "device_1_collector"
+
+#pragma pack(push, 1)
+typedef struct {
+    uint16_t magic;
+    uint8_t version;
+    uint8_t device_index;
+    uint16_t seq;
+    int32_t lat_e7;
+    int32_t lon_e7;
+    int32_t alt_cm;
+    uint16_t speed_centi_knots;
+    uint8_t sats;
+    uint8_t quality;
+    uint16_t battery_mv;
+    uint8_t battery_pct;
+    uint8_t halow_status;
+    uint16_t crc16;
+} rusc_telemetry_packet_t;
+#pragma pack(pop)
+
+static_assert(sizeof(rusc_telemetry_packet_t) == 28, "Unexpected telemetry packet size");
 // Task configuration
 #define IMPROV_BLE_APP_ID 0
 #define IMPROV_TASK_STACK_SIZE 4096
@@ -111,9 +138,9 @@ enum ImprovError {
     ERROR_NONE = 0x00,
     ERROR_INVALID_RPC = 0x01,
     ERROR_UNKNOWN_RPC = 0x02,
-    ERROR_UNEXPECTED_STATE = 0x03,
+    ERROR_UNABLE_TO_CONNECT = 0x03,
     ERROR_NOT_AUTHORIZED = 0x04,
-    ERROR_UNKNOWN = 0x05
+    ERROR_UNKNOWN = 0xFF
 };
 
 
@@ -130,30 +157,35 @@ static uint16_t improv_scan_rsp_len = 0;
 static uint8_t raw_adv_data;
 static uint16_t raw_adv_len = 0;
 
-// Improv Serial Protocol Constants
-enum ImprovCommand { UNKNOWN = 0x00, WIFI_SETTINGS = 0x01, IDENTIFY = 0x02, GET_CURRENT_STATE = 0x03, GET_DEVICE_INFO = 0x04 };
+// Improv RPC command IDs from the BLE specification.
+enum ImprovCommand { UNKNOWN = 0x00, WIFI_SETTINGS = 0x01, IDENTIFY = 0x02, GET_DEVICE_INFO = 0x03, SCAN_WIFI = 0x04 };
 //enum ImprovState { STATE_STOPPED = 0x00, STATE_AWAITING_AUTHORIZATION = 0x01, STATE_AUTHORIZED = 0x02, STATE_PROVISIONING = 0x03, STATE_PROVISIONED = 0x04 };
 //enum ImprovError { ERROR_NONE = 0x00, ERROR_INVALID_RPC = 0x01, ERROR_UNKNOWN_RPC = 0x02, ERROR_UNABLE_TO_CONNECT = 0x03, ERROR_NOT_AUTHORIZED = 0x04, ERROR_UNKNOWN = 0x05 };
 
 static const char* IMPROV_PREFIX = "IMPROV";
 
-// Improv BLE UUIDs (Official Specification - 16-bit)
-// Service UUID: 0x184E (Improv WiFi Service)
-// Characteristic UUIDs:
-// - Current State (0x0001): State of provisioning (Notify, Read)
-// - Error (0x0002): Error information (Notify, Read)
-// - RPC Command (0x0003): Commands from client (Write)
-// - RPC Result (0x0004): Results from commands (Notify, Read)
-// Service Data UUID: 0x184E (used in advertisement)
-
-static const uint16_t improv_service_uuid = 0x184E;
-static const uint16_t improv_current_state_uuid = 0x0001;
-static const uint16_t improv_error_uuid = 0x0002;
-static const uint16_t improv_rpc_command_uuid = 0x0003;
-static const uint16_t improv_rpc_result_uuid = 0x0004;
+// Improv BLE UUIDs (current public specification)
+// Service UUID:        00467768-6228-2272-4663-277478268000
+// Current State:       00467768-6228-2272-4663-277478268001
+// Error State:         00467768-6228-2272-4663-277478268002
+// RPC Command:         00467768-6228-2272-4663-277478268003
+// RPC Result:          00467768-6228-2272-4663-277478268004
+// Capabilities:        00467768-6228-2272-4663-277478268005
+// Advertisement data:  16-bit Service Data UUID 0x4677
+static const uint8_t IMPROV_UUID_BASE_LE[16] = {
+    0x00, 0x80, 0x26, 0x78, 0x74, 0x27, 0x63, 0x46,
+    0x72, 0x22, 0x28, 0x62, 0x68, 0x77, 0x46, 0x00
+};
+static const uint8_t IMPROV_SERVICE_DATA_UUID_LSB = 0x77;
+static const uint8_t IMPROV_SERVICE_DATA_UUID_MSB = 0x46;
+static const uint8_t IMPROV_CAPABILITY_IDENTIFY = 0x01;
+static const uint8_t IMPROV_CAPABILITY_DEVICE_INFO = 0x02;
+static const uint8_t IMPROV_CAPABILITIES = IMPROV_CAPABILITY_IDENTIFY | IMPROV_CAPABILITY_DEVICE_INFO;
 
 enum {
     IDX_SVC,
+    IDX_CHAR_CAPABILITIES,
+    IDX_CHAR_CAPABILITIES_VAL,
     IDX_CHAR_STATE,
     IDX_CHAR_STATE_VAL,
     IDX_CHAR_STATE_CFG, // Client Characteristic Configuration Descriptor
@@ -171,6 +203,7 @@ enum {
 static uint16_t improv_handle_table[IDX_CHAR_VAL_MAX];
 static uint16_t improv_conn_id = 0xFFFF;
 static esp_gatt_if_t improv_gatts_if = ESP_GATT_IF_NONE;
+static bool improv_restart_adv_after_stop = false;
 // Improv BLE globals
 //static uint16_t improv_handle_table[IDX_CHAR_VAL_MAX];
 //static uint16_t improv_conn_id = 0xFFFF;
@@ -236,16 +269,32 @@ static void build_improv_scan_rsp_data(uint8_t *rsp_data, uint16_t *rsp_len);
 esp_err_t initialize_ble_improv(void); 
 static void send_ble_improv_state_notification(ImprovState new_state);
 
+static void set_improv_uuid(esp_bt_uuid_t *uuid, uint8_t endpoint) {
+    uuid->len = ESP_UUID_LEN_128;
+    memcpy(uuid->uuid.uuid128, IMPROV_UUID_BASE_LE, sizeof(IMPROV_UUID_BASE_LE));
+    uuid->uuid.uuid128[0] = endpoint;
+}
+
+static uint8_t improv_checksum(const uint8_t *data, uint16_t len) {
+    uint8_t checksum = 0;
+    for (uint16_t i = 0; i < len; i++) {
+        checksum += data[i];
+    }
+    return checksum;
+}
+
 // Helper function to dynamically change state and cleanly kick the BLE stack
 static void update_improv_ble_state(ImprovState new_state) {
     s_improv_state = new_state;
     
     if (improv_gatts_if != ESP_GATT_IF_NONE) {
         build_improv_adv_data(improv_adv_data, &improv_adv_len);
-        
-        // Push the new telemetry packet to the BLE core
-        esp_ble_gap_config_adv_data_raw(improv_adv_data, improv_adv_len);
-        
+
+        if (improv_conn_id == 0xFFFF) {
+            improv_restart_adv_after_stop = true;
+            esp_ble_gap_stop_advertising();
+        }
+
         // Push notification update if a client is actively connected
         send_ble_improv_state_notification(new_state);
     }
@@ -258,36 +307,27 @@ static void build_improv_adv_data(uint8_t *adv_data, uint16_t *adv_len) {
     *p++ = 0x02; // Length
     *p++ = 0x01; // Type: Flags
     *p++ = 0x06; // BR/EDR Not Supported & General Discoverable
-    
-    // 2. Improv Service Data Block (10 bytes)
+
+    // 2. Complete List of 128-bit Service UUIDs. The web client filters on this UUID.
+    *p++ = 0x11; // 1(type) + 16(UUID)
+    *p++ = 0x07; // Complete List of 128-bit Service UUIDs
+    memcpy(p, IMPROV_UUID_BASE_LE, sizeof(IMPROV_UUID_BASE_LE));
+    p += sizeof(IMPROV_UUID_BASE_LE);
+
+    // 3. Improv Service Data Block (must be in the primary advertisement)
     *p++ = 0x09; // Length of this block (9 bytes follow)
     *p++ = 0x16; // Type: Service Data - 16-bit UUID
-    *p++ = 0x4E; // Improv UUID Low (0x184E)
-    *p++ = 0x18; // Improv UUID High
+    *p++ = IMPROV_SERVICE_DATA_UUID_LSB; // Improv service data UUID 0x4677
+    *p++ = IMPROV_SERVICE_DATA_UUID_MSB;
     *p++ = (uint8_t)s_improv_state; // Wire up your runtime variable state dynamically
-    *p++ = 0x03; // Improv Capabilities: Identify (0x01) | Wi-Fi Settings (0x02)
+    *p++ = IMPROV_CAPABILITIES;
     *p++ = 0x00; // Reserved 1
     *p++ = 0x00; // Reserved 2
     *p++ = 0x00; // Reserved 3
     *p++ = 0x00; // Reserved 4
-
-    // 3. Ultra-short Device Name inside the primary packet (6 bytes)
-    const char *short_name = "RGW"; 
-    size_t name_len = strlen(short_name);
-    
-    *p++ = (uint8_t)(name_len + 1); // Length of this block
-    *p++ = 0x09;                    // Type: Complete Local Name
-    memcpy(p, short_name, name_len);
-    p += name_len;
     
     // Calculate total payload length accurately using pointer arithmetic
     *adv_len = (uint16_t)(p - adv_data);
-    
-    // Force register the raw advertisement array directly to the hardware stack
-    esp_err_t err = esp_ble_gap_config_adv_data_raw(adv_data, *adv_len);
-    if (err != ESP_OK) {
-        ESP_LOGE("IMPROV_ADV", "Failed setting raw adv data: %d", err);
-    }
 }
 // 2. Build the Scan Response Data (Offloads the device name)
 static void build_improv_scan_rsp_data(uint8_t *rsp_data, uint16_t *rsp_len) {
@@ -336,13 +376,19 @@ static int udp_sock = -1;
 static int backend_sock = -1;
 static bool halow_active = false;
 static bool backend_connected = false;
+static volatile bool backend_wifi_has_ip = false;
+static volatile uint8_t backend_wifi_disconnect_reason = 0;
+static volatile bool backend_wifi_reconfiguring = false;
+static adc_oneshot_unit_handle_t g_adc_handle = NULL;
 
 static int battery_percent = 100;
+static uint16_t battery_mv = 0;
 static uint32_t total_packets_received = 0;
 static uint32_t total_devices_connected = 0;
 
 static uint32_t last_halow_check_ms = 0;
 static uint32_t last_log_ms = 0;
+static uint32_t last_gateway_status_ms = 0;
 
 // ============ NVS Credentials Management ============
 
@@ -380,6 +426,7 @@ static bool load_wifi_credentials() {
 static void send_ble_improv_state_notification(ImprovState state);
 static void send_ble_improv_error_notification(ImprovError error);
 static void send_ble_improv_rpc_result_notification(const uint8_t* data, uint16_t len);
+static void ble_wifi_provision_task(void *pvParameters);
 
 static void send_improv_state(ImprovState state) {
     s_improv_state = state; // Update global state
@@ -405,6 +452,9 @@ typedef struct {
     double latitude;
     double longitude;
     double altitude;
+    uint16_t battery_mv;
+    uint8_t battery_pct;
+    uint8_t halow_status;
     uint32_t last_seen_ms;
     uint32_t packet_count;
 } device_info_t;
@@ -414,10 +464,64 @@ typedef struct {
 static device_info_t connected_devices[MAX_DEVICES];
 static int num_connected_devices = 0;
 
-// ============ Battery Monitoring - DISABLED ============
-// Battery monitoring disabled due to ADC driver build issues
-// Can be re-enabled when ADC component is properly available
-// For now, battery_percent is set to constant 100%
+// ============ Battery Monitoring ============
+
+static uint16_t crc16_ccitt(const uint8_t *data, size_t len) {
+    uint16_t crc = 0xFFFF;
+    for (size_t i = 0; i < len; i++) {
+        crc ^= (uint16_t)data[i] << 8;
+        for (int bit = 0; bit < 8; bit++) {
+            crc = (crc & 0x8000) ? (uint16_t)((crc << 1) ^ 0x1021) : (uint16_t)(crc << 1);
+        }
+    }
+    return crc;
+}
+
+static uint8_t battery_percent_from_mv(uint16_t mv) {
+    if (mv <= BATTERY_EMPTY_MV) return 0;
+    if (mv >= BATTERY_FULL_MV) return 100;
+    return (uint8_t)(((mv - BATTERY_EMPTY_MV) * 100) / (BATTERY_FULL_MV - BATTERY_EMPTY_MV));
+}
+
+static void init_battery_adc(void) {
+    adc_oneshot_unit_init_cfg_t init_config = {
+        .unit_id = ADC_UNIT_1,
+        .ulp_mode = ADC_ULP_MODE_DISABLE,
+    };
+    if (adc_oneshot_new_unit(&init_config, &g_adc_handle) != ESP_OK) {
+        LOG_WARN("Battery ADC init failed");
+        g_adc_handle = NULL;
+        return;
+    }
+
+    adc_oneshot_chan_cfg_t channel_config = {
+        .atten = BATTERY_ADC_ATTEN,
+        .bitwidth = ADC_BITWIDTH_DEFAULT,
+    };
+    if (adc_oneshot_config_channel(g_adc_handle, BATTERY_ADC_CHANNEL, &channel_config) != ESP_OK) {
+        LOG_WARN("Battery ADC channel config failed");
+    }
+}
+
+static uint16_t read_battery_mv(void) {
+    if (g_adc_handle == NULL) {
+        return 0;
+    }
+
+    int raw = 0;
+    if (adc_oneshot_read(g_adc_handle, BATTERY_ADC_CHANNEL, &raw) != ESP_OK) {
+        return 0;
+    }
+
+    uint32_t adc_mv = ((uint32_t)raw * 3300U) / 4095U;
+    uint32_t mv = adc_mv * 2U;
+    return mv > UINT16_MAX ? UINT16_MAX : (uint16_t)mv;
+}
+
+static void update_gateway_battery(void) {
+    battery_mv = read_battery_mv();
+    battery_percent = battery_percent_from_mv(battery_mv);
+}
 
 // ============ HaLow AP Mode Handlers ============
 
@@ -629,8 +733,13 @@ static void wifi_event_handler(void* arg, esp_event_base_t event_base,
         LOG_INFO("WiFi STA started, connecting...");
         esp_wifi_connect();
     } else if (event_base == WIFI_EVENT && event_id == WIFI_EVENT_STA_DISCONNECTED) {
-        LOG_WARN("WiFi disconnected, retrying...");
-        esp_wifi_connect();
+        wifi_event_sta_disconnected_t* disconnected = (wifi_event_sta_disconnected_t*) event_data;
+        backend_wifi_has_ip = false;
+        backend_wifi_disconnect_reason = disconnected ? disconnected->reason : 0;
+        LOG_WARN("WiFi disconnected, retrying... reason=%u", backend_wifi_disconnect_reason);
+        if (!backend_wifi_reconfiguring) {
+            esp_wifi_connect();
+        }
     }
 }
 
@@ -638,6 +747,7 @@ static void ip_event_handler(void* arg, esp_event_base_t event_base,
                               int32_t event_id, void* event_data) {
     if (event_base == IP_EVENT && event_id == IP_EVENT_STA_GOT_IP) {
         ip_event_got_ip_t* event = (ip_event_got_ip_t*) event_data;
+        backend_wifi_has_ip = true;
         LOG_INFO("WiFi got IP: " IPSTR, IP2STR(&event->ip_info.ip));
         // Note: backend_connected is only set in connect_backend_server() after TCP connection succeeds
     }
@@ -765,6 +875,147 @@ static esp_err_t connect_backend_server(void) {
 
 // ============ Data Processing ============
 
+static bool send_backend_line(const char *line) {
+    if (!backend_connected || backend_sock < 0) {
+        return false;
+    }
+
+    ssize_t sent = send(backend_sock, (const uint8_t *)line, strlen(line), 0);
+    if (sent > 0) {
+        send(backend_sock, (const uint8_t *)"\n", 1, 0);
+        return true;
+    }
+
+    LOG_WARN("Failed to send to backend (errno=%d) - reconnecting", errno);
+    close(backend_sock);
+    backend_sock = -1;
+    backend_connected = false;
+    return false;
+}
+
+static const char *device_id_from_index(uint8_t device_index) {
+    switch (device_index) {
+        case 1:
+            return RUSC_DEVICE1_ID;
+        default:
+            return NULL;
+    }
+}
+
+static device_info_t *upsert_device_info(const char *device_id) {
+    for (int i = 0; i < num_connected_devices; i++) {
+        if (strcmp(connected_devices[i].device_id, device_id) == 0) {
+            return &connected_devices[i];
+        }
+    }
+
+    if (num_connected_devices >= MAX_DEVICES) {
+        return NULL;
+    }
+
+    device_info_t *device = &connected_devices[num_connected_devices++];
+    memset(device, 0, sizeof(*device));
+    strncpy(device->device_id, device_id, sizeof(device->device_id) - 1);
+    return device;
+}
+
+static bool process_compact_telemetry(const uint8_t *data, int len, const char *sender_ip) {
+    if (len < 2) {
+        return false;
+    }
+
+    uint16_t magic = 0;
+    memcpy(&magic, data, sizeof(magic));
+    if (magic != RUSC_TELEMETRY_MAGIC) {
+        return false;
+    }
+
+    if (len != sizeof(rusc_telemetry_packet_t)) {
+        LOG_WARN("Invalid compact telemetry length from %s: %d", sender_ip, len);
+        return true;
+    }
+
+    rusc_telemetry_packet_t packet;
+    memcpy(&packet, data, sizeof(packet));
+    if (packet.version != RUSC_TELEMETRY_VERSION) {
+        LOG_WARN("Unsupported compact telemetry version from %s: %u", sender_ip, packet.version);
+        return true;
+    }
+
+    uint16_t received_crc = packet.crc16;
+    packet.crc16 = 0;
+    uint16_t calculated_crc = crc16_ccitt((const uint8_t *)&packet, sizeof(packet));
+    if (received_crc != calculated_crc) {
+        LOG_WARN("Compact telemetry CRC mismatch from %s: rx=0x%04x calc=0x%04x",
+                 sender_ip, received_crc, calculated_crc);
+        return true;
+    }
+
+    const char *device_id = device_id_from_index(packet.device_index);
+    if (device_id == NULL) {
+        LOG_WARN("Unknown compact telemetry device index from %s: %u", sender_ip, packet.device_index);
+        return true;
+    }
+
+    double lat = packet.lat_e7 / 10000000.0;
+    double lon = packet.lon_e7 / 10000000.0;
+    double alt = packet.alt_cm / 100.0;
+    double speed = packet.speed_centi_knots / 100.0;
+
+    device_info_t *device = upsert_device_info(device_id);
+    if (device != NULL) {
+        device->last_seen_ms = mmosal_get_time_ms();
+        device->packet_count++;
+        device->satellites = packet.sats;
+        device->quality = packet.quality;
+        device->latitude = lat;
+        device->longitude = lon;
+        device->altitude = alt;
+        device->battery_mv = packet.battery_mv;
+        device->battery_pct = packet.battery_pct;
+        device->halow_status = packet.halow_status;
+    }
+
+    total_packets_received++;
+
+    char json_data[256];
+    snprintf(json_data, sizeof(json_data),
+             "{\"device_id\":\"%s\",\"lat\":%.7f,\"lon\":%.7f,\"alt\":%.2f,\"speed\":%.2f,"
+             "\"sats\":%u,\"quality\":%u,\"packet\":%u,\"battery_mv\":%u,\"battery\":%u,"
+             "\"halow_status\":%u}",
+             device_id,
+             lat,
+             lon,
+             alt,
+             speed,
+             packet.sats,
+             packet.quality,
+             packet.seq,
+             packet.battery_mv,
+             packet.battery_pct,
+             packet.halow_status);
+
+    send_backend_line(json_data);
+    LOG_DEBUG("Decoded compact telemetry: %s seq=%u", device_id, packet.seq);
+    return true;
+}
+
+static void send_gateway_status_if_due(uint32_t now_ms) {
+    if (now_ms - last_gateway_status_ms < GATEWAY_STATUS_INTERVAL_MS) {
+        return;
+    }
+    last_gateway_status_ms = now_ms;
+
+    update_gateway_battery();
+
+    char status_json[160];
+    snprintf(status_json, sizeof(status_json),
+             "{\"type\":\"gateway_status\",\"device_id\":\"device2\",\"battery_mv\":%u,\"battery\":%d}",
+             battery_mv,
+             battery_percent);
+    send_backend_line(status_json);
+}
+
 /**
  * Process GPS JSON data from Device1
  */
@@ -791,6 +1042,9 @@ static void process_device_data(const char *device_id, const char *json_data) {
             }
             
             cJSON *sats = cJSON_GetObjectItem(doc, "satellites");
+            if (sats == NULL) {
+                sats = cJSON_GetObjectItem(doc, "sats");
+            }
             if (sats && sats->type == cJSON_Number) {
                 connected_devices[i].satellites = sats->valueint;
             }
@@ -800,17 +1054,8 @@ static void process_device_data(const char *device_id, const char *json_data) {
     }
     
     // Forward to backend if connected
-    if (backend_connected && backend_sock >= 0) {
-        ssize_t sent = send(backend_sock, (const uint8_t *)json_data, strlen(json_data), 0);
-        if (sent > 0) {
-            send(backend_sock, (const uint8_t *)"\n", 1, 0);
-            LOG_DEBUG("Forwarded to backend: %s", device_id);
-        } else {
-            LOG_WARN("Failed to send to backend (errno=%d) - reconnecting", errno);
-            close(backend_sock);
-            backend_sock = -1;
-            backend_connected = false;
-        }
+    if (send_backend_line(json_data)) {
+        LOG_DEBUG("Forwarded to backend: %s", device_id);
     }
     
     cJSON_Delete(doc);
@@ -847,21 +1092,6 @@ static void check_halow_status(void) {
 
 // ============ Main Application Loops & Tasks ============
 
-/**
- * Dedicated task to monitor and maintain active BLE advertising
- */
-static void ble_advertising_task(void *pvParameters) {
-    vTaskDelay(pdMS_TO_TICKS(3000)); // Allow stack initialization time
-    
-    while (1) {
-        if (improv_gatts_if != ESP_GATT_IF_NONE && improv_conn_id == 0xFFFF) {
-            // Check-and-force approach only if advertising stopped unprompted
-            // (Standard GAP event handles restarting on disconnection natively)
-            esp_ble_gap_start_advertising(&improv_adv_params);
-        }
-        vTaskDelay(pdMS_TO_TICKS(5000)); 
-    }
-}
 static void gateway_task(void *pvParameters) {
     char buffer[UDP_BUFFER_SIZE];
     struct sockaddr_in remote_addr;
@@ -879,11 +1109,13 @@ static void gateway_task(void *pvParameters) {
         // Battery monitoring disabled - ADC driver not available in build
         // update_battery();
         
+        uint32_t now_ms = mmosal_get_time_ms();
+        
         // Log metrics periodically
         log_device_metrics();
+        send_gateway_status_if_due(now_ms);
         
         // Monitor heap health - detect memory leaks early
-        uint32_t now_ms = mmosal_get_time_ms();
         if (now_ms - last_heap_check >= 10000) {  // Check every 10 seconds
             size_t free_heap = esp_get_free_heap_size();
             if (free_heap < 50000) {  // Less than 50KB remaining
@@ -910,11 +1142,16 @@ static void gateway_task(void *pvParameters) {
                            (struct sockaddr *)&remote_addr, &remote_addr_len);
         
         if (num_recv > 0) {
-            buffer[num_recv] = 0;
-            
             // Extract device_id from sender IP for logging
             char sender_ip[INET_ADDRSTRLEN];
             inet_ntop(AF_INET, &remote_addr.sin_addr, sender_ip, sizeof(sender_ip));
+
+            if (process_compact_telemetry((const uint8_t *)buffer, num_recv, sender_ip)) {
+                vTaskDelay(pdMS_TO_TICKS(50));
+                continue;
+            }
+
+            buffer[num_recv] = 0;
             
             // Try to parse device_id from JSON (with memory safety)
             cJSON *doc = cJSON_Parse(buffer);
@@ -965,6 +1202,91 @@ static void send_ble_improv_rpc_result_notification(const uint8_t* data, uint16_
     }
 }
 
+typedef struct {
+    char ssid[33];
+    char password[65];
+} wifi_provision_request_t;
+
+static void send_empty_improv_rpc_result(uint8_t command) {
+    uint8_t rpc_result[] = {command, 0x00, command};
+    send_ble_improv_rpc_result_notification(rpc_result, sizeof(rpc_result));
+}
+
+static void send_gatt_write_response_if_needed(esp_gatt_if_t gatts_if,
+                                               const esp_ble_gatts_cb_param_t *param) {
+    if (param->write.need_rsp) {
+        esp_ble_gatts_send_response(gatts_if, param->write.conn_id, param->write.trans_id, ESP_GATT_OK, NULL);
+    }
+}
+
+static bool apply_backend_wifi_credentials(const char *ssid, const char *password, uint32_t timeout_ms) {
+    wifi_config_t wifi_config = {};
+    strncpy((char *)wifi_config.sta.ssid, ssid, sizeof(wifi_config.sta.ssid) - 1);
+    wifi_config.sta.ssid[sizeof(wifi_config.sta.ssid) - 1] = 0;
+    strncpy((char *)wifi_config.sta.password, password, sizeof(wifi_config.sta.password) - 1);
+    wifi_config.sta.password[sizeof(wifi_config.sta.password) - 1] = 0;
+    wifi_config.sta.pmf_cfg.capable = true;
+    wifi_config.sta.pmf_cfg.required = false;
+
+    LOG_INFO("Applying provisioned backend WiFi SSID: %s", ssid);
+    backend_wifi_has_ip = false;
+    backend_wifi_disconnect_reason = 0;
+    backend_connected = false;
+
+    backend_wifi_reconfiguring = true;
+    esp_wifi_disconnect();
+    vTaskDelay(pdMS_TO_TICKS(200));
+    esp_err_t err = esp_wifi_set_config(WIFI_IF_STA, &wifi_config);
+    if (err != ESP_OK) {
+        backend_wifi_reconfiguring = false;
+        LOG_ERROR("Failed to apply provisioned WiFi config: %s", esp_err_to_name(err));
+        return false;
+    }
+
+    backend_wifi_reconfiguring = false;
+    err = esp_wifi_connect();
+    if (err != ESP_OK && err != ESP_ERR_WIFI_CONN) {
+        LOG_ERROR("Failed to start provisioned WiFi connection: %s", esp_err_to_name(err));
+        return false;
+    }
+
+    uint32_t start_ms = mmosal_get_time_ms();
+    while (mmosal_get_time_ms() - start_ms < timeout_ms) {
+        if (backend_wifi_has_ip) {
+            LOG_INFO("Provisioned WiFi connected successfully");
+            return true;
+        }
+        vTaskDelay(pdMS_TO_TICKS(250));
+    }
+
+    LOG_WARN("Provisioned WiFi failed to connect within %lu ms (last reason=%u)",
+             timeout_ms, backend_wifi_disconnect_reason);
+    return false;
+}
+
+static void ble_wifi_provision_task(void *pvParameters) {
+    wifi_provision_request_t *request = (wifi_provision_request_t *)pvParameters;
+
+    update_improv_ble_state(STATE_PROVISIONING);
+
+    if (apply_backend_wifi_credentials(request->ssid, request->password, 20000)) {
+        strncpy(current_ssid, request->ssid, sizeof(current_ssid) - 1);
+        current_ssid[sizeof(current_ssid) - 1] = 0;
+        strncpy(current_password, request->password, sizeof(current_password) - 1);
+        current_password[sizeof(current_password) - 1] = 0;
+        save_wifi_credentials(current_ssid, current_password);
+
+        update_improv_ble_state(STATE_PROVISIONED);
+        send_empty_improv_rpc_result(WIFI_SETTINGS);
+    } else {
+        send_improv_error(ERROR_UNABLE_TO_CONNECT);
+        update_improv_ble_state(STATE_AUTHORIZED);
+    }
+
+    free(request);
+    vTaskDelete(NULL);
+}
+
 static void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *param) {
     switch (event) {
         case ESP_GAP_BLE_ADV_DATA_RAW_SET_COMPLETE_EVT:
@@ -984,6 +1306,13 @@ static void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param
                 LOG_INFO("Improv Wi-Fi BLE advertising successfully initiated.");
             }
             break;
+
+        case ESP_GAP_BLE_ADV_STOP_COMPLETE_EVT:
+            if (improv_restart_adv_after_stop && improv_conn_id == 0xFFFF) {
+                improv_restart_adv_after_stop = false;
+                esp_ble_gap_config_adv_data_raw(improv_adv_data, improv_adv_len);
+            }
+            break;
             
         default:
             break;
@@ -991,16 +1320,28 @@ static void gap_event_handler(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param
 }
 
 static void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_if, esp_ble_gatts_cb_param_t *param) {
-    static esp_bt_uuid_t uuid_state = { .len = ESP_UUID_LEN_16, .uuid = { .uuid16 = 0x0001 } }; 
-    static esp_bt_uuid_t uuid_error = { .len = ESP_UUID_LEN_16, .uuid = { .uuid16 = 0x0002 } }; 
-    static esp_bt_uuid_t uuid_rpc_command = { .len = ESP_UUID_LEN_16, .uuid = { .uuid16 = 0x0003 } }; 
-    static esp_bt_uuid_t uuid_rpc_result = { .len = ESP_UUID_LEN_16, .uuid = { .uuid16 = 0x0004 } }; 
+    static esp_bt_uuid_t uuid_capabilities;
+    static esp_bt_uuid_t uuid_state;
+    static esp_bt_uuid_t uuid_error;
+    static esp_bt_uuid_t uuid_rpc_command;
+    static esp_bt_uuid_t uuid_rpc_result;
     static esp_bt_uuid_t uuid_cccd = { .len = ESP_UUID_LEN_16, .uuid = { .uuid16 = 0x2902 } }; 
-    static esp_gatt_srvc_id_t service_id = { .id = { .uuid = { .len = ESP_UUID_LEN_16, .uuid = { .uuid16 = 0x184E } }, .inst_id = 0 }, .is_primary = true };
+    static esp_gatt_srvc_id_t service_id = {};
     
     if (event == ESP_GATTS_REG_EVT) {
         if (param->reg.status == ESP_GATT_OK) {
             improv_gatts_if = gatts_if;
+
+            set_improv_uuid(&uuid_capabilities, 0x05);
+            set_improv_uuid(&uuid_state, 0x01);
+            set_improv_uuid(&uuid_error, 0x02);
+            set_improv_uuid(&uuid_rpc_command, 0x03);
+            set_improv_uuid(&uuid_rpc_result, 0x04);
+
+            service_id.is_primary = true;
+            service_id.id.inst_id = 0;
+            set_improv_uuid(&service_id.id.uuid, 0x00);
+            esp_ble_gap_set_device_name("RUSC Gateway");
             
             // Build structures cleanly into globals
             build_improv_adv_data(improv_adv_data, &improv_adv_len);
@@ -1017,6 +1358,9 @@ static void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_
         if (param->create.status == ESP_GATT_OK) {
             improv_handle_table[IDX_SVC] = param->create.service_handle;
             esp_ble_gatts_start_service(improv_handle_table[IDX_SVC]);
+
+            esp_ble_gatts_add_char(improv_handle_table[IDX_SVC], &uuid_capabilities,
+                                   ESP_GATT_PERM_READ, ESP_GATT_CHAR_PROP_BIT_READ, NULL, NULL);
 
             esp_ble_gatts_add_char(improv_handle_table[IDX_SVC], &uuid_state,
                                    ESP_GATT_PERM_READ, ESP_GATT_CHAR_PROP_BIT_READ | ESP_GATT_CHAR_PROP_BIT_NOTIFY, NULL, NULL);
@@ -1040,12 +1384,13 @@ static void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_
         }
     } else if (event == ESP_GATTS_ADD_CHAR_EVT) {
         if (param->add_char.status == ESP_GATT_OK) {
-            if (param->add_char.char_uuid.len == ESP_UUID_LEN_16) {
-                uint16_t uuid = param->add_char.char_uuid.uuid.uuid16;
-                if (uuid == 0x0001) improv_handle_table[IDX_CHAR_STATE_VAL] = param->add_char.attr_handle;       
-                else if (uuid == 0x0002) improv_handle_table[IDX_CHAR_ERROR_VAL] = param->add_char.attr_handle;   
-                else if (uuid == 0x0003) improv_handle_table[IDX_CHAR_RPC_COMMAND_VAL] = param->add_char.attr_handle; 
-                else if (uuid == 0x0004) improv_handle_table[IDX_CHAR_RPC_RESULT_VAL] = param->add_char.attr_handle;  
+            if (param->add_char.char_uuid.len == ESP_UUID_LEN_128) {
+                uint8_t endpoint = param->add_char.char_uuid.uuid.uuid128[0];
+                if (endpoint == 0x05) improv_handle_table[IDX_CHAR_CAPABILITIES_VAL] = param->add_char.attr_handle;
+                else if (endpoint == 0x01) improv_handle_table[IDX_CHAR_STATE_VAL] = param->add_char.attr_handle;       
+                else if (endpoint == 0x02) improv_handle_table[IDX_CHAR_ERROR_VAL] = param->add_char.attr_handle;   
+                else if (endpoint == 0x03) improv_handle_table[IDX_CHAR_RPC_COMMAND_VAL] = param->add_char.attr_handle; 
+                else if (endpoint == 0x04) improv_handle_table[IDX_CHAR_RPC_RESULT_VAL] = param->add_char.attr_handle;  
             }
         }
     } else if (event == ESP_GATTS_ADD_CHAR_DESCR_EVT) {
@@ -1062,7 +1407,11 @@ static void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_
         esp_gatt_rsp_t rsp;
         memset(&rsp, 0, sizeof(esp_gatt_rsp_t));
         
-        if (param->read.handle == improv_handle_table[IDX_CHAR_STATE_VAL]) {
+        if (param->read.handle == improv_handle_table[IDX_CHAR_CAPABILITIES_VAL]) {
+            rsp.attr_value.len = 1;
+            rsp.attr_value.value[0] = IMPROV_CAPABILITIES;
+            esp_ble_gatts_send_response(gatts_if, param->read.conn_id, param->read.trans_id, ESP_GATT_OK, &rsp);
+        } else if (param->read.handle == improv_handle_table[IDX_CHAR_STATE_VAL]) {
             rsp.attr_value.len = 1;
             rsp.attr_value.value[0] = (uint8_t)s_improv_state;
             esp_ble_gatts_send_response(gatts_if, param->read.conn_id, param->read.trans_id, ESP_GATT_OK, &rsp);
@@ -1075,31 +1424,77 @@ static void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_
         }
     } else if (event == ESP_GATTS_WRITE_EVT) {
         if (param->write.handle == improv_handle_table[IDX_CHAR_RPC_COMMAND_VAL]) {
-            uint8_t command = param->write.value[0];
-            uint16_t data_len = param->write.len - 1;
-            const uint8_t* data = param->write.value + 1;
+            LOG_INFO("Improv RPC write received: len=%u", param->write.len);
+            if (param->write.len < 3) {
+                send_improv_error(ERROR_INVALID_RPC);
+                send_gatt_write_response_if_needed(gatts_if, param);
+                return;
+            }
 
-            if (command == WIFI_SETTINGS && data_len > 2) {
+            uint8_t command = param->write.value[0];
+            uint8_t data_len = param->write.value[1];
+            const uint8_t* data = param->write.value + 2;
+            uint8_t expected_len = data_len + 3;
+            uint8_t expected_checksum = improv_checksum(param->write.value, expected_len - 1);
+            LOG_INFO("Improv RPC command=0x%02x data_len=%u", command, data_len);
+
+            if (param->write.len != expected_len || param->write.value[expected_len - 1] != expected_checksum) {
+                LOG_WARN("Invalid Improv RPC packet: actual_len=%u expected_len=%u checksum=0x%02x expected=0x%02x",
+                         param->write.len, expected_len, param->write.value[expected_len - 1], expected_checksum);
+                send_improv_error(ERROR_INVALID_RPC);
+                uint8_t rpc_result[] = {command, 0x00, command};
+                send_ble_improv_rpc_result_notification(rpc_result, sizeof(rpc_result));
+            } else if (command == WIFI_SETTINGS && data_len >= 2) {
+                if (s_improv_state != STATE_AUTHORIZED) {
+                    send_improv_error(ERROR_NOT_AUTHORIZED);
+                    uint8_t rpc_result[] = {WIFI_SETTINGS, 0x00, WIFI_SETTINGS};
+                    send_ble_improv_rpc_result_notification(rpc_result, sizeof(rpc_result));
+                    send_gatt_write_response_if_needed(gatts_if, param);
+                    return;
+                }
+
                 update_improv_ble_state(STATE_PROVISIONING);
 
                 uint8_t ssid_len = data[0];
+                if (ssid_len > 32 || (uint16_t)ssid_len + 2 > data_len) {
+                    send_improv_error(ERROR_INVALID_RPC);
+                    send_gatt_write_response_if_needed(gatts_if, param);
+                    return;
+                }
+
                 char new_ssid[33] = {0}; 
                 memcpy(new_ssid, &data[1], ssid_len);
 
                 uint8_t pass_len = data[1 + ssid_len];
+                if (pass_len > 64 || (uint16_t)ssid_len + pass_len + 2 > data_len) {
+                    send_improv_error(ERROR_INVALID_RPC);
+                    send_gatt_write_response_if_needed(gatts_if, param);
+                    return;
+                }
+
                 char new_pass[65] = {0}; 
                 memcpy(new_pass, &data[2 + ssid_len], pass_len);
 
-                LOG_INFO("WiFi provisioned via BLE, saving and restarting...");
-                save_wifi_credentials(new_ssid, new_pass);
+                LOG_INFO("WiFi credentials received via BLE, testing connection...");
 
-                update_improv_ble_state(STATE_PROVISIONED);
-                
-                uint8_t rpc_result[] = {WIFI_SETTINGS, 0x00}; 
-                send_ble_improv_rpc_result_notification(rpc_result, sizeof(rpc_result));
+                wifi_provision_request_t *request = (wifi_provision_request_t *)calloc(1, sizeof(wifi_provision_request_t));
+                if (request == NULL) {
+                    send_improv_error(ERROR_UNKNOWN);
+                    send_gatt_write_response_if_needed(gatts_if, param);
+                    return;
+                }
 
-                vTaskDelay(pdMS_TO_TICKS(1000));
-                esp_restart();
+                strncpy(request->ssid, new_ssid, sizeof(request->ssid) - 1);
+                strncpy(request->password, new_pass, sizeof(request->password) - 1);
+
+                if (xTaskCreate(ble_wifi_provision_task, "improv_wifi", 4096, request, 4, NULL) != pdPASS) {
+                    free(request);
+                    send_improv_error(ERROR_UNKNOWN);
+                    send_gatt_write_response_if_needed(gatts_if, param);
+                    return;
+                }
+            } else if (command == IDENTIFY) {
+                LOG_INFO("Improv identify requested");
             } else if (command == GET_DEVICE_INFO) {
                 const char* firmware_name = "MorseMicro";
                 const char* firmware_version = "1.0";
@@ -1130,22 +1525,25 @@ static void gatts_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_t gatts_
                 p += strlen(device_name);
                 
                 *len_pos = p - (rpc_result + data_start); 
-                *p++ = 0x00; // Checksum placeholder
+                *p = improv_checksum(rpc_result, p - rpc_result);
+                p++;
                 
                 send_ble_improv_rpc_result_notification(rpc_result, p - rpc_result);
             } else {
-                send_ble_improv_error_notification(ERROR_UNKNOWN_RPC);
-                uint8_t rpc_result[] = {command, ERROR_UNKNOWN_RPC};
+                send_improv_error(ERROR_UNKNOWN_RPC);
+                uint8_t rpc_result[] = {command, 0x00, command};
                 send_ble_improv_rpc_result_notification(rpc_result, sizeof(rpc_result));
             }
         }
-        esp_ble_gatts_send_response(gatts_if, param->write.conn_id, param->write.trans_id, ESP_GATT_OK, NULL);
+        send_gatt_write_response_if_needed(gatts_if, param);
     } else if (event == ESP_GATTS_CONNECT_EVT) {
         improv_conn_id = param->connect.conn_id;
-        LOG_INFO("BLE client connected");
+        LOG_INFO("BLE client connected, conn_id=%u", improv_conn_id);
     } else if (event == ESP_GATTS_DISCONNECT_EVT) {
         improv_conn_id = 0xFFFF;
-        esp_ble_gap_start_advertising(&improv_adv_params);
+        LOG_INFO("BLE client disconnected, restarting Improv advertising");
+        build_improv_adv_data(improv_adv_data, &improv_adv_len);
+        esp_ble_gap_config_adv_data_raw(improv_adv_data, improv_adv_len);
     }
 }
 esp_err_t initialize_ble_improv(void) {
@@ -1232,6 +1630,8 @@ extern "C" void app_main(void) {
         err = nvs_flash_init();
     }
     ESP_ERROR_CHECK(err);
+    init_battery_adc();
+    update_gateway_battery();
 
     // 2. Load credentials and set initial Improv state
     // IMPORTANT: Always boot as AUTHORIZED for reprovisioning capability
@@ -1297,9 +1697,6 @@ extern "C" void app_main(void) {
 
     LOG_INFO("Gateway initialization complete - starting gateway task");
     printf("=================================================================\n\n");
-    
-    // Start BLE advertising task FIRST (will keep advertising active)
-    xTaskCreate(ble_advertising_task, "ble_adv", 4096, NULL, 2, NULL);
     
     // Create gateway task with dedicated stack to avoid stack overflow
     xTaskCreate(gateway_task, "gateway", GATEWAY_TASK_STACK_SIZE, NULL, GATEWAY_TASK_PRIORITY, NULL);

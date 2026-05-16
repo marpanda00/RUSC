@@ -44,6 +44,13 @@ let gpsData = {
   }
 };
 
+let gatewayStatus = {
+  device_id: 'device2',
+  last_update: null,
+  battery_mv: 0,
+  battery: 0
+};
+
 const MAX_HISTORY = 100;
 
 // ============ Haversine Distance Calculator ============
@@ -75,7 +82,11 @@ const tcpServer = net.createServer((socket) => {
       for (const line of lines) {
         if (line.trim()) {
           const data = JSON.parse(line);
-          processGPSData(data);
+          if (data.type === 'gateway_status') {
+            processGatewayStatus(data);
+          } else {
+            processGPSData(data);
+          }
         }
       }
     } catch (error) {
@@ -97,6 +108,15 @@ tcpServer.listen(TCP_PORT, '0.0.0.0', () => {
 });
 
 // ============ Process GPS Data ============
+
+function processGatewayStatus(data) {
+  gatewayStatus = {
+    device_id: data.device_id || 'device2',
+    last_update: new Date(),
+    battery_mv: data.battery_mv || 0,
+    battery: data.battery || 0
+  };
+}
 
 function processGPSData(data) {
   // Support both flat format (device1) and nested format
@@ -143,6 +163,9 @@ function processGPSData(data) {
       course: 0,
       quality: 0,
       signal_strength: 0,
+      battery_mv: 0,
+      battery: 0,
+      halow_status: 0,
       history: [],
       home_point: null,
       current_distance: 0,
@@ -162,6 +185,9 @@ function processGPSData(data) {
   gpsData[deviceId].speed_knots = speed;
   gpsData[deviceId].quality = quality;
   gpsData[deviceId].signal_strength = data.signal_strength || 0;
+  gpsData[deviceId].battery_mv = data.battery_mv || 0;
+  gpsData[deviceId].battery = data.battery || 0;
+  gpsData[deviceId].halow_status = data.halow_status || 0;
   
   // Calculate distance from home point
   if (gpsData[deviceId].home_point) {
@@ -186,7 +212,10 @@ function processGPSData(data) {
     speed_knots: speed,
     course: data.course || 0,
     distance_from_home: gpsData[deviceId].current_distance,
-    signal_strength: gpsData[deviceId].signal_strength
+    signal_strength: gpsData[deviceId].signal_strength,
+    battery_mv: gpsData[deviceId].battery_mv,
+    battery: gpsData[deviceId].battery,
+    halow_status: gpsData[deviceId].halow_status
   });
   
   // Keep only last MAX_HISTORY entries
@@ -216,6 +245,9 @@ function registerAPIRoutes(expressApp) {
         course: 0,
         quality: device.quality,
         signal_strength: device.signal_strength,
+        battery_mv: device.battery_mv,
+        battery: device.battery,
+        halow_status: device.halow_status,
         home_point: device.home_point,
         current_distance: device.current_distance,
         max_distance: device.max_distance
@@ -241,6 +273,9 @@ function registerAPIRoutes(expressApp) {
       course: device.course,
       quality: device.quality,
       signal_strength: device.signal_strength,
+      battery_mv: device.battery_mv,
+      battery: device.battery,
+      halow_status: device.halow_status,
       home_point: device.home_point,
       current_distance: device.current_distance,
       max_distance: device.max_distance
@@ -271,6 +306,16 @@ function registerAPIRoutes(expressApp) {
     }));
     
     res.json(devices);
+  });
+
+  expressApp.get('/api/gateway/status', (req, res) => {
+    const isActive = gatewayStatus.last_update &&
+      (Date.now() - new Date(gatewayStatus.last_update)) < 120000;
+
+    res.json({
+      ...gatewayStatus,
+      is_active: Boolean(isActive)
+    });
   });
 
   // Get statistics
