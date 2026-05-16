@@ -1,0 +1,99 @@
+dependencies:
+  hostap:
+    dependencies:
+    - name: idf
+      version: '>=5.1.1'
+    source:
+      path: C:\mm-iot-ori\framework\src\hostap
+      type: local
+    targets:
+    - esp32s3
+    - esp32c6
+    - esp32c3
+    - esp32p4
+    version: 2.10.4-esp32
+  idf:
+    source:
+      type: idf
+    version: 5.4.4
+  mm_shims:
+    dependencies:
+    - name: idf
+      version: '>=5.1.1'
+    - name: mmutils
+      path: ../src/mmutils
+      version: ==2.10.4-esp32
+    source:
+      path: C:\mm-iot-ori\framework\mm_shims
+      type: local
+    targets:
+    - esp32s3
+    - esp32c6
+    - esp32c3
+    - esp32p4
+    version: 2.10.4-esp32
+  mmpktmem:
+    dependencies:
+    - name: idf
+      version: '>=5.1.1'
+    source:
+      path: C:\mm-iot-ori\framework\src\mmpktmem
+      type: local
+    targets:
+    - esp32s3
+    - esp32c6
+    - esp32c3
+    - esp32p4
+    version: 2.10.4-esp32
+  mmregdb:
+    dependencies:
+    - name: idf
+      version: '>=5.1.1'
+    source:
+      path: C:\mm-iot-ori\framework\src\mmregdb
+      type: local
+    targets:
+    - esp32s3
+    - esp32c6
+    - esp32c3
+    - esp32p4
+    version: 2.10.4-esp32
+  mmutils:
+    dependencies:
+    - name: idf
+      version: '>=5.1.1'
+    source:
+      path: C:\mm-iot-ori\framework\src\mmutils
+      type: local
+    targets:
+    - esp32s3
+    - esp32c6
+    - esp32c3
+    - esp32p4
+    version: 2.10.4-esp32
+  morselib:
+    dependencies:
+    - name: idf
+      version: '>=5.1.1'
+    - name: mmpktmem
+      path: ../src/mmpktmem
+      version: ==2.10.4-esp32
+    - name: hostap
+      path: ../src/hostap
+      version: ==2.10.4-esp32
+    source:
+      path: C:\mm-iot-ori\framework\morselib
+      type: local
+    targets:
+    - esp32s3
+    - esp32c6
+    - esp32c3
+    - esp32p4
+    version: 2.10.4-esp32
+direct_dependencies:
+- mm_shims
+- mmregdb
+- morselib
+manifest_hash: 2ab9848fc3de526a375b1f6fd3807c1a07358fd0217417e5b563aeef683d7b96
+target: esp32s3
+version: 2.0.0

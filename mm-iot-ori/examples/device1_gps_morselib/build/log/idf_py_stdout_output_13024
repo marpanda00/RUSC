@@ -1,0 +1,1215 @@
+Ij
+[0;32mI (30) boot: efus�ESP-ROM:esp32s3-20210327[0m
+Build:Mar 27 2021
+rst:0x1 (POWERON),boot:0xb (SPI_FAST_FLASH_BOOT)
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2810,len:0x1564
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xd24
+load:0x403cb700,len:0x2ed4
+entry 0x403c8928
+[0;32mI (27) boot: ESP-IDF v5.4.4 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time May 10 2026 19:41:37[0m
+[0;32mI (27) boot: Multicore bootloader[0m
+[0;32mI (27) boot: chip revision: v0.2[0m
+[0;32mI (30) boot: efuse block revision: v1.3[0m
+[0;32mI (33) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (37) boot.esp32s3: SPI Mode       : DIO[0m
+[0;32mI (41) boot.esp32s3: SPI Flash Size : 16MB[0m
+[0;32mI (45) boot: Enabling RNG early entropy source...[0m
+[0;32mI (49) boot: Partition Table:[0m
+[0;32mI (52) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (65) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (71) boot:  2 factory          factory app      00 00 00010000 00177000[0m
+[0;32mI (78) boot: End of partition table[0m
+[0;32mI (81) esp_image: segment 0: paddr=00010020 vaddr=3c0b0020 size=9d1fch (643580) map[0m
+[0;32mI (202) esp_image: segment 1: paddr=000ad224 vaddr=3fc99500 size=02df4h ( 11764) load[0m
+[0;32mI (205) esp_image: segment 2: paddr=000b0020 vaddr=42000020 size=aa9c4h (698820) map[0m
+[0;32mI (329) esp_image: segment 3: paddr=0015a9ec vaddr=3fc9c2f4 size=003c8h (   968) load[0m
+[0;32mI (329) esp_image: segment 4: paddr=0015adbc vaddr=40374000 size=15490h ( 87184) load[0m
+[0;32mI (352) esp_image: segment 5: paddr=00170254 vaddr=50000000 size=0001ch (    28) load[0m
+[0;32mI (360) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (360) boot: Disabling RNG early entropy source...[0m
+[0;32mI (370) cpu_start: Multicore app[0m
+[0;32mI (379) cpu_start: GPIO 44 and 43 are used as console UART I/O pins[0m
+[0;32mI (379) cpu_start: Pro cpu start user code[0m
+[0;32mI (379) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (381) app_init: Application information:[0m
+[0;32mI (385) app_init: Project name:     main[0m
+[0;32mI (388) app_init: App version:      1[0m
+[0;32mI (392) app_init: Compile time:     May 10 2026 19:37:44[0m
+[0;32mI (397) app_init: ELF file SHA256:  5e0a4dd6f...[0m
+[0;32mI (401) app_init: ESP-IDF:          v5.4.4[0m
+[0;32mI (405) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (409) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (413) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (417) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (423) heap_init: At 3FCA0EA0 len 00048870 (290 KiB): RAM[0m
+[0;32mI (428) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (433) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (438) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM[0m
+[0;32mI (445) spi_flash: detected chip: winbond[0m
+[0;32mI (447) spi_flash: flash io: dio[0m
+[0;32mI (451) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (457) sleep_gpio: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (464) main_task: Started on CPU0[0m
+[0;32mI (495) main_task: Calling app_main()[0m
+[0;32mI (513) Device1_GPS: === RUSC Device 1: GPS Collector + HALow UDP ===[0m
+[0;32mI (513) Device1_GPS: Starting MorseMicro HALow radio initialization...[0m
+[0;32mI (615) gpio: GPIO[8]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (615) Device1_GPS: Setting regulatory domain to US...[0m
+[0;32mI (617) Device1_GPS: Regulatory domain set to US (Op Class 1, Channel 3)[0m
+[0;32mI (623) Device1_GPS: Attempting mmwlan_boot...[0m
+[0;32mI (628) gpio: GPIO[2]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (636) gpio: GPIO[9]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (644) gpio: GPIO[7]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (652) gpio: GPIO[6]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+Actual SPI CLK 40000kHz
+[0;32mI (1285) Device1_GPS: Radio boot successful![0m
+Morse LwIP interface initialised.
+[0;32mI (1301) Device1_GPS: Network interface initialized[0m
+[0;32mI (1302) Device1_GPS: Configuring HaLow STA connection for AP: MorseMicro[0m
+[0;32mI (1302) Device1_GPS: Attempting MorseMicro STA mode to connect to MorseMicro...[0m
+[0;32mI (1309) Device1_GPS: [DEBUG] STA connection parameters:[0m
+[0;32mI (1314) Device1_GPS:   SSID: MorseMicro (len=10)[0m
+[0;32mI (1318) Device1_GPS:   Security: 2 (MMWLAN_SAE=2)[0m
+[0;32mI (1323) Device1_GPS:   PMF: 0 (REQUIRED=0)[0m
+[0;32mI (1399) Device1_GPS: [DEBUG] mmwlan_sta_enable(with callback) returned: 0 (SUCCESS=0)[0m
+[0;32mI (1400) Device1_GPS: [DEBUG] STA enable SUCCESS - connection should be initiating[0m
+[0;32mI (1408) Device1_GPS: Waiting for SAE authentication (STA CONNECTED state)...[0m
+[0;32mI (4522) Device1_GPS: [CALLBACK] sta_status_callback fired! state=1[0m
+[0;32mI (4522) Device1_GPS: STA state: CONNECTING (1)[0m
+[0;32mI (7178) Device1_GPS: [CALLBACK] sta_status_callback fired! state=2[0m
+[0;32mI (7178) Device1_GPS: STA state: CONNECTED (2) - SAE auth successful![0m
+Morse STA interface up with MAC address 02:00:45:a4:59:f0
+[0;32mI (7185) Device1_GPS: [CALLBACK] mmipal_link_status_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (7185) Device1_GPS: [CALLBACK] mmwlan_link_state_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (7192) Device1_GPS: ✓ LWIP LINK IS UP - Ready to send UDP packets! IP: 192.168.1.2[0m
+[0;32mI (7201) Device1_GPS: Link went Up[0m
+[0;32mI (7192) Device1_GPS: ✓ SAE authentication successful[0m
+[0;32mI (7216) Device1_GPS: Waiting for LWIP link to be ready...[0m
+[0;32mI (7224) Device1_GPS: ✓ LWIP link is UP - ready to send data![0m
+[0;32mI (7226) Device1_GPS: Starting GPS UART task with 16KB stack...[0m
+[0;32mI (7233) Device1_GPS: GPS UART initialized on pins RX=18 TX=17[0m
+[0;32mI (8238) Device1_GPS: UDP socket created, ready to send to 192.168.1.1:5001[0m
+[0;32mI (8239) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (9244) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (10249) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E     9791 Failed to write page: -32768
+E     9791 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (11250) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    10788 Failed to write page: -32768
+E    10788 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (12256) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    11794 Failed to write page: -32768
+E    11794 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (13262) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    12800 Failed to write page: -32768
+E    12800 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (14268) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    13806 Failed to write page: -32768
+E    13806 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (15274) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    14812 Failed to write page: -32768
+E    14812 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+E    14817 Failed to write page: -32768
+E    14820 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+[0;32mI (16275) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    15812 Failed to write page: -32768
+E    15813 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+E    15818 Failed to write page: -32768
+E    15821 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+E    16812 Failed to write page: -32768
+E    16812 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+[0;32mI (17287) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    16824 Failed to write page: -32768
+E    16824 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+E    17812 Command 19:322 timed out
+
+assert failed: xQueueSemaphoreTake queue.c:1713 (pxQueue->uxItemSize == 0)
+
+
+Backtrace: 0x40376035:0x3fcaafd0 0x4037d075:0x3fcaaff0 0x403874bd:0x3fcab010 0x4037d8da:0x3fcab130 0x4200eb7e:0x3fcab170 0x4205c4da:0x3fcab190 0x4205d0a7:0x3fcab1d0 0x4205d759:0x3fcab240 0x420455b1:0x3fcab270 0x4200eacc:0x3fcab290 0x4037db0d:0x3fcab2c0
+
+
+
+
+ELF file SHA256: 5e0a4dd6f
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0xb (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40375f74
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2810,len:0x1564
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xd24
+load:0x403cb700,len:0x2ed4
+entry 0x403c8928
+[0;32mI (31) boot: ESP-IDF v5.4.4 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time May 10 2026 19:41:37[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (31) boot: chip revision: v0.2[0m
+[0;32mI (34) boot: efuse block revision: v1.3[0m
+[0;32mI (38) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (42) boot.esp32s3: SPI Mode       : DIO[0m
+[0;32mI (45) boot.esp32s3: SPI Flash Size : 16MB[0m
+[0;32mI (49) boot: Enabling RNG early entropy source...[0m
+[0;32mI (54) boot: Partition Table:[0m
+[0;32mI (56) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (63) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (69) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (76) boot:  2 factory          factory app      00 00 00010000 00177000[0m
+[0;32mI (82) boot: End of partition table[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c0b0020 size=9d1fch (643580) map[0m
+[0;32mI (206) esp_image: segment 1: paddr=000ad224 vaddr=3fc99500 size=02df4h ( 11764) load[0m
+[0;32mI (209) esp_image: segment 2: paddr=000b0020 vaddr=42000020 size=aa9c4h (698820) map[0m
+[0;32mI (333) esp_image: segment 3: paddr=0015a9ec vaddr=3fc9c2f4 size=003c8h (   968) load[0m
+[0;32mI (334) esp_image: segment 4: paddr=0015adbc vaddr=40374000 size=15490h ( 87184) load[0m
+[0;32mI (356) esp_image: segment 5: paddr=00170254 vaddr=50000000 size=0001ch (    28) load[0m
+[0;32mI (364) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (365) boot: Disabling RNG early entropy source...[0m
+[0;32mI (375) cpu_start: Multicore app[0m
+[0;32mI (383) cpu_start: GPIO 44 and 43 are used as console UART I/O pins[0m
+[0;32mI (384) cpu_start: Pro cpu start user code[0m
+[0;32mI (384) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (385) app_init: Application information:[0m
+[0;32mI (389) app_init: Project name:     main[0m
+[0;32mI (393) app_init: App version:      1[0m
+[0;32mI (396) app_init: Compile time:     May 10 2026 19:37:44[0m
+[0;32mI (401) app_init: ELF file SHA256:  5e0a4dd6f...[0m
+[0;32mI (406) app_init: ESP-IDF:          v5.4.4[0m
+[0;32mI (409) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (413) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (417) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (421) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (427) heap_init: At 3FCA0EA0 len 00048870 (290 KiB): RAM[0m
+[0;32mI (432) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (438) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (443) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM[0m
+[0;32mI (449) spi_flash: detected chip: winbond[0m
+[0;32mI (452) spi_flash: flash io: dio[0m
+[0;32mI (455) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (461) sleep_gpio: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (468) main_task: Started on CPU0[0m
+[0;32mI (499) main_task: Calling app_main()[0m
+[0;32mI (517) Device1_GPS: === RUSC Device 1: GPS Collector + HALow UDP ===[0m
+[0;32mI (517) Device1_GPS: Starting MorseMicro HALow radio initialization...[0m
+[0;32mI (619) gpio: GPIO[8]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (619) Device1_GPS: Setting regulatory domain to US...[0m
+[0;32mI (621) Device1_GPS: Regulatory domain set to US (Op Class 1, Channel 3)[0m
+[0;32mI (627) Device1_GPS: Attempting mmwlan_boot...[0m
+[0;32mI (632) gpio: GPIO[2]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (640) gpio: GPIO[9]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (648) gpio: GPIO[7]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (656) gpio: GPIO[6]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+Actual SPI CLK 40000kHz
+[0;32mI (1294) Device1_GPS: Radio boot successful![0m
+Morse LwIP interface initialised.
+[0;32mI (1310) Device1_GPS: Network interface initialized[0m
+[0;32mI (1311) Device1_GPS: Configuring HaLow STA connection for AP: MorseMicro[0m
+[0;32mI (1311) Device1_GPS: Attempting MorseMicro STA mode to connect to MorseMicro...[0m
+[0;32mI (1318) Device1_GPS: [DEBUG] STA connection parameters:[0m
+[0;32mI (1323) Device1_GPS:   SSID: MorseMicro (len=10)[0m
+[0;32mI (1327) Device1_GPS:   Security: 2 (MMWLAN_SAE=2)[0m
+[0;32mI (1332) Device1_GPS:   PMF: 0 (REQUIRED=0)[0m
+[0;32mI (1408) Device1_GPS: [DEBUG] mmwlan_sta_enable(with callback) returned: 0 (SUCCESS=0)[0m
+[0;32mI (1409) Device1_GPS: [DEBUG] STA enable SUCCESS - connection should be initiating[0m
+[0;32mI (1417) Device1_GPS: Waiting for SAE authentication (STA CONNECTED state)...[0m
+[0;32mI (4535) Device1_GPS: [CALLBACK] sta_status_callback fired! state=1[0m
+[0;32mI (4535) Device1_GPS: STA state: CONNECTING (1)[0m
+[0;32mI (6830) Device1_GPS: [CALLBACK] sta_status_callback fired! state=2[0m
+[0;32mI (6830) Device1_GPS: STA state: CONNECTED (2) - SAE auth successful![0m
+Morse STA interface up with MAC address 02:00:45:a4:59:f0
+[0;32mI (6837) Device1_GPS: [CALLBACK] mmipal_link_status_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (6837) Device1_GPS: [CALLBACK] mmwlan_link_state_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (6844) Device1_GPS: ✓ LWIP LINK IS UP - Ready to send UDP packets! IP: 192.168.1.2[0m
+[0;32mI (6853) Device1_GPS: Link went Up[0m
+[0;32mI (6844) Device1_GPS: ✓ SAE authentication successful[0m
+[0;32mI (6868) Device1_GPS: Waiting for LWIP link to be ready...[0m
+[0;32mI (6876) Device1_GPS: ✓ LWIP link is UP - ready to send data![0m
+[0;32mI (6878) Device1_GPS: Starting GPS UART task with 16KB stack...[0m
+[0;32mI (6885) Device1_GPS: GPS UART initialized on pins RX=18 TX=17[0m
+[0;32mI (7890) Device1_GPS: UDP socket created, ready to send to 192.168.1.1:5001[0m
+[0;32mI (7891) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (8896) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (9901) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (10902) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (11903) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (12908) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (13913) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (14918) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (15923) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (16924) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (17929) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (18934) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (19939) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (20944) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (21945) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (22950) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (23955) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (24960) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (25965) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (26966) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (27971) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (28976) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (29981) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (30986) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (31987) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (32992) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (33997) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    33535 Failed to write page: -32768
+E    33535 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (35002) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    34536 Failed to write page: -32768
+E    34536 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (36009) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    35543 Failed to write page: -32768
+E    35543 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (37010) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    36550 Failed to write page: -32768
+E    36550 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (38019) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    37559 Failed to write page: -32768
+E    37559 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (39028) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    38568 Failed to write page: -32768
+E    38568 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+E    38575 Failed to write page: -32768
+E    38575 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+E    39574 Failed to write page: -32768
+E    39575 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+[0;32mI (40046) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    39586 Failed to write page: -32768
+E    39586 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+E    40574 Failed to write page: -32768
+E    40575 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+[0;32mI (41058) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    40598 Failed to write page: -32768
+E    40598 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+E    41568 Command 19:322 timed out
+
+assert failed: xQueueSemaphoreTake queue.c:1713 (pxQueue->uxItemSize == 0)
+
+
+Backtrace: 0x40376035:0x3fcaafd0 0x4037d075:0x3fcaaff0 0x403874bd:0x3fcab010 0x4037d8da:0x3fcab130 0x4200eb7e:0x3fcab170 0x4205c4da:0x3fcab190 0x4205d0a7:0x3fcab1d0 0x4205d759:0x3fcab240 0x420455b1:0x3fcab270 0x4200eacc:0x3fcab290 0x4037db0d:0x3fcab2c0
+
+
+
+
+ELF file SHA256: 5e0a4dd6f
+
+Rebooting...
+���ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0xb (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40375f74
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2810,len:0x1564
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xd24
+load:0x403cb700,len:0x2ed4
+entry 0x403c8928
+[0;32mI (31) boot: ESP-IDF v5.4.4 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time May 10 2026 19:41:37[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (31) boot: chip revision: v0.2[0m
+[0;32mI (34) boot: efuse block revision: v1.3[0m
+[0;32mI (38) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (42) boot.esp32s3: SPI Mode       : DIO[0m
+[0;32mI (45) boot.esp32s3: SPI Flash Size : 16MB[0m
+[0;32mI (49) boot: Enabling RNG early entropy source...[0m
+[0;32mI (54) boot: Partition Table:[0m
+[0;32mI (56) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (63) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (69) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (76) boot:  2 factory          factory app      00 00 00010000 00177000[0m
+[0;32mI (82) boot: End of partition table[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c0b0020 size=9d1fch (643580) map[0m
+[0;32mI (206) esp_image: segment 1: paddr=000ad224 vaddr=3fc99500 size=02df4h ( 11764) load[0m
+[0;32mI (209) esp_image: segment 2: paddr=000b0020 vaddr=42000020 size=aa9c4h (698820) map[0m
+[0;32mI (333) esp_image: segment 3: paddr=0015a9ec vaddr=3fc9c2f4 size=003c8h (   968) load[0m
+[0;32mI (334) esp_image: segment 4: paddr=0015adbc vaddr=40374000 size=15490h ( 87184) load[0m
+[0;32mI (356) esp_image: segment 5: paddr=00170254 vaddr=50000000 size=0001ch (    28) load[0m
+[0;32mI (364) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (365) boot: Disabling RNG early entropy source...[0m
+[0;32mI (375) cpu_start: Multicore app[0m
+[0;32mI (383) cpu_start: GPIO 44 and 43 are used as console UART I/O pins[0m
+[0;32mI (384) cpu_start: Pro cpu start user code[0m
+[0;32mI (384) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (385) app_init: Application information:[0m
+[0;32mI (389) app_init: Project name:     main[0m
+[0;32mI (393) app_init: App version:      1[0m
+[0;32mI (396) app_init: Compile time:     May 10 2026 19:37:44[0m
+[0;32mI (401) app_init: ELF file SHA256:  5e0a4dd6f...[0m
+[0;32mI (406) app_init: ESP-IDF:          v5.4.4[0m
+[0;32mI (409) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (413) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (417) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (421) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (427) heap_init: At 3FCA0EA0 len 00048870 (290 KiB): RAM[0m
+[0;32mI (432) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (438) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (443) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM[0m
+[0;32mI (449) spi_flash: detected chip: winbond[0m
+[0;32mI (452) spi_flash: flash io: dio[0m
+[0;32mI (455) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (461) sleep_gpio: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (468) main_task: Started on CPU0[0m
+[0;32mI (499) main_task: Calling app_main()[0m
+[0;32mI (517) Device1_GPS: === RUSC Device 1: GPS Collector + HALow UDP ===[0m
+[0;32mI (517) Device1_GPS: Starting MorseMicro HALow radio initialization...[0m
+[0;32mI (619) gpio: GPIO[8]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (619) Device1_GPS: Setting regulatory domain to US...[0m
+[0;32mI (621) Device1_GPS: Regulatory domain set to US (Op Class 1, Channel 3)[0m
+[0;32mI (627) Device1_GPS: Attempting mmwlan_boot...[0m
+[0;32mI (632) gpio: GPIO[2]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (640) gpio: GPIO[9]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (648) gpio: GPIO[7]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (656) gpio: GPIO[6]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+Actual SPI CLK 40000kHz
+[0;32mI (1289) Device1_GPS: Radio boot successful![0m
+Morse LwIP interface initialised.
+[0;32mI (1305) Device1_GPS: Network interface initialized[0m
+[0;32mI (1306) Device1_GPS: Configuring HaLow STA connection for AP: MorseMicro[0m
+[0;32mI (1306) Device1_GPS: Attempting MorseMicro STA mode to connect to MorseMicro...[0m
+[0;32mI (1313) Device1_GPS: [DEBUG] STA connection parameters:[0m
+[0;32mI (1318) Device1_GPS:   SSID: MorseMicro (len=10)[0m
+[0;32mI (1322) Device1_GPS:   Security: 2 (MMWLAN_SAE=2)[0m
+[0;32mI (1327) Device1_GPS:   PMF: 0 (REQUIRED=0)[0m
+[0;32mI (1403) Device1_GPS: [DEBUG] mmwlan_sta_enable(with callback) returned: 0 (SUCCESS=0)[0m
+[0;32mI (1404) Device1_GPS: [DEBUG] STA enable SUCCESS - connection should be initiating[0m
+[0;32mI (1412) Device1_GPS: Waiting for SAE authentication (STA CONNECTED state)...[0m
+[0;32mI (4525) Device1_GPS: [CALLBACK] sta_status_callback fired! state=1[0m
+[0;32mI (4526) Device1_GPS: STA state: CONNECTING (1)[0m
+[0;32mI (6685) Device1_GPS: [CALLBACK] sta_status_callback fired! state=2[0m
+[0;32mI (6685) Device1_GPS: STA state: CONNECTED (2) - SAE auth successful![0m
+Morse STA interface up with MAC address 02:00:45:a4:59:f0
+[0;32mI (6691) Device1_GPS: [CALLBACK] mmipal_link_status_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (6692) Device1_GPS: [CALLBACK] mmwlan_link_state_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (6699) Device1_GPS: ✓ LWIP LINK IS UP - Ready to send UDP packets! IP: 192.168.1.2[0m
+[0;32mI (6708) Device1_GPS: Link went Up[0m
+[0;32mI (6699) Device1_GPS: ✓ SAE authentication successful[0m
+[0;32mI (6723) Device1_GPS: Waiting for LWIP link to be ready...[0m
+[0;32mI (6731) Device1_GPS: ✓ LWIP link is UP - ready to send data![0m
+[0;32mI (6733) Device1_GPS: Starting GPS UART task with 16KB stack...[0m
+[0;32mI (6740) Device1_GPS: GPS UART initialized on pins RX=18 TX=17[0m
+[0;32mI (7744) Device1_GPS: UDP socket created, ready to send to 192.168.1.1:5001[0m
+[0;32mI (7745) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (8750) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (9755) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (10756) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (11757) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (12762) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (13767) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    13305 Failed to write page: -32768
+E    13305 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (14772) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    14306 Failed to write page: -32768
+E    14306 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (15779) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    15319 Failed to write page: -32768
+E    15319 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (16780) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    16320 Failed to write page: -32768
+E    16320 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (17789) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    17329 Failed to write page: -32768
+E    17329 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (18802) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    18342 Failed to write page: -32768
+E    18342 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+E    18349 Failed to write page: -32768
+E    18349 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+E    19348 Failed to write page: -32768
+E    19349 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+[0;32mI (19820) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    19360 Failed to write page: -32768
+E    19360 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+E    20348 Failed to write page: -32768
+E    20349 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+[0;32mI (20832) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    20372 Failed to write page: -32768
+E    20372 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4037d150  PS      : 0x00060333  A0      : 0x8037d4eb  A1      : 0x3fcaa7b0  
+A2      : 0x3fcaacd8  A3      : 0x00000000  A4      : 0x00000000  A5      : 0x00060323  
+A6      : 0x00000001  A7      : 0x00060120  A8      : 0x00000000  A9      : 0x3fcaa7a0  
+A10     : 0x00000000  A11     : 0x00000000  A12     : 0x00000000  A13     : 0x00060323  
+A14     : 0xb33fffff  A15     : 0x3fcaad24  SAR     : 0x00000007  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00060158  LBEG    : 0x4205de6e  LEND    : 0x4205de88  LCOUNT  : 0x00000003  
+
+
+Backtrace: 0x4037d14d:0x3fcaa7b0 0x4037d4e8:0x3fcaa7e0 0x4200eb9a:0x3fcaa820 0x4205c258:0x3fcaa840 0x4205e05c:0x3fcaa8b0 0x4200eacc:0x3fcaa8d0 0x4037db0d:0x3fcaa900
+
+
+
+
+ELF file SHA256: 5e0a4dd6f
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0xb (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4209c62b
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2810,len:0x1564
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xd24
+load:0x403cb700,len:0x2ed4
+entry 0x403c8928
+[0;32mI (31) boot: ESP-IDF v5.4.4 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time May 10 2026 19:41:37[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (31) boot: chip revision: v0.2[0m
+[0;32mI (34) boot: efuse block revision: v1.3[0m
+[0;32mI (38) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (42) boot.esp32s3: SPI Mode       : DIO[0m
+[0;32mI (45) boot.esp32s3: SPI Flash Size : 16MB[0m
+[0;32mI (49) boot: Enabling RNG early entropy source...[0m
+[0;32mI (54) boot: Partition Table:[0m
+[0;32mI (56) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (63) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (69) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (76) boot:  2 factory          factory app      00 00 00010000 00177000[0m
+[0;32mI (82) boot: End of partition table[0m
+[0;32mI (86) esp_image: segment 0: paddr=00010020 vaddr=3c0b0020 size=9d1fch (643580) map[0m
+[0;32mI (207) esp_image: segment 1: paddr=000ad224 vaddr=3fc99500 size=02df4h ( 11764) load[0m
+[0;32mI (210) esp_image: segment 2: paddr=000b0020 vaddr=42000020 size=aa9c4h (698820) map[0m
+[0;32mI (334) esp_image: segment 3: paddr=0015a9ec vaddr=3fc9c2f4 size=003c8h (   968) load[0m
+[0;32mI (335) esp_image: segment 4: paddr=0015adbc vaddr=40374000 size=15490h ( 87184) load[0m
+[0;32mI (357) esp_image: segment 5: paddr=00170254 vaddr=50000000 size=0001ch (    28) load[0m
+[0;32mI (366) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (366) boot: Disabling RNG early entropy source...[0m
+[0;32mI (376) cpu_start: Multicore app[0m
+[0;32mI (384) cpu_start: GPIO 44 and 43 are used as console UART I/O pins[0m
+[0;32mI (385) cpu_start: Pro cpu start user code[0m
+[0;32mI (385) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (387) app_init: Application information:[0m
+[0;32mI (390) app_init: Project name:     main[0m
+[0;32mI (394) app_init: App version:      1[0m
+[0;32mI (397) app_init: Compile time:     May 10 2026 19:37:44[0m
+[0;32mI (402) app_init: ELF file SHA256:  5e0a4dd6f...[0m
+[0;32mI (407) app_init: ESP-IDF:          v5.4.4[0m
+[0;32mI (411) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (414) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (418) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (422) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (429) heap_init: At 3FCA0EA0 len 00048870 (290 KiB): RAM[0m
+[0;32mI (434) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (439) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (444) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM[0m
+[0;32mI (450) spi_flash: detected chip: winbond[0m
+[0;32mI (453) spi_flash: flash io: dio[0m
+[0;32mI (456) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (462) sleep_gpio: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (469) main_task: Started on CPU0[0m
+[0;32mI (500) main_task: Calling app_main()[0m
+[0;32mI (518) Device1_GPS: === RUSC Device 1: GPS Collector + HALow UDP ===[0m
+[0;32mI (518) Device1_GPS: Starting MorseMicro HALow radio initialization...[0m
+[0;32mI (620) gpio: GPIO[8]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (620) Device1_GPS: Setting regulatory domain to US...[0m
+[0;32mI (622) Device1_GPS: Regulatory domain set to US (Op Class 1, Channel 3)[0m
+[0;32mI (628) Device1_GPS: Attempting mmwlan_boot...[0m
+[0;32mI (633) gpio: GPIO[2]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (641) gpio: GPIO[9]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (649) gpio: GPIO[7]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (657) gpio: GPIO[6]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+Actual SPI CLK 40000kHz
+[0;32mI (1295) Device1_GPS: Radio boot successful![0m
+Morse LwIP interface initialised.
+[0;32mI (1311) Device1_GPS: Network interface initialized[0m
+[0;32mI (1312) Device1_GPS: Configuring HaLow STA connection for AP: MorseMicro[0m
+[0;32mI (1312) Device1_GPS: Attempting MorseMicro STA mode to connect to MorseMicro...[0m
+[0;32mI (1319) Device1_GPS: [DEBUG] STA connection parameters:[0m
+[0;32mI (1324) Device1_GPS:   SSID: MorseMicro (len=10)[0m
+[0;32mI (1328) Device1_GPS:   Security: 2 (MMWLAN_SAE=2)[0m
+[0;32mI (1333) Device1_GPS:   PMF: 0 (REQUIRED=0)[0m
+[0;32mI (1409) Device1_GPS: [DEBUG] mmwlan_sta_enable(with callback) returned: 0 (SUCCESS=0)[0m
+[0;32mI (1410) Device1_GPS: [DEBUG] STA enable SUCCESS - connection should be initiating[0m
+[0;32mI (1418) Device1_GPS: Waiting for SAE authentication (STA CONNECTED state)...[0m
+[0;32mI (4527) Device1_GPS: [CALLBACK] sta_status_callback fired! state=1[0m
+[0;32mI (4527) Device1_GPS: STA state: CONNECTING (1)[0m
+[0;32mI (6771) Device1_GPS: [CALLBACK] sta_status_callback fired! state=2[0m
+[0;32mI (6771) Device1_GPS: STA state: CONNECTED (2) - SAE auth successful![0m
+Morse STA interface up with MAC address 02:00:45:a4:59:f0
+[0;32mI (6778) Device1_GPS: [CALLBACK] mmipal_link_status_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (6778) Device1_GPS: [CALLBACK] mmwlan_link_state_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (6785) Device1_GPS: ✓ LWIP LINK IS UP - Ready to send UDP packets! IP: 192.168.1.2[0m
+[0;32mI (6794) Device1_GPS: Link went Up[0m
+[0;32mI (6785) Device1_GPS: ✓ SAE authentication successful[0m
+[0;32mI (6809) Device1_GPS: Waiting for LWIP link to be ready...[0m
+[0;32mI (6817) Device1_GPS: ✓ LWIP link is UP - ready to send data![0m
+[0;32mI (6819) Device1_GPS: Starting GPS UART task with 16KB stack...[0m
+[0;32mI (6826) Device1_GPS: GPS UART initialized on pins RX=18 TX=17[0m
+[0;32mI (7831) Device1_GPS: UDP socket created, ready to send to 192.168.1.1:5001[0m
+[0;32mI (7832) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (8837) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (9842) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (10843) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (11844) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (12849) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (13854) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (14859) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (15864) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (16865) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (17870) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (18875) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    18412 Failed to write page: -32768
+E    18412 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (19880) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    19413 Failed to write page: -32768
+E    19413 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (20887) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    20420 Failed to write page: -32768
+E    20421 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (21888) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    21421 Failed to write page: -32768
+E    21421 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (22894) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    22427 Failed to write page: -32768
+E    22427 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (23900) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    23433 Failed to write page: -32768
+E    23433 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+E    23438 Failed to write page: -32768
+E    23441 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+E    24433 Failed to write page: -32768
+E    24433 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+[0;32mI (24917) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    24450 Failed to write page: -32768
+E    24450 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+E    25433 Failed to write page: -32768
+E    25433 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+[0;32mI (25918) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    25451 Failed to write page: -32768
+E    25451 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+E    26433 Command 19:322 timed out
+
+assert failed: xQueueSemaphoreTake queue.c:1713 (pxQueue->uxItemSize == 0)
+
+
+Backtrace: 0x40376035:0x3fcaafd0 0x4037d075:0x3fcaaff0 0x403874bd:0x3fcab010 0x4037d8da:0x3fcab130 0x4200eb7e:0x3fcab170 0x4205c4da:0x3fcab190 0x4205d0a7:0x3fcab1d0 0x4205d759:0x3fcab240 0x420455b1:0x3fcab270 0x4200eacc:0x3fcab290 0x4037db0d:0x3fcab2c0
+
+
+
+
+ELF file SHA256: 5e0a4dd6f
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0xb (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40375f74
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2810,len:0x1564
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xd24
+load:0x403cb700,len:0x2ed4
+entry 0x403c8928
+[0;32mI (31) boot: ESP-IDF v5.4.4 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time May 10 2026 19:41:37[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (31) boot: chip revision: v0.2[0m
+[0;32mI (34) boot: efuse block revision: v1.3[0m
+[0;32mI (38) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (42) boot.esp32s3: SPI Mode       : DIO[0m
+[0;32mI (45) boot.esp32s3: SPI Flash Size : 16MB[0m
+[0;32mI (49) boot: Enabling RNG early entropy source...[0m
+[0;32mI (54) boot: Partition Table:[0m
+[0;32mI (56) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (63) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (69) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (76) boot:  2 factory          factory app      00 00 00010000 00177000[0m
+[0;32mI (82) boot: End of partition table[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c0b0020 size=9d1fch (643580) map[0m
+[0;32mI (206) esp_image: segment 1: paddr=000ad224 vaddr=3fc99500 size=02df4h ( 11764) load[0m
+[0;32mI (209) esp_image: segment 2: paddr=000b0020 vaddr=42000020 size=aa9c4h (698820) map[0m
+[0;32mI (333) esp_image: segment 3: paddr=0015a9ec vaddr=3fc9c2f4 size=003c8h (   968) load[0m
+[0;32mI (334) esp_image: segment 4: paddr=0015adbc vaddr=40374000 size=15490h ( 87184) load[0m
+[0;32mI (356) esp_image: segment 5: paddr=00170254 vaddr=50000000 size=0001ch (    28) load[0m
+[0;32mI (364) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (365) boot: Disabling RNG early entropy source...[0m
+[0;32mI (375) cpu_start: Multicore app[0m
+[0;32mI (383) cpu_start: GPIO 44 and 43 are used as console UART I/O pins[0m
+[0;32mI (384) cpu_start: Pro cpu start user code[0m
+[0;32mI (384) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (385) app_init: Application information:[0m
+[0;32mI (389) app_init: Project name:     main[0m
+[0;32mI (393) app_init: App version:      1[0m
+[0;32mI (396) app_init: Compile time:     May 10 2026 19:37:44[0m
+[0;32mI (401) app_init: ELF file SHA256:  5e0a4dd6f...[0m
+[0;32mI (406) app_init: ESP-IDF:          v5.4.4[0m
+[0;32mI (409) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (413) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (417) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (421) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (427) heap_init: At 3FCA0EA0 len 00048870 (290 KiB): RAM[0m
+[0;32mI (432) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (438) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (443) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM[0m
+[0;32mI (449) spi_flash: detected chip: winbond[0m
+[0;32mI (452) spi_flash: flash io: dio[0m
+[0;32mI (455) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (461) sleep_gpio: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (468) main_task: Started on CPU0[0m
+[0;32mI (499) main_task: Calling app_main()[0m
+[0;32mI (517) Device1_GPS: === RUSC Device 1: GPS Collector + HALow UDP ===[0m
+[0;32mI (517) Device1_GPS: Starting MorseMicro HALow radio initialization...[0m
+[0;32mI (619) gpio: GPIO[8]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (619) Device1_GPS: Setting regulatory domain to US...[0m
+[0;32mI (621) Device1_GPS: Regulatory domain set to US (Op Class 1, Channel 3)[0m
+[0;32mI (627) Device1_GPS: Attempting mmwlan_boot...[0m
+[0;32mI (632) gpio: GPIO[2]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (640) gpio: GPIO[9]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (648) gpio: GPIO[7]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (656) gpio: GPIO[6]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+Actual SPI CLK 40000kHz
+[0;32mI (1289) Device1_GPS: Radio boot successful![0m
+Morse LwIP interface initialised.
+[0;32mI (1305) Device1_GPS: Network interface initialized[0m
+[0;32mI (1306) Device1_GPS: Configuring HaLow STA connection for AP: MorseMicro[0m
+[0;32mI (1306) Device1_GPS: Attempting MorseMicro STA mode to connect to MorseMicro...[0m
+[0;32mI (1313) Device1_GPS: [DEBUG] STA connection parameters:[0m
+[0;32mI (1318) Device1_GPS:   SSID: MorseMicro (len=10)[0m
+[0;32mI (1322) Device1_GPS:   Security: 2 (MMWLAN_SAE=2)[0m
+[0;32mI (1327) Device1_GPS:   PMF: 0 (REQUIRED=0)[0m
+[0;32mI (1403) Device1_GPS: [DEBUG] mmwlan_sta_enable(with callback) returned: 0 (SUCCESS=0)[0m
+[0;32mI (1404) Device1_GPS: [DEBUG] STA enable SUCCESS - connection should be initiating[0m
+[0;32mI (1412) Device1_GPS: Waiting for SAE authentication (STA CONNECTED state)...[0m
+[0;32mI (4529) Device1_GPS: [CALLBACK] sta_status_callback fired! state=1[0m
+[0;32mI (4529) Device1_GPS: STA state: CONNECTING (1)[0m
+[0;32mI (6769) Device1_GPS: [CALLBACK] sta_status_callback fired! state=2[0m
+[0;32mI (6770) Device1_GPS: STA state: CONNECTED (2) - SAE auth successful![0m
+Morse STA interface up with MAC address 02:00:45:a4:59:f0
+[0;32mI (6776) Device1_GPS: [CALLBACK] mmipal_link_status_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (6776) Device1_GPS: [CALLBACK] mmwlan_link_state_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (6784) Device1_GPS: ✓ LWIP LINK IS UP - Ready to send UDP packets! IP: 192.168.1.2[0m
+[0;32mI (6792) Device1_GPS: Link went Up[0m
+[0;32mI (6784) Device1_GPS: ✓ SAE authentication successful[0m
+[0;32mI (6808) Device1_GPS: Waiting for LWIP link to be ready...[0m
+[0;32mI (6812) Device1_GPS: ✓ LWIP link is UP - ready to send data![0m
+[0;32mI (6818) Device1_GPS: Starting GPS UART task with 16KB stack...[0m
+[0;32mI (6824) Device1_GPS: GPS UART initialized on pins RX=18 TX=17[0m
+[0;32mI (7829) Device1_GPS: UDP socket created, ready to send to 192.168.1.1:5001[0m
+[0;32mI (7830) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (8832) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (9837) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (10838) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (11839) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (12844) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (13849) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (14854) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    14392 Failed to write page: -32768
+E    14392 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (15859) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    15393 Failed to write page: -32768
+E    15393 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (16866) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    16406 Failed to write page: -32768
+E    16406 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (17875) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    17415 Failed to write page: -32768
+E    17415 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (18884) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    18424 Failed to write page: -32768
+E    18424 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (19893) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    19433 Failed to write page: -32768
+E    19433 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+E    19440 Failed to write page: -32768
+E    19440 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+E    20439 Failed to write page: -32768
+E    20439 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+[0;32mI (20911) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    20451 Failed to write page: -32768
+E    20451 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+E    21439 Failed to write page: -32768
+E    21440 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+[0;32mI (21923) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    21463 Failed to write page: -32768
+E    21463 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+E    22433 Command 19:322 timed out
+
+assert failed: xQueueSemaphoreTake queue.c:1713 (pxQueue->uxItemSize == 0)
+
+
+Backtrace: 0x40376035:0x3fcaafd0 0x4037d075:0x3fcaaff0 0x403874bd:0x3fcab010 0x4037d8da:0x3fcab130 0x4200eb7e:0x3fcab170 0x4205c4da:0x3fcab190 0x4205d0a7:0x3fcab1d0 0x4205d759:0x3fcab240 0x420455b1:0x3fcab270 0x4200eacc:0x3fcab290 0x4037db0d:0x3fcab2c0
+
+
+
+
+ELF file SHA256: 5e0a4dd6f
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0xb (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40375f74
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2810,len:0x1564
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xd24
+load:0x403cb700,len:0x2ed4
+entry 0x403c8928
+[0;32mI (31) boot: ESP-IDF v5.4.4 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time May 10 2026 19:41:37[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (31) boot: chip revision: v0.2[0m
+[0;32mI (34) boot: efuse block revision: v1.3[0m
+[0;32mI (38) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (42) boot.esp32s3: SPI Mode       : DIO[0m
+[0;32mI (45) boot.esp32s3: SPI Flash Size : 16MB[0m
+[0;32mI (49) boot: Enabling RNG early entropy source...[0m
+[0;32mI (54) boot: Partition Table:[0m
+[0;32mI (56) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (63) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (69) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (76) boot:  2 factory          factory app      00 00 00010000 00177000[0m
+[0;32mI (82) boot: End of partition table[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c0b0020 size=9d1fch (643580) map[0m
+[0;32mI (206) esp_image: segment 1: paddr=000ad224 vaddr=3fc99500 size=02df4h ( 11764) load[0m
+[0;32mI (209) esp_image: segment 2: paddr=000b0020 vaddr=42000020 size=aa9c4h (698820) map[0m
+[0;32mI (333) esp_image: segment 3: paddr=0015a9ec vaddr=3fc9c2f4 size=003c8h (   968) load[0m
+[0;32mI (334) esp_image: segment 4: paddr=0015adbc vaddr=40374000 size=15490h ( 87184) load[0m
+[0;32mI (356) esp_image: segment 5: paddr=00170254 vaddr=50000000 size=0001ch (    28) load[0m
+[0;32mI (364) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (365) boot: Disabling RNG early entropy source...[0m
+[0;32mI (375) cpu_start: Multicore app[0m
+[0;32mI (383) cpu_start: GPIO 44 and 43 are used as console UART I/O pins[0m
+[0;32mI (384) cpu_start: Pro cpu start user code[0m
+[0;32mI (384) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (385) app_init: Application information:[0m
+[0;32mI (389) app_init: Project name:     main[0m
+[0;32mI (393) app_init: App version:      1[0m
+[0;32mI (396) app_init: Compile time:     May 10 2026 19:37:44[0m
+[0;32mI (401) app_init: ELF file SHA256:  5e0a4dd6f...[0m
+[0;32mI (406) app_init: ESP-IDF:          v5.4.4[0m
+[0;32mI (409) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (413) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (417) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (421) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (427) heap_init: At 3FCA0EA0 len 00048870 (290 KiB): RAM[0m
+[0;32mI (432) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (438) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (443) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM[0m
+[0;32mI (449) spi_flash: detected chip: winbond[0m
+[0;32mI (452) spi_flash: flash io: dio[0m
+[0;32mI (455) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (461) sleep_gpio: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (468) main_task: Started on CPU0[0m
+[0;32mI (499) main_task: Calling app_main()[0m
+[0;32mI (517) Device1_GPS: === RUSC Device 1: GPS Collector + HALow UDP ===[0m
+[0;32mI (517) Device1_GPS: Starting MorseMicro HALow radio initialization...[0m
+[0;32mI (619) gpio: GPIO[8]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (619) Device1_GPS: Setting regulatory domain to US...[0m
+[0;32mI (621) Device1_GPS: Regulatory domain set to US (Op Class 1, Channel 3)[0m
+[0;32mI (627) Device1_GPS: Attempting mmwlan_boot...[0m
+[0;32mI (632) gpio: GPIO[2]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (640) gpio: GPIO[9]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (648) gpio: GPIO[7]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (656) gpio: GPIO[6]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+Actual SPI CLK 40000kHz
+[0;32mI (1294) Device1_GPS: Radio boot successful![0m
+Morse LwIP interface initialised.
+[0;32mI (1310) Device1_GPS: Network interface initialized[0m
+[0;32mI (1311) Device1_GPS: Configuring HaLow STA connection for AP: MorseMicro[0m
+[0;32mI (1311) Device1_GPS: Attempting MorseMicro STA mode to connect to MorseMicro...[0m
+[0;32mI (1318) Device1_GPS: [DEBUG] STA connection parameters:[0m
+[0;32mI (1323) Device1_GPS:   SSID: MorseMicro (len=10)[0m
+[0;32mI (1327) Device1_GPS:   Security: 2 (MMWLAN_SAE=2)[0m
+[0;32mI (1332) Device1_GPS:   PMF: 0 (REQUIRED=0)[0m
+[0;32mI (1409) Device1_GPS: [DEBUG] mmwlan_sta_enable(with callback) returned: 0 (SUCCESS=0)[0m
+[0;32mI (1409) Device1_GPS: [DEBUG] STA enable SUCCESS - connection should be initiating[0m
+[0;32mI (1413) Device1_GPS: Waiting for SAE authentication (STA CONNECTED state)...[0m
+[0;32mI (4530) Device1_GPS: [CALLBACK] sta_status_callback fired! state=1[0m
+[0;32mI (4530) Device1_GPS: STA state: CONNECTING (1)[0m
+[0;32mI (6812) Device1_GPS: [CALLBACK] sta_status_callback fired! state=2[0m
+[0;32mI (6813) Device1_GPS: STA state: CONNECTED (2) - SAE auth successful![0m
+Morse STA interface up with MAC address 02:00:45:a4:59:f0
+[0;32mI (6819) Device1_GPS: [CALLBACK] mmipal_link_status_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (6819) Device1_GPS: [CALLBACK] mmwlan_link_state_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (6826) Device1_GPS: ✓ LWIP LINK IS UP - Ready to send UDP packets! IP: 192.168.1.2[0m
+[0;32mI (6835) Device1_GPS: Link went Up[0m
+[0;32mI (6826) Device1_GPS: ✓ SAE authentication successful[0m
+[0;32mI (6850) Device1_GPS: Waiting for LWIP link to be ready...[0m
+[0;32mI (6858) Device1_GPS: ✓ LWIP link is UP - ready to send data![0m
+[0;32mI (6861) Device1_GPS: Starting GPS UART task with 16KB stack...[0m
+[0;32mI (6868) Device1_GPS: GPS UART initialized on pins RX=18 TX=17[0m
+[0;32mI (7872) Device1_GPS: UDP socket created, ready to send to 192.168.1.1:5001[0m
+[0;32mI (7873) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (8878) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (9883) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (10884) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (11885) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (12886) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (13887) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (14888) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (15890) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (16891) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (17892) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (18893) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (19894) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (20895) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (21896) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (22897) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (23898) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (24899) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (25900) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (26901) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (27902) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (28903) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (29904) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (30908) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (31909) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (32914) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    32452 Failed to write page: -32768
+E    32452 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (33919) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    33453 Failed to write page: -32768
+E    33453 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (34926) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    34460 Failed to write page: -32768
+E    34460 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (35932) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    35466 Failed to write page: -32768
+E    35466 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (36933) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    36473 Failed to write page: -32768
+E    36473 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (37942) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    37482 Failed to write page: -32768
+E    37482 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+E    37489 Failed to write page: -32768
+E    37489 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+E    38489 Failed to write page: -32768
+E    38490 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+[0;32mI (38960) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    38500 Failed to write page: -32768
+E    38500 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+E    39489 Failed to write page: -32768
+E    39490 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+[0;32mI (39973) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    39513 Failed to write page: -32768
+E    39513 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4037d150  PS      : 0x00060533  A0      : 0x8037d4eb  A1      : 0x3fcaa7b0  
+A2      : 0x3fcaacd8  A3      : 0x00000000  A4      : 0x00000000  A5      : 0x00060523  
+A6      : 0x00000001  A7      : 0x00060f20  A8      : 0x00000000  A9      : 0x3fcaa7a0  
+A10     : 0x00000000  A11     : 0x00000000  A12     : 0x00000000  A13     : 0x00060523  
+A14     : 0xb33fffff  A15     : 0x3fcaad24  SAR     : 0x00000007  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00060f58  LBEG    : 0x4205de6e  LEND    : 0x4205de88  LCOUNT  : 0x00000003  
+
+
+Backtrace: 0x4037d14d:0x3fcaa7b0 0x4037d4e8:0x3fcaa7e0 0x4200eb9a:0x3fcaa820 0x4205c258:0x3fcaa840 0x4205e05c:0x3fcaa8b0 0x4200eacc:0x3fcaa8d0 0x4037db0d:0x3fcaa900
+
+
+
+
+ELF file SHA256: 5e0a4dd6f
+
+Rebooting...
+���ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0xb (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4209c247
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2810,len:0x1564
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xd24
+load:0x403cb700,len:0x2ed4
+entry 0x403c8928
+[0;32mI (31) boot: ESP-IDF v5.4.4 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time May 10 2026 19:41:37[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (31) boot: chip revision: v0.2[0m
+[0;32mI (34) boot: efuse block revision: v1.3[0m
+[0;32mI (38) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (42) boot.esp32s3: SPI Mode       : DIO[0m
+[0;32mI (45) boot.esp32s3: SPI Flash Size : 16MB[0m
+[0;32mI (49) boot: Enabling RNG early entropy source...[0m
+[0;32mI (54) boot: Partition Table:[0m
+[0;32mI (56) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (63) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (69) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (76) boot:  2 factory          factory app      00 00 00010000 00177000[0m
+[0;32mI (82) boot: End of partition table[0m
+[0;32mI (86) esp_image: segment 0: paddr=00010020 vaddr=3c0b0020 size=9d1fch (643580) map[0m
+[0;32mI (207) esp_image: segment 1: paddr=000ad224 vaddr=3fc99500 size=02df4h ( 11764) load[0m
+[0;32mI (210) esp_image: segment 2: paddr=000b0020 vaddr=42000020 size=aa9c4h (698820) map[0m
+[0;32mI (334) esp_image: segment 3: paddr=0015a9ec vaddr=3fc9c2f4 size=003c8h (   968) load[0m
+[0;32mI (335) esp_image: segment 4: paddr=0015adbc vaddr=40374000 size=15490h ( 87184) load[0m
+[0;32mI (357) esp_image: segment 5: paddr=00170254 vaddr=50000000 size=0001ch (    28) load[0m
+[0;32mI (366) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (366) boot: Disabling RNG early entropy source...[0m
+[0;32mI (376) cpu_start: Multicore app[0m
+[0;32mI (384) cpu_start: GPIO 44 and 43 are used as console UART I/O pins[0m
+[0;32mI (385) cpu_start: Pro cpu start user code[0m
+[0;32mI (385) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (387) app_init: Application information:[0m
+[0;32mI (390) app_init: Project name:     main[0m
+[0;32mI (394) app_init: App version:      1[0m
+[0;32mI (397) app_init: Compile time:     May 10 2026 19:37:44[0m
+[0;32mI (402) app_init: ELF file SHA256:  5e0a4dd6f...[0m
+[0;32mI (407) app_init: ESP-IDF:          v5.4.4[0m
+[0;32mI (411) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (414) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (418) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (422) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (429) heap_init: At 3FCA0EA0 len 00048870 (290 KiB): RAM[0m
+[0;32mI (434) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (439) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (444) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM[0m
+[0;32mI (450) spi_flash: detected chip: winbond[0m
+[0;32mI (453) spi_flash: flash io: dio[0m
+[0;32mI (456) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (462) sleep_gpio: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (469) main_task: Started on CPU0[0m
+[0;32mI (500) main_task: Calling app_main()[0m
+[0;32mI (518) Device1_GPS: === RUSC Device 1: GPS Collector + HALow UDP ===[0m
+[0;32mI (518) Device1_GPS: Starting MorseMicro HALow radio initialization...[0m
+[0;32mI (620) gpio: GPIO[8]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (620) Device1_GPS: Setting regulatory domain to US...[0m
+[0;32mI (622) Device1_GPS: Regulatory domain set to US (Op Class 1, Channel 3)[0m
+[0;32mI (628) Device1_GPS: Attempting mmwlan_boot...[0m
+[0;32mI (633) gpio: GPIO[2]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (641) gpio: GPIO[9]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (649) gpio: GPIO[7]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (657) gpio: GPIO[6]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+Actual SPI CLK 40000kHz
+[0;32mI (1295) Device1_GPS: Radio boot successful![0m
+Morse LwIP interface initialised.
+[0;32mI (1311) Device1_GPS: Network interface initialized[0m
+[0;32mI (1312) Device1_GPS: Configuring HaLow STA connection for AP: MorseMicro[0m
+[0;32mI (1312) Device1_GPS: Attempting MorseMicro STA mode to connect to MorseMicro...[0m
+[0;32mI (1319) Device1_GPS: [DEBUG] STA connection parameters:[0m
+[0;32mI (1324) Device1_GPS:   SSID: MorseMicro (len=10)[0m
+[0;32mI (1328) Device1_GPS:   Security: 2 (MMWLAN_SAE=2)[0m
+[0;32mI (1333) Device1_GPS:   PMF: 0 (REQUIRED=0)[0m
+[0;32mI (1409) Device1_GPS: [DEBUG] mmwlan_sta_enable(with callback) returned: 0 (SUCCESS=0)[0m
+[0;32mI (1410) Device1_GPS: [DEBUG] STA enable SUCCESS - connection should be initiating[0m
+[0;32mI (1418) Device1_GPS: Waiting for SAE authentication (STA CONNECTED state)...[0m
+[0;32mI (4542) Device1_GPS: [CALLBACK] sta_status_callback fired! state=1[0m
+[0;32mI (4542) Device1_GPS: STA state: CONNECTING (1)[0m
+[0;32mI (6704) Device1_GPS: [CALLBACK] sta_status_callback fired! state=2[0m
+[0;32mI (6704) Device1_GPS: STA state: CONNECTED (2) - SAE auth successful![0m
+Morse STA interface up with MAC address 02:00:45:a4:59:f0
+[0;32mI (6710) Device1_GPS: [CALLBACK] mmipal_link_status_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (6711) Device1_GPS: [CALLBACK] mmwlan_link_state_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (6718) Device1_GPS: ✓ LWIP LINK IS UP - Ready to send UDP packets! IP: 192.168.1.2[0m
+[0;32mI (6727) Device1_GPS: Link went Up[0m
+[0;32mI (6718) Device1_GPS: ✓ SAE authentication successful[0m
+[0;32mI (6742) Device1_GPS: Waiting for LWIP link to be ready...[0m
+[0;32mI (6746) Device1_GPS: ✓ LWIP link is UP - ready to send data![0m
+[0;32mI (6752) Device1_GPS: Starting GPS UART task with 16KB stack...[0m
+[0;32mI (6759) Device1_GPS: GPS UART initialized on pins RX=18 TX=17[0m
+[0;32mI (7763) Device1_GPS: UDP socket created, ready to send to 192.168.1.1:5001[0m
+[0;32mI (7764) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (8767) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (9772) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (10773) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (11774) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (12779) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (13784) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (14789) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (15790) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (16791) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (17792) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (18793) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (19794) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (20795) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (21796) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (22799) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (23804) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (24809) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (25814) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (26815) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (27818) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (28823) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    28360 Failed to write page: -32768
+E    28360 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (29828) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    29361 Failed to write page: -32768
+E    29361 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (30835) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    30368 Failed to write page: -32768
+E    30368 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (31836) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    31369 Failed to write page: -32768
+E    31369 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (32842) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    32375 Failed to write page: -32768
+E    32375 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (33848) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    33381 Failed to write page: -32768
+E    33381 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+E    33386 Failed to write page: -32768
+E    33389 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+E    34381 Failed to write page: -32768
+E    34381 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+[0;32mI (34865) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    34398 Failed to write page: -32768
+E    34398 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+E    35381 Failed to write page: -32768
+E    35381 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+[0;32mI (35866) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+E    35399 Failed to write page: -32768
+E    35399 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4037d150  PS      : 0x00060333  A0      : 0x8037d4eb  A1      : 0x3fcaa7b0  
+A2      : 0x3fcaacd8  A3      : 0x00000000  A4      : 0x00000000  A5      : 0x00060323  
+A6      : 0x00000001  A7      : 0x00060120  A8      : 0x00000000  A9      : 0x3fcaa7a0  
+A10     : 0x00000000  A11     : 0x00000000  A12     : 0x00000000  A13     : 0x00060323  
+A14     : 0xb33fffff  A15     : 0x3fcaad24  SAR     : 0x00000007  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00060158  LBEG    : 0x4205de6e  LEND    : 0x4205de88  LCOUNT  : 0x00000003  
+
+
+Backtrace: 0x4037d14d:0x3fcaa7b0 0x4037d4e8:0x3fcaa7e0 0x4200eb9a:0x3fcaa820 0x4205c258:0x3fcaa840 0x4205e05c:0x3fcaa8b0 0x4200eacc:0x3fcaa8d0 0x4037db0d:0x3fcaa900
+
+
+
+
+ELF file SHA256: 5e0a4dd6f
+
+Rebooting...
+���ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0xb (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4209c2a7
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2810,len:0x1564
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xd24
+load:0x403cb700,len:0x2ed4
+entry 0x403c8928
+[0;32mI (31) boot: ESP-IDF v5.4.4 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time May 10 2026 19:41:37[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (31) boot: chip revision: v0.2[0m
+[0;32mI (34) boot: efuse block revision: v1.3[0m
+[0;32mI (38) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (42) boot.esp32s3: SPI Mode       : DIO[0m
+[0;32mI (45) boot.esp32s3: SPI Flash Size : 16MB[0m
+[0;32mI (49) boot: Enabling RNG early entropy source...[0m
+[0;32mI (54) boot: Partition Table:[0m
+[0;32mI (56) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (63) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (69) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (76) boot:  2 factory          factory app      00 00 00010000 00177000[0m
+[0;32mI (82) boot: End of partition table[0m
+[0;32mI (86) esp_image: segment 0: paddr=00010020 vaddr=3c0b0020 size=9d1fch (643580) map[0m
+[0;32mI (207) esp_image: segment 1: paddr=000ad224 vaddr=3fc99500 size=02df4h ( 11764) load[0m
+[0;32mI (210) esp_image: segment 2: paddr=000b0020 vaddr=42000020 size=aa9c4h (698820) map[0m
+[0;32mI (334) esp_image: segment 3: paddr=0015a9ec vaddr=3fc9c2f4 size=003c8h (   968) load[0m
+[0;32mI (335) esp_image: segment 4: paddr=0015adbc vaddr=40374000 size=15490h ( 87184) load[0m
+[0;32mI (357) esp_image: segment 5: paddr=00170254 vaddr=50000000 size=0001ch (    28) load[0m
+[0;32mI (366) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (366) boot: Disabling RNG early entropy source...[0m
+[0;32mI (376) cpu_start: Multicore app[0m
+[0;32mI (384) cpu_start: GPIO 44 and 43 are used as console UART I/O pins[0m
+[0;32mI (385) cpu_start: Pro cpu start user code[0m
+[0;32mI (385) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (387) app_init: Application information:[0m
+[0;32mI (390) app_init: Project name:     main[0m
+[0;32mI (394) app_init: App version:      1[0m
+[0;32mI (397) app_init: Compile time:     May 10 2026 19:37:44[0m
+[0;32mI (402) app_init: ELF file SHA256:  5e0a4dd6f...[0m
+[0;32mI (407) app_init: ESP-IDF:          v5.4.4[0m
+[0;32mI (411) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (414) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (418) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (422) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (429) heap_init: At 3FCA0EA0 len 00048870 (290 KiB): RAM[0m
+[0;32mI (434) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (439) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (444) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM[0m
+[0;32mI (450) spi_flash: detected chip: winbond[0m
+[0;32mI (453) spi_flash: flash io: dio[0m
+[0;32mI (456) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (462) sleep_gpio: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (469) main_task: Started on CPU0[0m
+[0;32mI (500) main_task: Calling app_main()[0m
+[0;32mI (518) Device1_GPS: === RUSC Device 1: GPS Collector + HALow UDP ===[0m
+[0;32mI (518) Device1_GPS: Starting MorseMicro HALow radio initialization...[0m
+[0;32mI (620) gpio: GPIO[8]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (620) Device1_GPS: Setting regulatory domain to US...[0m
+[0;32mI (622) Device1_GPS: Regulatory domain set to US (Op Class 1, Channel 3)[0m
+[0;32mI (628) Device1_GPS: Attempting mmwlan_boot...[0m
+[0;32mI (633) gpio: GPIO[2]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (641) gpio: GPIO[9]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (649) gpio: GPIO[7]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (657) gpio: GPIO[6]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+Actual SPI CLK 40000kHz
+[0;32mI (1290) Device1_GPS: Radio boot successful![0m
+Morse LwIP interface initialised.
+[0;32mI (1306) Device1_GPS: Network interface initialized[0m
+[0;32mI (1307) Device1_GPS: Configuring HaLow STA connection for AP: MorseMicro[0m
+[0;32mI (1307) Device1_GPS: Attempting MorseMicro STA mode to connect to MorseMicro...[0m
+[0;32mI (1314) Device1_GPS: [DEBUG] STA connection parameters:[0m
+[0;32mI (1319) Device1_GPS:   SSID: MorseMicro (len=10)[0m
+[0;32mI (1323) Device1_GPS:   Security: 2 (MMWLAN_SAE=2)[0m
+[0;32mI (1328) Device1_GPS:   PMF: 0 (REQUIRED=0)[0m
+[0;32mI (1404) Device1_GPS: [DEBUG] mmwlan_sta_enable(with callback) returned: 0 (SUCCESS=0)[0m
+[0;32mI (1405) Device1_GPS: [DEBUG] STA enable SUCCESS - connection should be initiating[0m
+[0;32mI (1413) Device1_GPS: Waiting for SAE authentication (STA CONNECTED state)...[0m
+[0;32mI (4532) Device1_GPS: [CALLBACK] sta_status_callback fired! state=1[0m
+[0;32mI (4533) Device1_GPS: STA state: CONNECTING (1)[0m
+[0;32mI (6749) Device1_GPS: [CALLBACK] sta_status_callback fired! state=2[0m
+[0;32mI (6750) Device1_GPS: STA state: CONNECTED (2) - SAE auth successful![0m
+Morse STA interface up with MAC address 02:00:45:a4:59:f0
+[0;32mI (6751) Device1_GPS: ✓ SAE authentication successful[0m
+[0;32mI (6756) Device1_GPS: [CALLBACK] mmipal_link_status_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (6756) Device1_GPS: [CALLBACK] mmwlan_link_state_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (6769) Device1_GPS: ✓ LWIP LINK IS UP - Ready to send UDP packets! IP: 192.168.1.2[0m
+[0;32mI (6777) Device1_GPS: Link went Up[0m
+[0;32mI (6769) Device1_GPS: Waiting for LWIP link to be ready...[0m
+[0;32mI (6793) Device1_GPS: ✓ LWIP link is UP - ready to send data![0m
+[0;32mI (6800) Device1_GPS: Starting GPS UART task with 16KB stack...[0m
+[0;32mI (6804) Device1_GPS: GPS UART initialized on pins RX=18 TX=17[0m
+[0;32mI (7809) Device1_GPS: UDP socket created, ready to send to 192.168.1.1:5001[0m
+[0;32mI (7810) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (8815) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (9816) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (10817) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (11818) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (12819) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (13820) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (14821) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (15824) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (16825) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (17830) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (18835) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (19840) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (20844) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (21845) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (22850) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (23855) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (24860) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (25865) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (26866) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (27871) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (28876) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (29881) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (30886) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (31887) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (32892) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (33897) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (34902) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (35907) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (36908) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m

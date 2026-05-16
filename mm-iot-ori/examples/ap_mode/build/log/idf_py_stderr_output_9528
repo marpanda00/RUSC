@@ -1,0 +1,10 @@
+[0;33m--- Warning: GDB cannot open serial ports accessed as COMx[0m
+[0;33m--- Using \\.\COM5 instead...[0m
+[0;33m--- esp-idf-monitor 1.9.0 on \\.\COM5 115200[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H[0m
+[0m--- 0x4200cc1c: [0;33mmmosal_impl_assert[0m[0m at [0;32mC:/mm-iot-ori/framework/mm_shims/mmosal_shim_freertos_esp32.c[0m[0m:[1;31m110[0m
+[0m--- 0x4200e637: [0;33mapp_print_version_info[0m[0m at [0;32mC:/mm-iot-ori/examples/ap_mode/main/src/ap_mode.c[0m[0m:[1;31m252[0m
+[0m--- 0x4200e77d: [0;33mapp_main[0m[0m at [0;32mC:/mm-iot-ori/examples/ap_mode/main/src/ap_mode.c[0m[0m:[1;31m329[0m
+[0m--- 0x420a0ef3: [0;33mmain_task[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.4.4/components/freertos/app_startup.c[0m[0m:[1;31m208[0m
+[0m--- 0x4037c5b5: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.4.4/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m139[0m
+[0m

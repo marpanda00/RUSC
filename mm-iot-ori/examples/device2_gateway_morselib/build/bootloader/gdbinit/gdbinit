@@ -1,0 +1,2 @@
+source C:/Code/RUSC/mm-iot-ori/examples/device2_gateway_morselib/build/bootloader/gdbinit/symbols
+source C:/Code/RUSC/mm-iot-ori/examples/device2_gateway_morselib/build/bootloader/gdbinit/connect

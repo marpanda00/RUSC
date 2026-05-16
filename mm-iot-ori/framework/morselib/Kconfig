@@ -1,0 +1,13 @@
+# Copyright 2025 Morse Micro
+# SPDX-License-Identifier: Apache-2.0
+menu "Morse Micro Library Configuration"
+    config BUILD_SUPPLICANT_FROM_SOURCE
+        bool "Build hostap/supplicant from source"
+        default n
+        help
+            This selects the specific build of libmorse to use.
+
+            By default, the libmorse used by the build will contain hostap,
+            but some applications will require hostap to be compiled separately
+            and linked against a different build of libmorse. For example, ap_mode.
+endmenu

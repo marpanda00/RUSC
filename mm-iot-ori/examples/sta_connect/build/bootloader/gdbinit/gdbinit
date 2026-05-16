@@ -1,0 +1,2 @@
+source C:/mm-iot-ori/examples/sta_connect/build/bootloader/gdbinit/symbols
+source C:/mm-iot-ori/examples/sta_connect/build/bootloader/gdbinit/connect

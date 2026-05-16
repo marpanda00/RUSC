@@ -1,0 +1,467 @@
+�Ij
+[0;32mI (30) boot: efuse �ESP-ROM:esp32s3-20210327[0m
+Build:Mar 27 2021
+rst:0x1 (POWERON),boot:0x2b (SPI_FAST_FLASH_BOOT)
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2810,len:0x1564
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xd24
+load:0x403cb700,len:0x2ed4
+entry 0x403c8928
+[0;32mI (27) boot: ESP-IDF v5.4.4 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time May 10 2026 19:41:37[0m
+[0;32mI (27) boot: Multicore bootloader[0m
+[0;32mI (27) boot: chip revision: v0.2[0m
+[0;32mI (30) boot: efuse block revision: v1.3[0m
+[0;32mI (34) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (37) boot.esp32s3: SPI Mode       : DIO[0m
+[0;32mI (41) boot.esp32s3: SPI Flash Size : 16MB[0m
+[0;32mI (45) boot: Enabling RNG early entropy source...[0m
+[0;32mI (49) boot: Partition Table:[0m
+[0;32mI (52) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (65) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (71) boot:  2 factory          factory app      00 00 00010000 00177000[0m
+[0;32mI (78) boot: End of partition table[0m
+[0;32mI (81) esp_image: segment 0: paddr=00010020 vaddr=3c0b0020 size=9d1fch (643580) map[0m
+[0;32mI (202) esp_image: segment 1: paddr=000ad224 vaddr=3fc99500 size=02df4h ( 11764) load[0m
+[0;32mI (205) esp_image: segment 2: paddr=000b0020 vaddr=42000020 size=aa9c0h (698816) map[0m
+[0;32mI (329) esp_image: segment 3: paddr=0015a9e8 vaddr=3fc9c2f4 size=003c8h (   968) load[0m
+[0;32mI (330) esp_image: segment 4: paddr=0015adb8 vaddr=40374000 size=15490h ( 87184) load[0m
+[0;32mI (352) esp_image: segment 5: paddr=00170250 vaddr=50000000 size=0001ch (    28) load[0m
+[0;32mI (360) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (360) boot: Disabling RNG early entropy source...[0m
+[0;32mI (370) cpu_start: Multicore app[0m
+[0;32mI (379) cpu_start: GPIO 44 and 43 are used as console UART I/O pins[0m
+[0;32mI (379) cpu_start: Pro cpu start user code[0m
+[0;32mI (380) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (381) app_init: Application information:[0m
+[0;32mI (385) app_init: Project name:     main[0m
+[0;32mI (388) app_init: App version:      1[0m
+[0;32mI (392) app_init: Compile time:     May 10 2026 19:37:44[0m
+[0;32mI (397) app_init: ELF file SHA256:  c8054d624...[0m
+[0;32mI (401) app_init: ESP-IDF:          v5.4.4[0m
+[0;32mI (405) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (409) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (413) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (417) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (423) heap_init: At 3FCA0EA0 len 00048870 (290 KiB): RAM[0m
+[0;32mI (428) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (433) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (439) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM[0m
+[0;32mI (445) spi_flash: detected chip: winbond[0m
+[0;32mI (448) spi_flash: flash io: dio[0m
+[0;32mI (451) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (457) sleep_gpio: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (464) main_task: Started on CPU0[0m
+[0;32mI (495) main_task: Calling app_main()[0m
+[0;32mI (513) Device1_GPS: === RUSC Device 1: GPS Collector + HALow UDP ===[0m
+[0;32mI (513) Device1_GPS: Starting MorseMicro HALow radio initialization...[0m
+[0;32mI (615) gpio: GPIO[8]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (615) Device1_GPS: Setting regulatory domain to US...[0m
+[0;32mI (617) Device1_GPS: Regulatory domain set to US (Op Class 1, Channel 3)[0m
+[0;32mI (623) Device1_GPS: Attempting mmwlan_boot...[0m
+[0;32mI (628) gpio: GPIO[2]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (636) gpio: GPIO[9]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (644) gpio: GPIO[7]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (652) gpio: GPIO[6]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+Actual SPI CLK 40000kHz
+[0;32mI (1279) Device1_GPS: Radio boot successful![0m
+Morse LwIP interface initialised.
+[0;32mI (1296) Device1_GPS: Network interface initialized[0m
+[0;32mI (1297) Device1_GPS: Configuring HaLow STA connection for AP: MorseMicro[0m
+[0;32mI (1297) Device1_GPS: Attempting MorseMicro STA mode to connect to MorseMicro...[0m
+[0;32mI (1304) Device1_GPS: [DEBUG] STA connection parameters:[0m
+[0;32mI (1309) Device1_GPS:   SSID: MorseMicro (len=10)[0m
+[0;32mI (1313) Device1_GPS:   Security: 2 (MMWLAN_SAE=2)[0m
+[0;32mI (1318) Device1_GPS:   PMF: 0 (REQUIRED=0)[0m
+[0;32mI (1395) Device1_GPS: [DEBUG] mmwlan_sta_enable(with callback) returned: 0 (SUCCESS=0)[0m
+[0;32mI (1395) Device1_GPS: [DEBUG] STA enable SUCCESS - connection should be initiating[0m
+[0;32mI (1403) Device1_GPS: Waiting for SAE authentication (STA CONNECTED state)...[0m
+[0;32mI (4515) Device1_GPS: [CALLBACK] sta_status_callback fired! state=1[0m
+[0;32mI (4515) Device1_GPS: STA state: CONNECTING (1)[0m
+[0;32mI (5380) Device1_GPS: [CALLBACK] sta_status_callback fired! state=2[0m
+[0;32mI (5381) Device1_GPS: STA state: CONNECTED (2) - SAE auth successful![0m
+Morse STA interface up with MAC address 02:00:45:a4:59:f0
+[0;32mI (5387) Device1_GPS: [CALLBACK] mmipal_link_status_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (5387) Device1_GPS: [CALLBACK] mmwlan_link_state_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (5394) Device1_GPS: ✓ LWIP LINK IS UP - Ready to send UDP packets! IP: 192.168.1.2[0m
+[0;32mI (5403) Device1_GPS: Link went Up[0m
+[0;32mI (5394) Device1_GPS: ✓ SAE authentication successful[0m
+[0;32mI (5418) Device1_GPS: Waiting for LWIP link to be ready...[0m
+[0;32mI (5426) Device1_GPS: ✓ LWIP link is UP - ready to send data![0m
+[0;32mI (5429) Device1_GPS: Starting GPS UART task with 16KB stack...[0m
+[0;32mI (5435) Device1_GPS: GPS UART initialized on pins RX=18 TX=17[0m
+[0;32mI (6440) Device1_GPS: UDP socket created, ready to send to 192.168.1.1:5001[0m
+[0;32mI (6441) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (7442) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (8443) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (9444) Device1_GPS: Sent GPS data: lat=0.000000 lon=0.000000[0m
+[0;32mI (10445) Device1_GPS: Sent GPS data: lat=42.594662 lon=-71.177734[0m
+[0;32mI (11447) Device1_GPS: Sent GPS data: lat=42.594654 lon=-71.177734[0m
+[0;32mI (12449) Device1_GPS: Sent GPS data: lat=42.594646 lon=-71.177734[0m
+[0;32mI (13451) Device1_GPS: Sent GPS data: lat=42.594646 lon=-71.177734[0m
+[0;32mI (14453) Device1_GPS: Sent GPS data: lat=42.594635 lon=-71.177734[0m
+[0;32mI (15454) Device1_GPS: Sent GPS data: lat=42.594624 lon=-71.177734[0m
+[0;32mI (16456) Device1_GPS: Sent GPS data: lat=42.594624 lon=-71.177734[0m
+[0;32mI (17458) Device1_GPS: Sent GPS data: lat=42.594643 lon=-71.177734[0m
+[0;32mI (18460) Device1_GPS: Sent GPS data: lat=42.594646 lon=-71.177742[0m
+[0;32mI (19462) Device1_GPS: Sent GPS data: lat=42.594646 lon=-71.177734[0m
+[0;32mI (20464) Device1_GPS: Sent GPS data: lat=42.594643 lon=-71.177734[0m
+[0;32mI (21466) Device1_GPS: Sent GPS data: lat=42.594639 lon=-71.177734[0m
+[0;32mI (22468) Device1_GPS: Sent GPS data: lat=42.594666 lon=-71.177742[0m
+[0;32mI (23470) Device1_GPS: Sent GPS data: lat=42.594658 lon=-71.177734[0m
+[0;32mI (24474) Device1_GPS: Sent GPS data: lat=42.594666 lon=-71.177734[0m
+[0;32mI (25476) Device1_GPS: Sent GPS data: lat=42.594677 lon=-71.177742[0m
+[0;32mI (26478) Device1_GPS: Sent GPS data: lat=42.594696 lon=-71.177750[0m
+[0;32mI (27480) Device1_GPS: Sent GPS data: lat=42.594704 lon=-71.177757[0m
+[0;32mI (28482) Device1_GPS: Sent GPS data: lat=42.594727 lon=-71.177757[0m
+[0;32mI (29484) Device1_GPS: Sent GPS data: lat=42.594757 lon=-71.177757[0m
+[0;32mI (30486) Device1_GPS: Sent GPS data: lat=42.594776 lon=-71.177750[0m
+[0;32mI (31488) Device1_GPS: Sent GPS data: lat=42.594788 lon=-71.177750[0m
+[0;32mI (32490) Device1_GPS: Sent GPS data: lat=42.594818 lon=-71.177734[0m
+[0;32mI (33493) Device1_GPS: Sent GPS data: lat=42.594849 lon=-71.177696[0m
+[0;32mI (34494) Device1_GPS: Sent GPS data: lat=42.594872 lon=-71.177689[0m
+[0;32mI (35496) Device1_GPS: Sent GPS data: lat=42.594891 lon=-71.177681[0m
+[0;32mI (36498) Device1_GPS: Sent GPS data: lat=42.594910 lon=-71.177673[0m
+[0;32mI (37500) Device1_GPS: Sent GPS data: lat=42.594910 lon=-71.177673[0m
+[0;32mI (38504) Device1_GPS: Sent GPS data: lat=42.594913 lon=-71.177673[0m
+[0;32mI (39506) Device1_GPS: Sent GPS data: lat=42.594921 lon=-71.177711[0m
+[0;32mI (40507) Device1_GPS: Sent GPS data: lat=42.594921 lon=-71.177719[0m
+[0;32mI (41509) Device1_GPS: Sent GPS data: lat=42.594933 lon=-71.177734[0m
+[0;32mI (42511) Device1_GPS: Sent GPS data: lat=42.594952 lon=-71.177734[0m
+[0;32mI (43513) Device1_GPS: Sent GPS data: lat=42.594944 lon=-71.177734[0m
+[0;32mI (44515) Device1_GPS: Sent GPS data: lat=42.594933 lon=-71.177734[0m
+[0;32mI (45517) Device1_GPS: Sent GPS data: lat=42.594940 lon=-71.177734[0m
+[0;32mI (46519) Device1_GPS: Sent GPS data: lat=42.594940 lon=-71.177734[0m
+[0;32mI (47521) Device1_GPS: Sent GPS data: lat=42.594952 lon=-71.177734[0m
+[0;32mI (48523) Device1_GPS: Sent GPS data: lat=42.594959 lon=-71.177734[0m
+[0;32mI (49525) Device1_GPS: Sent GPS data: lat=42.594967 lon=-71.177727[0m
+[0;32mI (50526) Device1_GPS: Sent GPS data: lat=42.594967 lon=-71.177711[0m
+[0;32mI (51528) Device1_GPS: Sent GPS data: lat=42.594975 lon=-71.177727[0m
+[0;32mI (52532) Device1_GPS: Sent GPS data: lat=42.594971 lon=-71.177734[0m
+[0;32mI (53534) Device1_GPS: Sent GPS data: lat=42.594971 lon=-71.177719[0m
+[0;32mI (54536) Device1_GPS: Sent GPS data: lat=42.594959 lon=-71.177719[0m
+[0;32mI (55538) Device1_GPS: Sent GPS data: lat=42.594963 lon=-71.177719[0m
+[0;32mI (56539) Device1_GPS: Sent GPS data: lat=42.594948 lon=-71.177719[0m
+[0;32mI (57541) Device1_GPS: Sent GPS data: lat=42.594948 lon=-71.177711[0m
+[0;32mI (58543) Device1_GPS: Sent GPS data: lat=42.594959 lon=-71.177711[0m
+[0;32mI (59545) Device1_GPS: Sent GPS data: lat=42.594944 lon=-71.177711[0m
+[0;32mI (60547) Device1_GPS: Sent GPS data: lat=42.594963 lon=-71.177711[0m
+[0;32mI (61548) Device1_GPS: Sent GPS data: lat=42.594971 lon=-71.177689[0m
+[0;32mI (62550) Device1_GPS: Sent GPS data: lat=42.594982 lon=-71.177696[0m
+[0;32mI (63552) Device1_GPS: Sent GPS data: lat=42.594982 lon=-71.177689[0m
+[0;32mI (64554) Device1_GPS: Sent GPS data: lat=42.594990 lon=-71.177689[0m
+[0;32mI (65556) Device1_GPS: Sent GPS data: lat=42.595001 lon=-71.177673[0m
+[0;32mI (66557) Device1_GPS: Sent GPS data: lat=42.595005 lon=-71.177673[0m
+[0;32mI (67559) Device1_GPS: Sent GPS data: lat=42.595001 lon=-71.177673[0m
+[0;32mI (68561) Device1_GPS: Sent GPS data: lat=42.594982 lon=-71.177666[0m
+[0;32mI (69563) Device1_GPS: Sent GPS data: lat=42.594982 lon=-71.177673[0m
+[0;32mI (70565) Device1_GPS: Sent GPS data: lat=42.595009 lon=-71.177696[0m
+[0;32mI (71566) Device1_GPS: Sent GPS data: lat=42.595013 lon=-71.177711[0m
+[0;32mI (72568) Device1_GPS: Sent GPS data: lat=42.595013 lon=-71.177711[0m
+[0;32mI (73570) Device1_GPS: Sent GPS data: lat=42.595028 lon=-71.177719[0m
+[0;32mI (74572) Device1_GPS: Sent GPS data: lat=42.595036 lon=-71.177696[0m
+[0;32mI (75574) Device1_GPS: Sent GPS data: lat=42.595070 lon=-71.177696[0m
+[0;32mI (76575) Device1_GPS: Sent GPS data: lat=42.595062 lon=-71.177681[0m
+[0;32mI (77577) Device1_GPS: Sent GPS data: lat=42.595051 lon=-71.177673[0m
+[0;32mI (78579) Device1_GPS: Sent GPS data: lat=42.595051 lon=-71.177689[0m
+[0;32mI (79581) Device1_GPS: Sent GPS data: lat=42.595032 lon=-71.177673[0m
+[0;32mI (80584) Device1_GPS: Sent GPS data: lat=42.595032 lon=-71.177673[0m
+[0;32mI (81585) Device1_GPS: Sent GPS data: lat=42.595043 lon=-71.177689[0m
+[0;32mI (82587) Device1_GPS: Sent GPS data: lat=42.595055 lon=-71.177696[0m
+[0;32mI (83589) Device1_GPS: Sent GPS data: lat=42.595085 lon=-71.177696[0m
+[0;32mI (84591) Device1_GPS: Sent GPS data: lat=42.595100 lon=-71.177719[0m
+[0;32mI (85593) Device1_GPS: Sent GPS data: lat=42.595131 lon=-71.177734[0m
+[0;32mI (86594) Device1_GPS: Sent GPS data: lat=42.595154 lon=-71.177734[0m
+[0;32mI (87596) Device1_GPS: Sent GPS data: lat=42.595142 lon=-71.177750[0m
+[0;32mI (88598) Device1_GPS: Sent GPS data: lat=42.595112 lon=-71.177757[0m
+[0;32mI (89600) Device1_GPS: Sent GPS data: lat=42.595093 lon=-71.177742[0m
+[0;32mI (90602) Device1_GPS: Sent GPS data: lat=42.595085 lon=-71.177757[0m
+[0;32mI (91603) Device1_GPS: Sent GPS data: lat=42.595100 lon=-71.177742[0m
+[0;32mI (92605) Device1_GPS: Sent GPS data: lat=42.595116 lon=-71.177727[0m
+[0;32mI (93607) Device1_GPS: Sent GPS data: lat=42.595127 lon=-71.177734[0m
+[0;32mI (94609) Device1_GPS: Sent GPS data: lat=42.595123 lon=-71.177719[0m
+[0;32mI (95611) Device1_GPS: Sent GPS data: lat=42.595123 lon=-71.177734[0m
+[0;32mI (96613) Device1_GPS: Sent GPS data: lat=42.595100 lon=-71.177750[0m
+[0;32mI (97615) Device1_GPS: Sent GPS data: lat=42.595104 lon=-71.177773[0m
+[0;32mI (98617) Device1_GPS: Sent GPS data: lat=42.595131 lon=-71.177795[0m
+[0;32mI (99619) Device1_GPS: Sent GPS data: lat=42.595104 lon=-71.177795[0m
+[0;32mI (100621) Device1_GPS: Sent GPS data: lat=42.595085 lon=-71.177773[0m
+[0;32mI (101622) Device1_GPS: Sent GPS data: lat=42.595085 lon=-71.177773[0m
+[0;32mI (102624) Device1_GPS: Sent GPS data: lat=42.595074 lon=-71.177773[0m
+[0;32mI (103628) Device1_GPS: Sent GPS data: lat=42.595112 lon=-71.177795[0m
+[0;32mI (104630) Device1_GPS: Sent GPS data: lat=42.595112 lon=-71.177834[0m
+[0;32mI (105632) Device1_GPS: Sent GPS data: lat=42.595100 lon=-71.177841[0m
+[0;32mI (106633) Device1_GPS: Sent GPS data: lat=42.595055 lon=-71.177834[0m
+[0;32mI (107635) Device1_GPS: Sent GPS data: lat=42.595051 lon=-71.177841[0m
+[0;32mI (108637) Device1_GPS: Sent GPS data: lat=42.595085 lon=-71.177879[0m
+[0;32mI (109639) Device1_GPS: Sent GPS data: lat=42.595081 lon=-71.177872[0m
+[0;32mI (110641) Device1_GPS: Sent GPS data: lat=42.595062 lon=-71.177872[0m
+[0;32mI (111642) Device1_GPS: Sent GPS data: lat=42.595032 lon=-71.177864[0m
+[0;32mI (112644) Device1_GPS: Sent GPS data: lat=42.595039 lon=-71.177879[0m
+[0;32mI (113646) Device1_GPS: Sent GPS data: lat=42.595024 lon=-71.177895[0m
+[0;32mI (114648) Device1_GPS: Sent GPS data: lat=42.594990 lon=-71.177879[0m
+[0;32mI (115650) Device1_GPS: Sent GPS data: lat=42.594971 lon=-71.177879[0m
+[0;32mI (116652) Device1_GPS: Sent GPS data: lat=42.594959 lon=-71.177895[0m
+[0;32mI (117656) Device1_GPS: Sent GPS data: lat=42.594944 lon=-71.177895[0m
+[0;32mI (118658) Device1_GPS: Sent GPS data: lat=42.594940 lon=-71.177895[0m
+[0;32mI (119660) Device1_GPS: Sent GPS data: lat=42.594910 lon=-71.177895[0m
+[0;32mI (120662) Device1_GPS: Sent GPS data: lat=42.594917 lon=-71.177917[0m
+[0;32mI (121663) Device1_GPS: Sent GPS data: lat=42.594910 lon=-71.177910[0m
+[0;32mI (122665) Device1_GPS: Sent GPS data: lat=42.594902 lon=-71.177940[0m
+[0;32mI (123667) Device1_GPS: Sent GPS data: lat=42.594921 lon=-71.177956[0m
+[0;32mI (124669) Device1_GPS: Sent GPS data: lat=42.594917 lon=-71.177956[0m
+[0;32mI (125671) Device1_GPS: Sent GPS data: lat=42.594868 lon=-71.177933[0m
+[0;32mI (126673) Device1_GPS: Sent GPS data: lat=42.594868 lon=-71.177940[0m
+[0;32mI (127675) Device1_GPS: Sent GPS data: lat=42.594883 lon=-71.177940[0m
+[0;32mI (128677) Device1_GPS: Sent GPS data: lat=42.594872 lon=-71.177933[0m
+[0;32mI (129679) Device1_GPS: Sent GPS data: lat=42.594879 lon=-71.177956[0m
+[0;32mI (130681) Device1_GPS: Sent GPS data: lat=42.594872 lon=-71.177963[0m
+[0;32mI (131682) Device1_GPS: Sent GPS data: lat=42.594872 lon=-71.177979[0m
+[0;32mI (132684) Device1_GPS: Sent GPS data: lat=42.594860 lon=-71.177971[0m
+[0;32mI (133686) Device1_GPS: Sent GPS data: lat=42.594872 lon=-71.177971[0m
+[0;32mI (134688) Device1_GPS: Sent GPS data: lat=42.594875 lon=-71.177963[0m
+[0;32mI (135690) Device1_GPS: Sent GPS data: lat=42.594887 lon=-71.177963[0m
+[0;32mI (136691) Device1_GPS: Sent GPS data: lat=42.594898 lon=-71.177979[0m
+[0;32mI (137693) Device1_GPS: Sent GPS data: lat=42.594902 lon=-71.177986[0m
+[0;32mI (138695) Device1_GPS: Sent GPS data: lat=42.594898 lon=-71.177971[0m
+[0;32mI (139697) Device1_GPS: Sent GPS data: lat=42.594898 lon=-71.177963[0m
+[0;32mI (140699) Device1_GPS: Sent GPS data: lat=42.594917 lon=-71.177979[0m
+[0;32mI (141700) Device1_GPS: Sent GPS data: lat=42.594929 lon=-71.177994[0m
+[0;32mI (142702) Device1_GPS: Sent GPS data: lat=42.594959 lon=-71.178001[0m
+[0;32mI (143704) Device1_GPS: Sent GPS data: lat=42.594952 lon=-71.178001[0m
+[0;32mI (144706) Device1_GPS: Sent GPS data: lat=42.594971 lon=-71.178017[0m
+[0;32mI (145710) Device1_GPS: Sent GPS data: lat=42.594971 lon=-71.177994[0m
+[0;32mI (146712) Device1_GPS: Sent GPS data: lat=42.594971 lon=-71.177971[0m
+[0;32mI (147714) Device1_GPS: Sent GPS data: lat=42.594978 lon=-71.177963[0m
+[0;32mI (148716) Device1_GPS: Sent GPS data: lat=42.595013 lon=-71.177994[0m
+[0;32mI (149718) Device1_GPS: Sent GPS data: lat=42.595001 lon=-71.177979[0m
+[0;32mI (150720) Device1_GPS: Sent GPS data: lat=42.595020 lon=-71.177994[0m
+[0;32mI (151722) Device1_GPS: Sent GPS data: lat=42.595005 lon=-71.178017[0m
+[0;32mI (152724) Device1_GPS: Sent GPS data: lat=42.594982 lon=-71.177979[0m
+[0;32mI (153726) Device1_GPS: Sent GPS data: lat=42.594994 lon=-71.178001[0m
+[0;32mI (154728) Device1_GPS: Sent GPS data: lat=42.595009 lon=-71.178017[0m
+[0;32mI (155730) Device1_GPS: Sent GPS data: lat=42.594994 lon=-71.177971[0m
+[0;32mI (156731) Device1_GPS: Sent GPS data: lat=42.594963 lon=-71.177956[0m
+[0;32mI (157733) Device1_GPS: Sent GPS data: lat=42.594982 lon=-71.177971[0m
+[0;32mI (158735) Device1_GPS: Sent GPS data: lat=42.594982 lon=-71.177979[0m
+[0;32mI (159739) Device1_GPS: Sent GPS data: lat=42.595020 lon=-71.177979[0m
+[0;32mI (160741) Device1_GPS: Sent GPS data: lat=42.595024 lon=-71.177994[0m
+[0;32mI (161743) Device1_GPS: Sent GPS data: lat=42.595036 lon=-71.178001[0m
+[0;32mI (162745) Device1_GPS: Sent GPS data: lat=42.595055 lon=-71.178024[0m
+[0;32mI (163747) Device1_GPS: Sent GPS data: lat=42.595062 lon=-71.178017[0m
+[0;32mI (164749) Device1_GPS: Sent GPS data: lat=42.595036 lon=-71.177963[0m
+[0;32mI (165751) Device1_GPS: Sent GPS data: lat=42.595020 lon=-71.177956[0m
+[0;32mI (166753) Device1_GPS: Sent GPS data: lat=42.595009 lon=-71.177940[0m
+[0;32mI (167755) Device1_GPS: Sent GPS data: lat=42.595070 lon=-71.177963[0m
+[0;32mI (168757) Device1_GPS: Sent GPS data: lat=42.595093 lon=-71.177986[0m
+[0;32mI (169759) Device1_GPS: Sent GPS data: lat=42.595104 lon=-71.178001[0m
+[0;32mI (170761) Device1_GPS: Sent GPS data: lat=42.595081 lon=-71.177979[0m
+[0;32mI (171763) Device1_GPS: Sent GPS data: lat=42.595093 lon=-71.178001[0m
+[0;32mI (172765) Device1_GPS: Sent GPS data: lat=42.595070 lon=-71.177971[0m
+[0;32mI (173769) Device1_GPS: Sent GPS data: lat=42.595081 lon=-71.177971[0m
+[0;32mI (174771) Device1_GPS: Sent GPS data: lat=42.595081 lon=-71.177971[0m
+[0;32mI (175773) Device1_GPS: Sent GPS data: lat=42.595127 lon=-71.177994[0m
+[0;32mI (176775) Device1_GPS: Sent GPS data: lat=42.595146 lon=-71.177994[0m
+[0;32mI (177777) Device1_GPS: Sent GPS data: lat=42.595146 lon=-71.178001[0m
+[0;32mI (178779) Device1_GPS: Sent GPS data: lat=42.595154 lon=-71.178001[0m
+[0;32mI (179782) Device1_GPS: Sent GPS data: lat=42.595150 lon=-71.178001[0m
+[0;32mI (180783) Device1_GPS: Sent GPS data: lat=42.595154 lon=-71.177994[0m
+[0;32mI (181785) Device1_GPS: Sent GPS data: lat=42.595142 lon=-71.177994[0m
+[0;32mI (182787) Device1_GPS: Sent GPS data: lat=42.595146 lon=-71.177986[0m
+[0;32mI (183789) Device1_GPS: Sent GPS data: lat=42.595146 lon=-71.177986[0m
+[0;32mI (184791) Device1_GPS: Sent GPS data: lat=42.595131 lon=-71.177979[0m
+[0;32mI (185793) Device1_GPS: Sent GPS data: lat=42.595146 lon=-71.177979[0m
+[0;32mI (186795) Device1_GPS: Sent GPS data: lat=42.595181 lon=-71.177979[0m
+[0;32mI (187799) Device1_GPS: Sent GPS data: lat=42.595192 lon=-71.177979[0m
+[0;32mI (188801) Device1_GPS: Sent GPS data: lat=42.595207 lon=-71.177979[0m
+[0;32mI (189803) Device1_GPS: Sent GPS data: lat=42.595188 lon=-71.177956[0m
+[0;32mI (190805) Device1_GPS: Sent GPS data: lat=42.595203 lon=-71.177956[0m
+[0;32mI (191806) Device1_GPS: Sent GPS data: lat=42.595188 lon=-71.177956[0m
+[0;32mI (192808) Device1_GPS: Sent GPS data: lat=42.595173 lon=-71.177940[0m
+[0;32mI (193810) Device1_GPS: Sent GPS data: lat=42.595192 lon=-71.177963[0m
+[0;32mI (194812) Device1_GPS: Sent GPS data: lat=42.595207 lon=-71.177963[0m
+[0;32mI (195814) Device1_GPS: Sent GPS data: lat=42.595196 lon=-71.177979[0m
+[0;32mI (196815) Device1_GPS: Sent GPS data: lat=42.595196 lon=-71.177979[0m
+[0;32mI (197817) Device1_GPS: Sent GPS data: lat=42.595177 lon=-71.177979[0m
+[0;32mI (198819) Device1_GPS: Sent GPS data: lat=42.595161 lon=-71.177979[0m
+[0;32mI (199821) Device1_GPS: Sent GPS data: lat=42.595173 lon=-71.177994[0m
+[0;32mI (200823) Device1_GPS: Sent GPS data: lat=42.595150 lon=-71.177986[0m
+[0;32mI (201827) Device1_GPS: Sent GPS data: lat=42.595032 lon=-71.177956[0m
+[0;32mI (202829) Device1_GPS: Sent GPS data: lat=42.595039 lon=-71.177956[0m
+[0;32mI (203831) Device1_GPS: Sent GPS data: lat=42.594963 lon=-71.177917[0m
+[0;32mI (204833) Device1_GPS: Sent GPS data: lat=42.594952 lon=-71.177917[0m
+[0;32mI (205835) Device1_GPS: Sent GPS data: lat=42.594959 lon=-71.177917[0m
+[0;32mI (206836) Device1_GPS: Sent GPS data: lat=42.594959 lon=-71.177940[0m
+[0;32mI (207838) Device1_GPS: Sent GPS data: lat=42.594975 lon=-71.177963[0m
+[0;32mI (208840) Device1_GPS: Sent GPS data: lat=42.594963 lon=-71.177963[0m
+[0;32mI (209842) Device1_GPS: Sent GPS data: lat=42.594940 lon=-71.177940[0m
+[0;32mI (210844) Device1_GPS: Sent GPS data: lat=42.594948 lon=-71.177956[0m
+[0;32mI (211846) Device1_GPS: Sent GPS data: lat=42.594940 lon=-71.177956[0m
+[0;32mI (212848) Device1_GPS: Sent GPS data: lat=42.594959 lon=-71.177979[0m
+[0;32mI (213850) Device1_GPS: Sent GPS data: lat=42.594963 lon=-71.177971[0m
+[0;32mI (214852) Device1_GPS: Sent GPS data: lat=42.594959 lon=-71.177979[0m
+[0;32mI (215854) Device1_GPS: Sent GPS data: lat=42.594948 lon=-71.177963[0m
+[0;32mI (216856) Device1_GPS: Sent GPS data: lat=42.594929 lon=-71.177956[0m
+[0;32mI (217858) Device1_GPS: Sent GPS data: lat=42.594921 lon=-71.177963[0m
+[0;32mI (218860) Device1_GPS: Sent GPS data: lat=42.594902 lon=-71.177940[0m
+[0;32mI (219862) Device1_GPS: Sent GPS data: lat=42.594891 lon=-71.177933[0m
+[0;32mI (220864) Device1_GPS: Sent GPS data: lat=42.594872 lon=-71.177925[0m
+[0;32mI (221866) Device1_GPS: Sent GPS data: lat=42.594868 lon=-71.177917[0m
+[0;32mI (222868) Device1_GPS: Sent GPS data: lat=42.594830 lon=-71.177879[0m
+[0;32mI (223870) Device1_GPS: Sent GPS data: lat=42.594837 lon=-71.177895[0m
+[0;32mI (224872) Device1_GPS: Sent GPS data: lat=42.594841 lon=-71.177895[0m
+[0;32mI (225873) Device1_GPS: Sent GPS data: lat=42.594860 lon=-71.177895[0m
+[0;32mI (226875) Device1_GPS: Sent GPS data: lat=42.594868 lon=-71.177879[0m
+[0;32mI (227877) Device1_GPS: Sent GPS data: lat=42.594875 lon=-71.177895[0m
+[0;32mI (228879) Device1_GPS: Sent GPS data: lat=42.594887 lon=-71.177895[0m
+[0;32mI (229883) Device1_GPS: Sent GPS data: lat=42.594891 lon=-71.177895[0m
+[0;32mI (230884) Device1_GPS: Sent GPS data: lat=42.594902 lon=-71.177895[0m
+[0;32mI (231886) Device1_GPS: Sent GPS data: lat=42.594898 lon=-71.177895[0m
+[0;32mI (232888) Device1_GPS: Sent GPS data: lat=42.594891 lon=-71.177872[0m
+[0;32mI (233890) Device1_GPS: Sent GPS data: lat=42.594879 lon=-71.177856[0m
+[0;32mI (234892) Device1_GPS: Sent GPS data: lat=42.594879 lon=-71.177849[0m
+[0;32mI (235893) Device1_GPS: Sent GPS data: lat=42.594883 lon=-71.177856[0m
+[0;32mI (236895) Device1_GPS: Sent GPS data: lat=42.594868 lon=-71.177841[0m
+[0;32mI (237897) Device1_GPS: Sent GPS data: lat=42.594837 lon=-71.177818[0m
+[0;32mI (238899) Device1_GPS: Sent GPS data: lat=42.594810 lon=-71.177795[0m
+[0;32mI (239901) Device1_GPS: Sent GPS data: lat=42.594795 lon=-71.177788[0m
+[0;32mI (240902) Device1_GPS: Sent GPS data: lat=42.594715 lon=-71.177757[0m
+[0;32mI (241904) Device1_GPS: Sent GPS data: lat=42.594593 lon=-71.177711[0m
+[0;32mI (242906) Device1_GPS: Sent GPS data: lat=42.594566 lon=-71.177711[0m
+[0;32mI (243908) Device1_GPS: Sent GPS data: lat=42.594509 lon=-71.177673[0m
+[0;32mI (244914) Device1_GPS: Sent GPS data: lat=42.594475 lon=-71.177673[0m
+[0;32mI (245915) Device1_GPS: Sent GPS data: lat=42.594448 lon=-71.177650[0m
+[0;32mI (246917) Device1_GPS: Sent GPS data: lat=42.594475 lon=-71.177650[0m
+[0;32mI (247919) Device1_GPS: Sent GPS data: lat=42.594482 lon=-71.177650[0m
+[0;32mI (248921) Device1_GPS: Sent GPS data: lat=42.594509 lon=-71.177666[0m
+[0;32mI (249923) Device1_GPS: Sent GPS data: lat=42.594513 lon=-71.177673[0m
+[0;32mI (250924) Device1_GPS: Sent GPS data: lat=42.594532 lon=-71.177689[0m
+[0;32mI (251926) Device1_GPS: Sent GPS data: lat=42.594551 lon=-71.177696[0m
+[0;32mI (252928) Device1_GPS: Sent GPS data: lat=42.594555 lon=-71.177689[0m
+[0;32mI (253930) Device1_GPS: Sent GPS data: lat=42.594570 lon=-71.177689[0m
+[0;32mI (254932) Device1_GPS: Sent GPS data: lat=42.594715 lon=-71.177780[0m
+[0;32mI (255933) Device1_GPS: Sent GPS data: lat=42.594715 lon=-71.177773[0m
+[0;32mI (256935) Device1_GPS: Sent GPS data: lat=42.594818 lon=-71.177834[0m
+[0;32mI (257939) Device1_GPS: Sent GPS data: lat=42.594898 lon=-71.177895[0m
+[0;32mI (258941) Device1_GPS: Sent GPS data: lat=42.594982 lon=-71.177940[0m
+[0;32mI (259943) Device1_GPS: Sent GPS data: lat=42.595104 lon=-71.178024[0m
+[0;32mI (260944) Device1_GPS: Sent GPS data: lat=42.595142 lon=-71.178040[0m
+[0;32mI (261946) Device1_GPS: Sent GPS data: lat=42.595184 lon=-71.178078[0m
+[0;32mI (262948) Device1_GPS: Sent GPS data: lat=42.595192 lon=-71.178085[0m
+[0;32mI (263950) Device1_GPS: Sent GPS data: lat=42.595203 lon=-71.178093[0m
+[0;32mI (264952) Device1_GPS: Sent GPS data: lat=42.595219 lon=-71.178101[0m
+[0;32mI (265953) Device1_GPS: Sent GPS data: lat=42.595238 lon=-71.178123[0m
+[0;32mI (266955) Device1_GPS: Sent GPS data: lat=42.595249 lon=-71.178139[0m
+[0;32mI (267957) Device1_GPS: Sent GPS data: lat=42.595245 lon=-71.178139[0m
+[0;32mI (268959) Device1_GPS: Sent GPS data: lat=42.595245 lon=-71.178139[0m
+[0;32mI (269961) Device1_GPS: Sent GPS data: lat=42.595245 lon=-71.178139[0m
+[0;32mI (270963) Device1_GPS: Sent GPS data: lat=42.595245 lon=-71.178139[0m
+[0;32mI (271967) Device1_GPS: Sent GPS data: lat=42.595215 lon=-71.178123[0m
+[0;32mI (272969) Device1_GPS: Sent GPS data: lat=42.595192 lon=-71.178116[0m
+[0;32mI (273971) Device1_GPS: Sent GPS data: lat=42.595192 lon=-71.178101[0m
+[0;32mI (274973) Device1_GPS: Sent GPS data: lat=42.595177 lon=-71.178093[0m
+[0;32mI (275975) Device1_GPS: Sent GPS data: lat=42.595165 lon=-71.178101[0m
+[0;32mI (276977) Device1_GPS: Sent GPS data: lat=42.595154 lon=-71.178085[0m
+[0;32mI (277978) Device1_GPS: Sent GPS data: lat=42.595142 lon=-71.178085[0m
+[0;32mI (278980) Device1_GPS: Sent GPS data: lat=42.595116 lon=-71.178078[0m
+[0;32mI (279982) Device1_GPS: Sent GPS data: lat=42.595104 lon=-71.178078[0m
+[0;32mI (280984) Device1_GPS: Sent GPS data: lat=42.595116 lon=-71.178078[0m
+[0;32mI (281985) Device1_GPS: Sent GPS data: lat=42.595116 lon=-71.178078[0m
+[0;32mI (282987) Device1_GPS: Sent GPS data: lat=42.595093 lon=-71.178078[0m
+[0;32mI (283989) Device1_GPS: Sent GPS data: lat=42.595074 lon=-71.178062[0m
+[0;32mI (284991) Device1_GPS: Sent GPS data: lat=42.595070 lon=-71.178055[0m
+[0;32mI (285995) Device1_GPS: Sent GPS data: lat=42.595058 lon=-71.178040[0m
+[0;32mI (286996) Device1_GPS: Sent GPS data: lat=42.595043 lon=-71.178024[0m
+[0;32mI (287998) Device1_GPS: Sent GPS data: lat=42.595043 lon=-71.178017[0m
+[0;32mI (289000) Device1_GPS: Sent GPS data: lat=42.595020 lon=-71.178017[0m
+[0;32mI (290002) Device1_GPS: Sent GPS data: lat=42.595009 lon=-71.178017[0m
+[0;32mI (291004) Device1_GPS: Sent GPS data: lat=42.595020 lon=-71.178017[0m
+[0;32mI (292005) Device1_GPS: Sent GPS data: lat=42.595001 lon=-71.178001[0m
+[0;32mI (293007) Device1_GPS: Sent GPS data: lat=42.594975 lon=-71.177979[0m
+[0;32mI (294009) Device1_GPS: Sent GPS data: lat=42.595005 lon=-71.178001[0m
+[0;32mI (295011) Device1_GPS: Sent GPS data: lat=42.594997 lon=-71.177994[0m
+[0;32mI (296013) Device1_GPS: Sent GPS data: lat=42.594978 lon=-71.177979[0m
+[0;32mI (297014) Device1_GPS: Sent GPS data: lat=42.594982 lon=-71.177979[0m
+[0;32mI (298016) Device1_GPS: Sent GPS data: lat=42.594971 lon=-71.177971[0m
+[0;32mI (299018) Device1_GPS: Sent GPS data: lat=42.594971 lon=-71.177956[0m
+[0;32mI (300022) Device1_GPS: Sent GPS data: lat=42.594959 lon=-71.177956[0m
+[0;32mI (301024) Device1_GPS: Sent GPS data: lat=42.594940 lon=-71.177940[0m
+[0;32mI (302025) Device1_GPS: Sent GPS data: lat=42.594917 lon=-71.177933[0m
+[0;32mI (303027) Device1_GPS: Sent GPS data: lat=42.594868 lon=-71.177879[0m
+[0;32mI (304029) Device1_GPS: Sent GPS data: lat=42.594845 lon=-71.177872[0m
+[0;32mI (305031) Device1_GPS: Sent GPS data: lat=42.594856 lon=-71.177872[0m
+[0;32mI (306033) Device1_GPS: Sent GPS data: lat=42.594879 lon=-71.177872[0m
+[0;32mI (307034) Device1_GPS: Sent GPS data: lat=42.594868 lon=-71.177856[0m
+[0;32mI (308036) Device1_GPS: Sent GPS data: lat=42.594872 lon=-71.177856[0m
+[0;32mI (309038) Device1_GPS: Sent GPS data: lat=42.594860 lon=-71.177841[0m
+[0;32mI (310040) Device1_GPS: Sent GPS data: lat=42.594837 lon=-71.177834[0m
+[0;32mI (311042) Device1_GPS: Sent GPS data: lat=42.594830 lon=-71.177841[0m
+[0;32mI (312043) Device1_GPS: Sent GPS data: lat=42.594837 lon=-71.177849[0m
+[0;32mI (313045) Device1_GPS: Sent GPS data: lat=42.594849 lon=-71.177841[0m
+[0;32mI (314049) Device1_GPS: Sent GPS data: lat=42.594868 lon=-71.177879[0m
+[0;32mI (314928) Device1_GPS: [CALLBACK] sta_status_callback fired! state=0[0m
+[0;32mI (314929) Device1_GPS: STA state: 0[0m
+[0;32mI (314929) Device1_GPS: [CALLBACK] mmipal_link_status_callback fired! link_state=0 (UP=1)[0m
+[0;32mI (314930) Device1_GPS: [CALLBACK] mmwlan_link_state_callback fired! link_state=0 (UP=1)[0m
+[0;32mI (314935) Device1_GPS: LWIP Link went DOWN[0m
+[0;33mW (314943) Device1_GPS: Link went DOWN (state=0)[0m
+[0;33mW (315053) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (316054) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (317054) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (318054) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (319055) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (320056) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (321056) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (322057) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (323057) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (324058) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (325058) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (326059) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (327059) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (328059) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (329059) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (330060) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (331060) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (332061) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (333061) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (334061) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (335061) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (336061) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (337061) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (338061) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (339061) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (340061) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (341061) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (342061) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (343061) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (344061) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (345061) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (346061) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (347061) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (348062) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (349062) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (350063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (351063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (352063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (353063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (354063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (355063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (356063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (357063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (358063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (359063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (360063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (361063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (362063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (363063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (364063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (365063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (366063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (367063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (368063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (369063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (370063) Device1_GPS: Failed to send UDP packet[0m
+[0;33mW (371063) Device1_GPS: Failed to send UDP packet[0m

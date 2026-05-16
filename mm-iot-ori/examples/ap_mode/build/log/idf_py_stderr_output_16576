@@ -1,0 +1,14 @@
+[0;33m--- Warning: GDB cannot open serial ports accessed as COMx[0m
+[0;33m--- Using \\.\COM5 instead...[0m
+[0;33m--- esp-idf-monitor 1.9.0 on \\.\COM5 115200[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H[0m
+[0m--- 0x4200cbfc: [0;33mmmosal_impl_assert[0m[0m at [0;32mC:/mm-iot-ori/framework/mm_shims/mmosal_shim_freertos_esp32.c[0m[0m:[1;31m110[0m
+[0m--- 0x4200ec20: [0;33mmmnetif_init[0m[0m at [0;32mC:/mm-iot-ori/framework/src/mmipal/lwip/mmnetif.c[0m[0m:[1;31m235[0m
+[0m--- 0x42071ced: [0;33mnetif_add[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.4.4/components/lwip/lwip/src/core/netif.c[0m[0m:[1;31m396[0m
+[0m--- 0x42071db5: [0;33mnetif_add_noaddr[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.4.4/components/lwip/lwip/src/core/netif.c[0m[0m:[1;31m252[0m
+[0m--- 0x4200e594: [0;33mtcpip_init_done_handler[0m[0m at [0;32mC:/mm-iot-ori/framework/src/mmipal/lwip/mmipal_lwip.c[0m[0m:[1;31m629[0m
+[0m--- 0x40385206: [0;33mtcpip_thread[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.4.4/components/lwip/lwip/src/api/tcpip.c[0m[0m:[1;31m136[0m
+[0m--- 0x4037c5b5: [0;33mvPortTaskWrapper[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.4.4/components/freertos/FreeRTOS-Kernel/portable/xtensa/port.c[0m[0m:[1;31m139[0m
+[0m--- 0x40375e38: [0;33mesp_restart_noos[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.4.4/components/esp_system/port/soc/esp32s3/system_internal.c[0m[0m:[1;31m164[0m
+[0m--- 0x42071cf0: [0;33mnetif_add[0m[0m at [0;32mC:/Espressif/frameworks/esp-idf-v5.4.4/components/lwip/lwip/src/core/netif.c[0m[0m:[1;31m396[0m
+[0m

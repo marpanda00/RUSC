@@ -1,0 +1,1527 @@
+0.2
+[0;32mI (30) boot: �ESP-ROM:esp32s3-20210327[0m
+Build:Mar 27 2021
+rst:0x1 (POWERON),boot:0xb (SPI_FAST_FLASH_BOOT)
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2810,len:0x1564
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xd24
+load:0x403cb700,len:0x2ed4
+entry 0x403c8928
+[0;32mI (27) boot: ESP-IDF v5.4.4 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time May 16 2026 04:14:33[0m
+[0;32mI (27) boot: Multicore bootloader[0m
+[0;32mI (27) boot: chip revision: v0.2[0m
+[0;32mI (30) boot: efuse block revision: v1.3[0m
+[0;32mI (33) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (37) boot.esp32s3: SPI Mode       : DIO[0m
+[0;32mI (41) boot.esp32s3: SPI Flash Size : 16MB[0m
+[0;32mI (45) boot: Enabling RNG early entropy source...[0m
+[0;32mI (49) boot: Partition Table:[0m
+[0;32mI (52) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00005000[0m
+[0;32mI (65) boot:  1 otadata          OTA data         01 00 0000e000 00002000[0m
+[0;32mI (71) boot:  2 factory          factory app      00 00 00010000 00300000[0m
+[0;32mI (78) boot: End of partition table[0m
+[0;32mI (81) boot: Defaulting to factory image[0m
+[0;32mI (85) esp_image: segment 0: paddr=00010020 vaddr=3c140020 size=b7c8ch (752780) map[0m
+[0;32mI (225) esp_image: segment 1: paddr=000c7cb4 vaddr=3fca2b00 size=054a8h ( 21672) load[0m
+[0;32mI (230) esp_image: segment 2: paddr=000cd164 vaddr=40374000 size=02eb4h ( 11956) load[0m
+[0;32mI (232) esp_image: segment 3: paddr=000d0020 vaddr=42000020 size=13a4f4h (1287412) map[0m
+[0;32mI (463) esp_image: segment 4: paddr=0020a51c vaddr=40376eb4 size=1bbe4h (113636) load[0m
+[0;32mI (488) esp_image: segment 5: paddr=00226108 vaddr=50000000 size=0001ch (    28) load[0m
+[0;32mI (500) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (500) boot: Disabling RNG early entropy source...[0m
+[0;32mI (510) cpu_start: Multicore app[0m
+[0;32mI (519) cpu_start: GPIO 44 and 43 are used as console UART I/O pins[0m
+[0;32mI (520) cpu_start: Pro cpu start user code[0m
+[0;32mI (520) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (521) app_init: Application information:[0m
+[0;32mI (525) app_init: Project name:     main[0m
+[0;32mI (529) app_init: App version:      1[0m
+[0;32mI (532) app_init: Compile time:     May 16 2026 04:12:51[0m
+[0;32mI (537) app_init: ELF file SHA256:  346d8a068...[0m
+[0;32mI (541) app_init: ESP-IDF:          v5.4.4[0m
+[0;32mI (545) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (549) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (553) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (557) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (563) heap_init: At 3FCB2470 len 000372A0 (220 KiB): RAM[0m
+[0;32mI (568) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (573) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (579) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM[0m
+[0;32mI (585) spi_flash: detected chip: winbond[0m
+[0;32mI (588) spi_flash: flash io: dio[0m
+[0;32mI (591) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (597) sleep_gpio: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (604) coexist: coex firmware version: 2de0784[0m
+[0;32mI (608) coexist: coexist rom version e7ae62f[0m
+[0;32mI (612) main_task: Started on CPU0[0m
+[0;32mI (634) main_task: Calling app_main()[0m
+
+
+=================================================================
+RUSC Device 2: HaLow Gateway (MorseMicro + ESP-IDF)
+=================================================================
+
+[0;32mI (664) RUSC-GW: No provisioning found in NVS[0m
+[0;32mI (664) RUSC-GW: Initializing MorseMicro HaLow stack...[0m
+[0;32mI (764) RUSC-GW: [DEBUG] Calling mmhal_init()...[0m
+[0;32mI (764) gpio: GPIO[8]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (765) RUSC-GW: [DEBUG] mmhal_init() complete[0m
+[0;32mI (769) RUSC-GW: [DEBUG] Calling mmwlan_init()...[0m
+[0;32mI (774) RUSC-GW: [DEBUG] mmwlan_init() complete[0m
+[0;32mI (778) RUSC-GW: [DEBUG] Looking up regulatory domain for US...[0m
+[0;32mI (784) RUSC-GW: [DEBUG] Regulatory domain found[0m
+[0;32mI (788) RUSC-GW: [DEBUG] Setting channel list...[0m
+[0;32mI (792) RUSC-GW: [DEBUG] Channel list set successfully. OP Class=1, Channel=3[0m
+[0;32mI (799) RUSC-GW: [DEBUG] Calling mmwlan_boot() - chip reset and SPI initialization...[0m
+[0;32mI (807) gpio: GPIO[2]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (815) gpio: GPIO[9]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (823) gpio: GPIO[7]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (831) gpio: GPIO[6]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+Actual SPI CLK 40000kHz
+[0;32mI (1454) RUSC-GW: [DEBUG] mmwlan_boot() returned with status 0[0m
+[0;32mI (1454) RUSC-GW: Radio boot successful![0m
+Morse LwIP interface initialised.
+[0;32mI (1471) RUSC-GW: Network interface initialized[0m
+[0;32mI (1471) RUSC-GW: Configuring HaLow AP for SSID: MorseMicro[0m
+[0;32mI (1475) RUSC-GW: HaLow AP Mode started successfully![0m
+[0;32mI (1476) RUSC-GW:   SSID: MorseMicro[0m
+[0;32mI (1478) RUSC-GW:   Channel: 3 (Op Class 1)[0m
+[0;32mI (1482) RUSC-GW:   IP: 192.168.1.1[0m
+[0;32mI (1485) RUSC-GW:   Max STAs: 5[0m
+[0;32mI (1488) RUSC-GW: UDP listener started on port 5001[0m
+[0;32mI (1493) RUSC-GW: No NVS credentials, using defaults[0m
+[0;32mI (1497) RUSC-GW: Connecting to backend WiFi: [0m
+[0;32mI (1502) pp: pp rom version: e7ae62f[0m
+[0;32mI (1505) net80211: net80211 rom version: e7ae62f[0m
+[0;32mI (1510) wifi:wifi driver task: 3fcc5648, prio:23, stack:6656, core=0[0m
+[0;32mI (1524) wifi:wifi firmware version: 8896d66[0m
+[0;32mI (1525) wifi:wifi certification version: v7.0[0m
+[0;32mI (1525) wifi:config NVS flash: enabled[0m
+[0;32mI (1527) wifi:config nano formatting: disabled[0m
+[0;32mI (1531) wifi:Init data frame dynamic rx buffer num: 32[0m
+[0;32mI (1536) wifi:Init static rx mgmt buffer num: 5[0m
+[0;32mI (1540) wifi:Init management short buffer num: 32[0m
+[0;32mI (1545) wifi:Init dynamic tx buffer num: 32[0m
+[0;32mI (1549) wifi:Init static tx FG buffer num: 2[0m
+[0;32mI (1553) wifi:Init static rx buffer size: 1600[0m
+[0;32mI (1557) wifi:Init static rx buffer num: 10[0m
+[0;32mI (1561) wifi:Init dynamic rx buffer num: 32[0m
+[0;32mI (1566) wifi_init: rx ba win: 6[0m
+[0;32mI (1568) wifi_init: accept mbox: 6[0m
+[0;32mI (1571) wifi_init: tcpip mbox: 32[0m
+[0;32mI (1580) wifi_init: udp mbox: 10[0m
+[0;32mI (1610) wifi_init: tcp mbox: 10[0m
+[0;32mI (1610) wifi_init: tcp tx win: 8760[0m
+[0;32mI (1610) wifi_init: tcp rx win: 14600[0m
+[0;32mI (1610) wifi_init: tcp mss: 1460[0m
+[0;32mI (1616) wifi_init: WiFi IRAM OP enabled[0m
+[0;32mI (1616) wifi_init: WiFi RX IRAM OP enabled[0m
+[0;32mI (1645) wifi_init: LWIP IRAM OP enabled[0m
+[0;32mI (1648) phy_init: phy_version 711,97bcf0a2,Aug 25 2025,19:04:10[0m
+[0;32mI (1691) wifi:mode : sta (b4:3a:45:a4:58:a8)[0m
+[0;32mI (1691) wifi:enable tsf[0m
+[0;32mI (1693) RUSC-GW: WiFi STA started, connecting...[0m
+Morse AP interface up with MAC address 00:00:45:a4:58:a8
+[0;32mI (2358) RUSC-GW: [HaLow] Link UP at 1746 ms: IP=192.168.1.1[0m
+[0;33mW (4694) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (4695) RUSC-GW: Backend WiFi connection failed - staying in AUTHORIZED for reprovisioning[0m
+[0;32mI (4697) BLE_INIT: BT controller compile version [b7de11e][0m
+[0;32mI (4702) BLE_INIT: Using main XTAL as clock source[0m
+[0;32mI (4709) BLE_INIT: Feature Config, ADV:1, BLE_50:0, DTM:1, SCAN:1, CCA:0, SMP:1, CONNECT:1[0m
+[0;32mI (4715) BLE_INIT: Bluetooth MAC: b4:3a:45:a4:58:aa[0m
+[0;32mI (4749) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (4753) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (5750) RUSC-GW: Gateway initialization complete - starting gateway task[0m
+=================================================================
+
+[0;32mI (5751) RUSC-GW: Gateway task started (stack=12288 bytes)[0m
+[0;32mI (5756) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=0 Packets=0[0m
+[0;32mI (5764) main_task: Returned from app_main()[0m
+[0;32mI (8754) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (10614) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (10614) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (10615) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (10771) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=0 Packets=0[0m
+[0;32mI (13754) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (15771) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=0 Packets=0[0m
+[0;32mI (18754) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (20621) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (20621) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (20622) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (20778) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=0 Packets=0[0m
+[0;32mI (23755) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (25778) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=0 Packets=0[0m
+[0;32mI (28760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (30628) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (30628) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (30629) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (30785) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=0 Packets=0[0m
+[0;32mI (33759) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (35785) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=0 Packets=0[0m
+[0;32mI (38762) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (38847) RUSC-GW: [AP] STA AUTHORIZED: 02:00:45:a4:59:f0 (AID=1)[0m
+[0;32mI (40637) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (40637) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (40638) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (40794) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (43760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (45794) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (48760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (50644) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (50644) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (50645) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (50801) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (53760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (55801) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (58762) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (60652) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (60652) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (60653) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (60809) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (61255) RUSC-GW: BLE client connected[0m
+[0;32mI (65809) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (70659) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (70659) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (70660) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (70816) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (75816) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (80666) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (80666) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (80667) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (80823) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (85823) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (90673) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (90673) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (90674) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (90830) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (95830) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (100680) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (100680) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (100681) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (100838) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (105838) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (110688) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (110689) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (110690) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (110846) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (115846) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (120696) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (120696) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (120697) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (120854) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (125854) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (130704) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (130704) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (130705) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (130862) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (135862) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (140713) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (140713) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (140714) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (140871) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (145871) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (150721) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (150721) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (150722) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (150879) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (155879) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (160729) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (160729) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (160730) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (160887) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (165887) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (170737) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (170737) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (170738) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (170895) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (175895) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (180745) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (180745) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (180746) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (180903) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (185903) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (190753) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (190753) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (190754) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (190911) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (195911) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (200761) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (200761) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (200762) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (200919) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (205919) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (210769) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (210769) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (210770) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (210927) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (215928) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=0[0m
+[0;32mI (220779) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (220779) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (220780) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (220937) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=2[0m
+[0;32mI (225940) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=7[0m
+[0;32mI (230792) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (230792) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (230793) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (230950) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=12[0m
+[0;32mI (235951) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=17[0m
+[0;32mI (240802) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (240802) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (240803) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (240960) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=22[0m
+[0;32mI (245962) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=27[0m
+[0;32mI (250814) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (250814) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (250815) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (250972) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=32[0m
+[0;32mI (255974) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=37[0m
+[0;32mI (260826) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (260826) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (260827) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (260984) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=42[0m
+[0;32mI (265985) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=47[0m
+[0;32mI (270835) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (270836) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (270836) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (270993) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=52[0m
+[0;32mI (275994) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=57[0m
+[0;32mI (280847) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (280847) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (280848) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (281005) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=62[0m
+[0;32mI (286006) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=67[0m
+[0;32mI (290859) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (290859) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (290860) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (291017) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=72[0m
+[0;32mI (296019) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=77[0m
+[0;32mI (300870) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (300870) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (300871) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (301028) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=82[0m
+[0;32mI (306031) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=87[0m
+[0;32mI (310883) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (310883) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (310884) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (311041) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=92[0m
+[0;32mI (316042) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=97[0m
+[0;32mI (320894) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (320895) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (320895) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (321052) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=102[0m
+[0;32mI (326054) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=107[0m
+[0;32mI (330905) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (330905) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (330906) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (331063) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=112[0m
+[0;32mI (336065) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=117[0m
+[0;32mI (340915) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (340915) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (340916) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (341073) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=122[0m
+[0;32mI (346073) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=127[0m
+[0;32mI (350926) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (350926) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (350927) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (351084) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=132[0m
+[0;33mW (354829) BT_HCI: hcif disc complete: hdl 0x1, rsn 0x8 dev_find 1[0m
+[0;32mI (354833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (356086) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=137[0m
+[0;32mI (358760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (360937) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (360937) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (360938) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (361095) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=142[0m
+[0;32mI (363760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (366096) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=147[0m
+[0;32mI (368760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (370947) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (370947) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (370948) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (371105) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=152[0m
+[0;32mI (373760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (376107) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=157[0m
+[0;32mI (378760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (380958) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (380959) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (380959) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (381116) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=162[0m
+[0;32mI (383760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (386118) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=167[0m
+[0;32mI (388760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (390969) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (390969) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (390970) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (391127) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=172[0m
+[0;32mI (393760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (396127) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=177[0m
+[0;32mI (398760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (400977) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (400977) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (400978) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (401135) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=182[0m
+[0;32mI (403760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (406137) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=187[0m
+[0;32mI (408760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (410989) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (410989) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (410990) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (411147) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=192[0m
+[0;32mI (413760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (416148) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=197[0m
+[0;32mI (418760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (420999) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (420999) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (421000) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (421157) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=202[0m
+[0;32mI (423760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (426157) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=207[0m
+[0;32mI (428760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (431009) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (431009) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (431010) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (431167) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=212[0m
+[0;32mI (433760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (436168) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=217[0m
+[0;32mI (438760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (441019) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (441019) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (441020) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (441177) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=222[0m
+[0;32mI (443760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (446177) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=227[0m
+[0;32mI (448760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (451027) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (451027) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (451028) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (451185) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=232[0m
+[0;32mI (453760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (456186) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=237[0m
+[0;32mI (458760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (461037) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (461037) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (461038) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (461195) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=242[0m
+[0;32mI (463760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (466196) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=247[0m
+[0;32mI (468760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (471048) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (471048) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (471049) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (471206) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=252[0m
+[0;32mI (473760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (476207) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=257[0m
+[0;32mI (478760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (481059) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (481059) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (481060) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (481217) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=262[0m
+[0;32mI (483760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (486218) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=267[0m
+[0;32mI (488760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (491069) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (491069) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (491070) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (491227) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=272[0m
+[0;32mI (493760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (496227) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=277[0m
+[0;32mI (498760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (501079) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (501079) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (501080) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (501237) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=282[0m
+[0;32mI (503760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (506238) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=287[0m
+[0;32mI (508760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (511089) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (511089) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (511090) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (511247) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=292[0m
+[0;32mI (513760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (516248) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=297[0m
+[0;32mI (518760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (521099) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (521099) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (521100) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (521257) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=302[0m
+[0;32mI (523761) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (526257) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=307[0m
+[0;32mI (528762) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (531107) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (531107) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (531108) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (531266) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=312[0m
+[0;32mI (533760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (536266) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=317[0m
+[0;32mI (538760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (541117) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (541117) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (541118) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (541275) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=322[0m
+[0;32mI (543760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (546275) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=327[0m
+[0;32mI (548760) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (551126) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (551126) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (551127) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (551284) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=332[0m
+[0;32mI (553761) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (556286) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=337[0m
+[0;32mI (558765) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (561137) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (561137) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (561138) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (561296) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=342[0m
+[0;32mI (563765) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (566297) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=347[0m
+[0;32mI (568765) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (571149) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (571149) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (571150) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (571307) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=352[0m
+[0;32mI (573765) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (576307) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=357[0m
+[0;32mI (578765) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (581158) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (581158) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (581159) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (581316) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=362[0m
+[0;32mI (583765) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (586318) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=367[0m
+[0;32mI (588766) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (591171) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (591171) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (591172) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (591329) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=372[0m
+[0;32mI (593765) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (596332) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=377[0m
+[0;32mI (598765) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (601183) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (601183) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (601184) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (601341) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=382[0m
+[0;32mI (603765) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (606342) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=387[0m
+[0;32mI (608765) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (611192) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (611192) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (611193) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (611350) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=392[0m
+[0;32mI (613766) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (616351) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=397[0m
+[0;32mI (618770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (621202) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (621202) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (621203) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (621360) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=402[0m
+[0;32mI (623770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (626361) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=406[0m
+[0;32mI (628770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (631212) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (631212) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (631213) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (631370) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=411[0m
+[0;32mI (633770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (636371) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=416[0m
+[0;32mI (638770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (641223) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (641223) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (641224) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (641381) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=421[0m
+[0;32mI (643770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (646383) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=426[0m
+[0;32mI (648771) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (651234) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (651234) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (651235) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (651392) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=431[0m
+[0;32mI (653770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (656396) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=436[0m
+[0;32mI (658770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (661247) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (661247) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (661248) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (661405) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=441[0m
+[0;32mI (663770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (666409) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=446[0m
+[0;32mI (668770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (671260) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (671260) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (671261) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (671418) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=451[0m
+[0;32mI (673771) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (676421) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=456[0m
+[0;32mI (678771) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (681272) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (681272) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (681273) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (681430) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=461[0m
+[0;32mI (683770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (686431) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=466[0m
+[0;32mI (688770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (691283) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (691283) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (691284) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (691441) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=471[0m
+[0;32mI (693770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (696444) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=476[0m
+[0;32mI (698770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (701294) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (701294) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (701295) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (701452) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=481[0m
+[0;32mI (703771) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (706453) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=486[0m
+[0;32mI (708770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (711303) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (711303) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (711304) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (711461) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=491[0m
+[0;32mI (713770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (716462) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=496[0m
+[0;32mI (718770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (721312) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (721312) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (721313) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (721470) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=501[0m
+[0;32mI (723770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (726474) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=506[0m
+[0;32mI (728770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (731326) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (731326) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (731327) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (731484) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=511[0m
+[0;32mI (733770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (736485) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=516[0m
+[0;32mI (738770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (741335) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (741336) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (741336) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (741493) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=521[0m
+[0;32mI (743770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (746495) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=526[0m
+[0;32mI (748770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (751346) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (751346) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (751347) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (751504) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=531[0m
+[0;32mI (753770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (756505) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=536[0m
+[0;32mI (758770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (761357) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (761357) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (761358) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (761515) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=541[0m
+[0;32mI (763770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (766517) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=546[0m
+[0;32mI (768770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (771368) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (771368) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (771369) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (771526) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=551[0m
+[0;32mI (773770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (776526) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=556[0m
+[0;32mI (778770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (781377) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (781377) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (781378) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (781535) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=561[0m
+[0;32mI (783770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (786535) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=566[0m
+[0;32mI (788770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (791386) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (791386) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (791387) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (791544) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=571[0m
+[0;32mI (793770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (796546) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=576[0m
+[0;32mI (798770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (801398) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (801398) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (801399) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (801556) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=581[0m
+[0;32mI (803770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (806557) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=586[0m
+[0;32mI (808770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (811408) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (811408) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (811409) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (811566) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=591[0m
+[0;32mI (813770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (816567) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=596[0m
+[0;32mI (818770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (821420) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (821420) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (821421) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (821578) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=601[0m
+[0;32mI (823770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (826580) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=606[0m
+[0;32mI (828770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (831431) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (831431) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (831432) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (831589) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=611[0m
+[0;32mI (833770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (836591) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=616[0m
+[0;32mI (838770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (841442) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (841442) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (841443) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (841600) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=621[0m
+[0;32mI (843770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (846600) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=626[0m
+[0;32mI (848770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (851452) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (851452) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (851453) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (851610) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=631[0m
+[0;32mI (853770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (856612) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=636[0m
+[0;32mI (858770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (861464) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (861464) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (861465) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (861622) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=641[0m
+[0;32mI (863770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (866624) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=646[0m
+[0;32mI (868770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (871475) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (871475) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (871476) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (871633) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=651[0m
+[0;32mI (873770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (876634) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=656[0m
+[0;32mI (878770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (881484) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (881484) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (881485) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (881642) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=661[0m
+[0;32mI (883772) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (886642) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=666[0m
+[0;32mI (888770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (891494) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (891494) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (891495) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (891652) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=671[0m
+[0;32mI (893770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (896655) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=676[0m
+[0;32mI (898770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (901505) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (901505) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (901506) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (901663) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=681[0m
+[0;32mI (903770) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (906664) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=686[0m
+[0;32mI (908771) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (911515) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (911515) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (911516) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (911673) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=691[0m
+[0;32mI (913775) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (916673) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=696[0m
+[0;32mI (918774) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (921525) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (921525) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (921526) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (921683) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=701[0m
+[0;32mI (923774) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (926685) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=706[0m
+[0;32mI (928774) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (931535) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (931535) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (931536) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (931693) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=711[0m
+[0;32mI (933774) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (936693) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=716[0m
+[0;32mI (938775) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (941545) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (941545) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (941546) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (941703) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=721[0m
+[0;32mI (943776) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (946704) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=726[0m
+[0;32mI (948774) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (951554) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (951555) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (951555) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (951712) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=731[0m
+[0;32mI (953774) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (956714) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=736[0m
+[0;32mI (958774) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (961564) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (961564) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (961565) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (961722) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=741[0m
+[0;32mI (963774) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (966723) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=746[0m
+[0;32mI (968775) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (971576) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (971576) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (971577) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (971734) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=751[0m
+[0;32mI (973779) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (976735) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=756[0m
+[0;32mI (978779) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (981586) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (981586) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (981587) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (981744) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=761[0m
+[0;32mI (983779) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (986746) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=766[0m
+[0;32mI (988779) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (991596) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (991596) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (991597) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (991754) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=771[0m
+[0;32mI (993779) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (996754) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=776[0m
+[0;32mI (998779) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1001605) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1001605) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1001606) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1001763) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=781[0m
+[0;32mI (1003781) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1006765) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=786[0m
+[0;32mI (1008779) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1011617) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1011617) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1011618) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1011775) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=791[0m
+[0;32mI (1013779) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1016779) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=796[0m
+[0;32mI (1018779) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1021631) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1021631) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1021632) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1021789) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=801[0m
+[0;32mI (1023779) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1026791) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=806[0m
+[0;32mI (1028780) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1031643) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1031643) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1031644) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1031801) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=811[0m
+[0;32mI (1033784) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1036801) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=816[0m
+[0;32mI (1038783) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1041652) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1041652) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1041653) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1041810) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=821[0m
+[0;32mI (1043783) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1046810) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=826[0m
+[0;32mI (1048783) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1051663) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1051663) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1051664) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1051821) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=831[0m
+[0;32mI (1053783) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1056822) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=836[0m
+[0;32mI (1058784) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1061673) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1061673) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1061674) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1061831) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=841[0m
+[0;32mI (1063785) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1066838) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=846[0m
+[0;32mI (1068783) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1071693) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1071693) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1071694) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1071851) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=851[0m
+[0;32mI (1073783) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1076856) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=856[0m
+[0;32mI (1078783) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1081711) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1081711) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1081712) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1081869) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=861[0m
+[0;32mI (1083783) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1086874) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=866[0m
+[0;32mI (1088784) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1091729) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1091729) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1091730) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1091887) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=871[0m
+[0;32mI (1093789) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1096892) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=876[0m
+[0;32mI (1098789) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1101747) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1101747) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1101748) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1101905) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=881[0m
+[0;32mI (1103789) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1106910) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=886[0m
+[0;32mI (1108789) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1111766) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1111766) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1111767) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1111924) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=891[0m
+[0;32mI (1113789) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1116930) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=896[0m
+[0;32mI (1118789) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1121785) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1121785) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1121786) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1121943) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=901[0m
+[0;32mI (1123789) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1126949) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=906[0m
+[0;32mI (1128790) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1131804) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1131804) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1131805) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1131962) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=911[0m
+[0;32mI (1133790) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1136967) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=916[0m
+[0;32mI (1138790) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1141822) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1141822) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1141823) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1141980) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=921[0m
+[0;32mI (1143790) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1146986) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=926[0m
+[0;32mI (1148791) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1151841) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1151841) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1151842) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1151999) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=931[0m
+[0;32mI (1153792) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1157004) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=936[0m
+[0;32mI (1158792) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1161859) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1161859) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1161860) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1162017) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=941[0m
+[0;32mI (1163792) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1167022) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=946[0m
+[0;32mI (1168792) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1171878) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1171878) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1171879) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1172036) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=951[0m
+[0;32mI (1173792) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1177041) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=956[0m
+[0;32mI (1178792) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1181895) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1181895) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1181896) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1182054) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=961[0m
+[0;32mI (1183794) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1187059) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=966[0m
+[0;32mI (1188793) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1191913) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1191913) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1191914) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1192072) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=971[0m
+[0;32mI (1193793) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1197077) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=976[0m
+[0;32mI (1198793) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1201931) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1201931) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1201932) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1202090) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=981[0m
+[0;32mI (1203793) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1207095) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=986[0m
+[0;32mI (1208794) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1211949) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1211950) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1211950) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1212108) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=991[0m
+[0;32mI (1213797) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1217113) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=996[0m
+[0;32mI (1218796) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1221967) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1221967) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1221968) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1222126) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1001[0m
+[0;32mI (1223796) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1227131) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1006[0m
+[0;32mI (1228796) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1231985) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1231985) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1231986) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1232144) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1011[0m
+[0;32mI (1233796) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1237149) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1016[0m
+[0;32mI (1238797) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1242003) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1242003) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1242004) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1242162) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1021[0m
+[0;32mI (1243797) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1247167) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1026[0m
+[0;32mI (1248796) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1252022) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1252022) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1252023) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1252181) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1031[0m
+[0;32mI (1253796) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1257186) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1036[0m
+[0;32mI (1258796) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1262040) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1262040) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1262041) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1262199) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1041[0m
+[0;32mI (1263796) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1267204) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1046[0m
+[0;32mI (1268797) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1272058) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1272058) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1272059) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1272217) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1051[0m
+[0;32mI (1273801) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1277221) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1055[0m
+[0;32mI (1278801) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1282077) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1282077) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1282078) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1282235) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1060[0m
+[0;32mI (1283802) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1287240) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1065[0m
+[0;32mI (1288801) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1292095) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1292095) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1292096) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1292253) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1070[0m
+[0;32mI (1293801) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1297258) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1075[0m
+[0;32mI (1298801) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1302113) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1302113) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1302114) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1302271) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1080[0m
+[0;32mI (1303802) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1307276) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1085[0m
+[0;32mI (1308801) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1312131) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1312131) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1312132) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1312289) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1090[0m
+[0;32mI (1313801) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1317294) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1095[0m
+[0;32mI (1318801) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1322149) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1322149) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1322150) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1322307) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1100[0m
+[0;32mI (1323801) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1327312) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1105[0m
+[0;32mI (1328802) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1332168) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1332168) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1332169) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1332326) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1110[0m
+[0;32mI (1333806) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1337331) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1115[0m
+[0;32mI (1338805) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1342186) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1342186) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1342187) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1342344) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1120[0m
+[0;32mI (1343805) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1347349) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1125[0m
+[0;32mI (1348805) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1352204) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1352204) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1352205) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1352362) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1130[0m
+[0;32mI (1353805) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1357367) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1135[0m
+[0;32mI (1358806) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1362222) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1362222) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1362223) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1362380) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1140[0m
+[0;32mI (1363806) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1367385) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1145[0m
+[0;32mI (1368808) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1372240) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1372240) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1372241) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1372398) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1150[0m
+[0;32mI (1373808) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1377404) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1155[0m
+[0;32mI (1378808) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1382259) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1382259) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1382260) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1382417) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1160[0m
+[0;32mI (1383808) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1387422) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1165[0m
+[0;32mI (1388808) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1392277) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1392277) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1392278) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1392435) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1170[0m
+[0;32mI (1393809) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1397440) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1175[0m
+[0;32mI (1398808) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1402295) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1402295) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1402296) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1402453) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1180[0m
+[0;32mI (1403808) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1407459) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1185[0m
+[0;32mI (1408808) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1412314) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1412314) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1412315) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1412472) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1190[0m
+[0;32mI (1413808) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1417477) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1195[0m
+[0;32mI (1418809) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1422332) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1422332) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1422333) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1422490) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1200[0m
+[0;32mI (1423812) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1427495) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1205[0m
+[0;32mI (1428811) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1432351) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1432351) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1432352) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1432509) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1210[0m
+[0;32mI (1433811) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1437514) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1215[0m
+[0;32mI (1438811) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1442370) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1442371) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1442371) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1442528) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1220[0m
+[0;32mI (1443811) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1447533) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1225[0m
+[0;32mI (1448812) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1452388) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1452388) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1452389) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1452546) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1230[0m
+[0;32mI (1453812) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1457551) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1235[0m
+[0;32mI (1458811) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1462406) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1462406) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1462407) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1462564) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1240[0m
+[0;32mI (1463811) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1467569) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1245[0m
+[0;32mI (1468811) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1472424) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1472424) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1472425) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1472582) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1250[0m
+[0;32mI (1473811) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1477587) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1255[0m
+[0;32mI (1478812) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1482442) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1482442) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1482443) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1482600) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1260[0m
+[0;32mI (1483817) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1487606) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1265[0m
+[0;32mI (1488816) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1492461) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1492461) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1492462) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1492619) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1270[0m
+[0;32mI (1493816) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1497625) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1275[0m
+[0;32mI (1498816) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1502481) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1502481) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1502482) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1502639) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1280[0m
+[0;32mI (1503816) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1507645) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1285[0m
+[0;32mI (1508817) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1512500) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1512501) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1512501) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1512658) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1290[0m
+[0;32mI (1513817) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1517663) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1295[0m
+[0;32mI (1518819) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1522518) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1522519) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1522519) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1522676) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1300[0m
+[0;32mI (1523819) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1527681) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1305[0m
+[0;32mI (1528819) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1532536) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1532536) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1532537) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1532694) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1310[0m
+[0;32mI (1533819) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1537699) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1315[0m
+[0;32mI (1538819) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1542554) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1542554) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1542555) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1542712) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1320[0m
+[0;32mI (1543820) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1547717) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1325[0m
+[0;32mI (1548819) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1552572) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1552572) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1552573) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1552730) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1330[0m
+[0;32mI (1553819) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1557735) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1335[0m
+[0;32mI (1558819) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1562590) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1562590) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1562591) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1562748) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1340[0m
+[0;32mI (1563819) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1567754) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1345[0m
+[0;32mI (1568820) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1572609) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1572609) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1572610) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1572767) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1350[0m
+[0;32mI (1573823) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1577772) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1355[0m
+[0;32mI (1578823) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1582627) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1582627) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1582628) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1582785) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1360[0m
+[0;32mI (1583823) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1587790) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1365[0m
+[0;32mI (1588823) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1592645) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1592645) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1592646) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1592803) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1370[0m
+[0;32mI (1593823) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1597808) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1375[0m
+[0;32mI (1598824) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1602663) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1602663) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1602664) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1602821) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1380[0m
+[0;32mI (1603824) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1607829) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1385[0m
+[0;32mI (1608828) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1612684) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1612684) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1612685) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1612842) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1390[0m
+[0;32mI (1613828) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1617847) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1395[0m
+[0;32mI (1618828) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1622702) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1622702) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1622703) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1622860) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1400[0m
+[0;32mI (1623828) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1627865) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1405[0m
+[0;32mI (1628828) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1632720) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1632720) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1632721) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1632878) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1410[0m
+[0;32mI (1633828) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1637883) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1415[0m
+[0;32mI (1638829) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1642738) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1642738) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1642739) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1642896) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1420[0m
+[0;32mI (1643829) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1647901) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1425[0m
+[0;32mI (1648829) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1652756) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1652756) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1652757) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1652914) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1430[0m
+[0;32mI (1653829) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1657920) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1435[0m
+[0;32mI (1658829) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1662775) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1662775) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1662776) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1662933) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1440[0m
+[0;32mI (1663830) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1667938) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1445[0m
+[0;32mI (1668829) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1672794) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1672794) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1672795) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1672952) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1450[0m
+[0;32mI (1673829) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1677957) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1455[0m
+[0;32mI (1678829) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1682813) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1682813) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1682814) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1682971) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1460[0m
+[0;32mI (1683829) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1687976) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1465[0m
+[0;32mI (1688830) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1692832) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1692832) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1692833) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1692990) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1470[0m
+[0;32mI (1693830) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1697995) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1475[0m
+[0;32mI (1698832) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1702850) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1702850) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1702851) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1703008) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1480[0m
+[0;32mI (1703832) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1708013) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1485[0m
+[0;32mI (1708832) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1712868) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1712868) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1712869) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1713026) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1490[0m
+[0;32mI (1713832) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1718031) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1495[0m
+[0;32mI (1718833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1722886) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1722886) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1722887) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1723044) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1500[0m
+[0;32mI (1723833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1728049) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1505[0m
+[0;32mI (1728833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1732904) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1732904) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1732905) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1733062) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1510[0m
+[0;32mI (1733833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1738068) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1515[0m
+[0;32mI (1738833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1742923) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1742923) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1742924) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1743081) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1520[0m
+[0;32mI (1743833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1748086) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1525[0m
+[0;32mI (1748834) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1752941) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1752941) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1752942) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1753099) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1530[0m
+[0;32mI (1753834) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1758104) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1535[0m
+[0;32mI (1758833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1762959) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1762960) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1762960) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1763117) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1540[0m
+[0;32mI (1763833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1768122) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1545[0m
+[0;32mI (1768833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1772977) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1772977) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1772978) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1773135) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1550[0m
+[0;32mI (1773833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1778140) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1555[0m
+[0;32mI (1778834) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1782995) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1782995) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1782996) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1783153) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1560[0m
+[0;32mI (1783833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1788158) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1565[0m
+[0;32mI (1788833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1793013) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1793013) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1793014) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1793171) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1570[0m
+[0;32mI (1793833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1798176) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1575[0m
+[0;32mI (1798833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1803031) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1803031) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1803032) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1803189) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1580[0m
+[0;32mI (1803833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1808195) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1585[0m
+[0;32mI (1808833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1813050) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1813050) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1813051) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1813208) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1590[0m
+[0;32mI (1813833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1818213) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1595[0m
+[0;32mI (1818833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1823068) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1823069) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1823069) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1823226) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1600[0m
+[0;32mI (1823833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1828231) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1605[0m
+[0;32mI (1828833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1833086) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1833086) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1833087) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1833244) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1610[0m
+[0;32mI (1833833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1838249) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1615[0m
+[0;32mI (1838833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1843104) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1843104) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1843105) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1843262) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1620[0m
+[0;32mI (1843833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1848267) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1625[0m
+[0;32mI (1848833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1853122) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1853122) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1853123) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1853280) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1630[0m
+[0;32mI (1853833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1858285) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1635[0m
+[0;32mI (1858833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1863140) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1863140) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1863141) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1863298) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1640[0m
+[0;32mI (1863833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1868303) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1645[0m
+[0;32mI (1868833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1873157) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1873157) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1873158) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1873316) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1650[0m
+[0;32mI (1873833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1878321) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1655[0m
+[0;32mI (1878833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1883175) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1883176) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1883176) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1883334) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1660[0m
+[0;32mI (1883833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1888339) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1665[0m
+[0;32mI (1888833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1893193) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1893193) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1893194) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1893352) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1670[0m
+[0;32mI (1893833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1898357) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1675[0m
+[0;32mI (1898833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1903211) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1903211) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1903212) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1903370) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1680[0m
+[0;32mI (1903833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1908375) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1685[0m
+[0;32mI (1908833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1913229) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1913229) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1913230) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1913388) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1690[0m
+[0;32mI (1913833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1918394) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1695[0m
+[0;32mI (1918833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1923248) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1923248) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1923249) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1923407) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1700[0m
+[0;32mI (1923833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1928412) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1705[0m
+[0;32mI (1928833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1933266) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1933266) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1933267) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1933425) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1710[0m
+[0;32mI (1933833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1938430) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1715[0m
+[0;32mI (1938833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1943284) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1943284) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1943285) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1943443) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1720[0m
+[0;32mI (1943833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1948448) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1725[0m
+[0;32mI (1948833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1953302) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1953303) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1953303) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1953461) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1730[0m
+[0;32mI (1953833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1958466) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1735[0m
+[0;32mI (1958834) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1963320) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1963320) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1963321) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1963479) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1740[0m
+[0;32mI (1963833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1968484) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1745[0m
+[0;32mI (1968833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1973338) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1973338) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1973339) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1973497) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1750[0m
+[0;32mI (1973833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1978501) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1754[0m
+[0;32mI (1978833) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1983356) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1983356) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1983357) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1983514) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1759[0m
+[0;32mI (1983834) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1988519) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1764[0m
+[0;32mI (1988837) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1993374) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (1993374) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (1993375) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (1993532) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1769[0m
+[0;32mI (1993836) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (1998537) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1774[0m
+[0;32mI (1998836) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (2003392) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (2003392) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (2003393) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (2003550) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1779[0m
+[0;32mI (2003836) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (2008555) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1784[0m
+[0;32mI (2008836) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (2013410) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (2013410) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (2013411) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (2013568) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1789[0m
+[0;32mI (2013837) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (2018573) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1794[0m
+[0;32mI (2018837) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (2023428) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (2023428) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (2023429) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (2023586) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1799[0m
+[0;32mI (2023836) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (2028591) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1804[0m
+[0;32mI (2028836) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (2033446) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (2033446) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (2033447) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (2033604) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1809[0m
+[0;32mI (2033836) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (2038609) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1814[0m
+[0;32mI (2038836) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (2043464) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (2043464) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (2043465) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (2043622) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1819[0m
+[0;32mI (2043837) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (2048627) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1824[0m
+[0;32mI (2048842) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (2053482) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (2053482) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (2053483) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0m
+[0;32mI (2053640) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1829[0m
+[0;32mI (2053841) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (2058645) RUSC-GW: [Status] HaLow=ON Backend=DISC Battery=100% Devices=1 Packets=1834[0m
+[0;32mI (2058841) RUSC-GW: Improv Wi-Fi BLE advertising successfully initiated.[0m
+[0;32mI (2063500) RUSC-GW: [RETRY] Attempting to reconnect to backend server...[0m
+[0;33mW (2063500) wifi:Haven't to connect to a suitable AP now![0m
+[0;33mW (2063501) RUSC-GW: [RETRY] Backend WiFi not connected, skipping server connection[0

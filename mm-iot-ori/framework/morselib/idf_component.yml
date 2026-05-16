@@ -1,0 +1,19 @@
+# Copyright 2026 Morse Micro
+# SPDX-License-Identifier: Apache-2.0
+
+dependencies:
+    idf:
+        version: ">=5.1.1"
+    mmpktmem:
+        version: "==2.10.4-esp32"
+        path: ../src/mmpktmem
+    hostap:
+        version: "==2.10.4-esp32"
+        path: ../src/hostap
+description: Morselib WLAN component for the esp32s3
+targets:
+    - esp32s3
+    - esp32c6
+    - esp32c3
+    - esp32p4
+version: "2.10.4-esp32"

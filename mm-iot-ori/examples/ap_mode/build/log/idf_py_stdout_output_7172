@@ -1,0 +1,191 @@
+ion: v0.2
+[0;32mI (30) b�ESP-ROM:esp32s3-20210327[0m
+Build:Mar 27 2021
+rst:0x1 (POWERON),boot:0x2b (SPI_FAST_FLASH_BOOT)
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2810,len:0x1564
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xd24
+load:0x403cb700,len:0x2ed4
+entry 0x403c8928
+[0;32mI (27) boot: ESP-IDF v5.4.4 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time May 10 2026 00:35:27[0m
+[0;32mI (27) boot: Multicore bootloader[0m
+[0;32mI (27) boot: chip revision: v0.2[0m
+[0;32mI (30) boot: efuse block revision: v1.3[0m
+[0;32mI (34) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (37) boot.esp32s3: SPI Mode       : DIO[0m
+[0;32mI (41) boot.esp32s3: SPI Flash Size : 16MB[0m
+[0;32mI (45) boot: Enabling RNG early entropy source...[0m
+[0;32mI (49) boot: Partition Table:[0m
+[0;32mI (52) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (65) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (71) boot:  2 factory          factory app      00 00 00010000 00177000[0m
+[0;32mI (78) boot: End of partition table[0m
+[0;32mI (81) esp_image: segment 0: paddr=00010020 vaddr=3c0b0020 size=9b6e4h (636644) map[0m
+[0;32mI (201) esp_image: segment 1: paddr=000ab70c vaddr=3fc97e00 size=030d4h ( 12500) load[0m
+[0;32mI (204) esp_image: segment 2: paddr=000ae7e8 vaddr=40374000 size=01830h (  6192) load[0m
+[0;32mI (206) esp_image: segment 3: paddr=000b0020 vaddr=42000020 size=a4e78h (675448) map[0m
+[0;32mI (331) esp_image: segment 4: paddr=00154ea0 vaddr=40375830 size=12504h ( 75012) load[0m
+[0;32mI (348) esp_image: segment 5: paddr=001673ac vaddr=50000000 size=0001ch (    28) load[0m
+[0;32mI (356) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (356) boot: Disabling RNG early entropy source...[0m
+[0;32mI (366) cpu_start: Multicore app[0m
+[0;32mI (374) cpu_start: GPIO 44 and 43 are used as console UART I/O pins[0m
+[0;32mI (375) cpu_start: Pro cpu start user code[0m
+[0;32mI (375) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (377) app_init: Application information:[0m
+[0;32mI (380) app_init: Project name:     ap_mode[0m
+[0;32mI (384) app_init: App version:      1[0m
+[0;32mI (388) app_init: Compile time:     May 10 2026 00:34:48[0m
+[0;32mI (393) app_init: ELF file SHA256:  7b58c6599...[0m
+[0;32mI (397) app_init: ESP-IDF:          v5.4.4[0m
+[0;32mI (401) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (405) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (409) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (413) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (419) heap_init: At 3FC9F470 len 0004A2A0 (296 KiB): RAM[0m
+[0;32mI (424) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (429) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (434) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM[0m
+[0;32mI (441) spi_flash: detected chip: winbond[0m
+[0;32mI (443) spi_flash: flash io: dio[0m
+[0;32mI (447) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (453) sleep_gpio: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (460) main_task: Started on CPU0[0m
+[0;32mI (491) main_task: Calling app_main()[0m
+
+
+AP Mode Example (Built May 10 2026 00:48:24)
+
+
+--- FORCING HT-HC33 HARDWARE WAKE ---
+[0;32mI (492) gpio: GPIO[5]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (500) gpio: GPIO[8]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+Resetting Morse chip...
+Initializing Morse HAL...
+[0;32mI (660) gpio: GPIO[8]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+Fixing Hardware State (Post-HAL Sledgehammer)...
+[0;32mI (663) gpio: GPIO[8]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (672) gpio: GPIO[5]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+
+--- MORSE HARDWARE PIN AUDIT ---
+GPIO [02] (CS   ) | Level: 1 | OUTPUT
+GPIO [03] (MOSI ) | Level: 0 | OUTPUT
+GPIO [04] (SCK  ) | Level: 0 | OUTPUT
+GPIO [05] (MISO ) | Level: 1 | OUTPUT
+GPIO [06] (IRQ  ) | Level: 0 | OUTPUT
+GPIO [07] (BUSY ) | Level: 0 | OUTPUT
+GPIO [08] (RESET) | Level: 0 | OUTPUT
+GPIO [09] (WAKE ) | Level: 1 | OUTPUT
+SPI Signal Routing:
+-----------------------------------
+
+
+--- MORSE HARDWARE PIN AUDIT ---
+GPIO [02] (CS   ) | Level: 1 | OUTPUT
+GPIO [03] (MOSI ) | Level: 0 | OUTPUT
+GPIO [04] (SCK  ) | Level: 0 | OUTPUT
+GPIO [05] (MISO ) | Level: 1 | OUTPUT
+GPIO [06] (IRQ  ) | Level: 0 | OUTPUT
+GPIO [07] (BUSY ) | Level: 0 | OUTPUT
+GPIO [08] (RESET) | Level: 0 | OUTPUT
+GPIO [09] (WAKE ) | Level: 1 | OUTPUT
+SPI Signal Routing:
+-----------------------------------
+
+[0;32mI (940) gpio: GPIO[2]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (948) gpio: GPIO[9]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (956) gpio: GPIO[7]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (964) gpio: GPIO[6]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+Actual SPI CLK 10000kHz
+E      546 Transport init failed
+-----------------------------------
+  HW Version:              esp32s3
+  BCF API version:         12.1.0
+  BCF build version:       88fa91f8 a02e363
+  BCF board description:   {"module": "mm6108-mf08551", "s
+  !! Error occured whilst retrieving version info !!
+  Morselib version:        
+  Morse firmware version:  
+  Morse chip ID:           0x0000
+  Morse chip name:         
+-----------------------------------
+MMOSAL Assert, CPU 0 (current core) backtrace
+
+Backtrace: 0x4200CC20:0x3FCA2C90 0x4200E63B:0x3FCA2CB0 0x4200E7BE:0x3FCA2DA0 0x420A0F37:0x3FCA2F80 0x4037C5B5:0x3FCA2FB0
+
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x2b (SPI_FAST_FLASH_BOOT)
+Saved PC:0x40375e38
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2810,len:0x1564
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xd24
+load:0x403cb700,len:0x2ed4
+entry 0x403c8928
+[0;32mI (31) boot: ESP-IDF v5.4.4 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time May 10 2026 00:35:27[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (32) boot: chip revision: v0.2[0m
+[0;32mI (34) boot: efuse block revision: v1.3[0m
+[0;32mI (38) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (42) boot.esp32s3: SPI Mode       : DIO[0m
+[0;32mI (46) boot.esp32s3: SPI Flash Size : 16MB[0m
+[0;32mI (49) boot: Enabling RNG early entropy source...[0m
+[0;32mI (54) boot: Partition Table:[0m
+[0;32mI (56) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (63) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (69) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (76) boot:  2 factory          factory app      00 00 00010000 00177000[0m
+[0;32mI (82) boot: End of partition table[0m
+[0;32mI (86) esp_image: segment 0: paddr=00010020 vaddr=3c0b0020 size=9b6e4h (636644) map[0m
+[0;32mI (205) esp_image: segment 1: paddr=000ab70c vaddr=3fc97e00 size=030d4h ( 12500) load[0m
+[0;32mI (208) esp_image: segment 2: paddr=000ae7e8 vaddr=40374000 size=01830h (  6192) load[0m
+[0;32mI (211) esp_image: segment 3: paddr=000b0020 vaddr=42000020 size=a4e78h (675448) map[0m
+[0;32mI (336) esp_image: segment 4: paddr=00154ea0 vaddr=40375830 size=12504h ( 75012) load[0m
+[0;32mI (352) esp_image: segment 5: paddr=001673ac vaddr=50000000 size=0001ch (    28) load[0m
+[0;32mI (360) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (360) boot: Disabling RNG early entropy source...[0m
+[0;32mI (370) cpu_start: Multicore app[0m
+[0;32mI (379) cpu_start: GPIO 44 and 43 are used as console UART I/O pins[0m
+[0;32mI (379) cpu_start: Pro cpu start user code[0m
+[0;32mI (379) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (381) app_init: Application information:[0m
+[0;32mI (385) app_init: Project name:     ap_mode[0m
+[0;32mI (389) app_init: App version:      1[0m
+[0;32mI (392) app_init: Compile time:     May 10 2026 00:34:48[0m
+[0;32mI (397) app_init: ELF file SHA256:  7b58c6599...[0m
+[0;32mI (401) app_init: ESP-IDF:          v5.4.4[0m
+[0;32mI (405) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (409) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (413) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (417) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (423) heap_init: At 3FC9F470 len 0004A2A0 (296 KiB): RAM[0m
+[0;32mI (428) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (433) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (439) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM[0m
+[0;32mI (445) spi_flash: detected chip: winbond[0m
+[0;32mI (448) spi_flash: flash io: dio[0m
+[0;32mI (451) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (457) sleep_gpio: Enable automatic switching of GPIO sleep configuration[0m
+Failure 0 logged at pc 0x00000000, lr 0x4200e7c1, line 252 in 00000000
+    0x00000000
+    0x00000000
+    0x00000000
+    0x00000000
+[0;32mI (476) main_task: Started on CPU0[0m
+[0;32mI (495) main_task: Calling app_main()[0m
+
+
+AP Mode Example (Built May 10 2026 00:48:24)
+
+
+--- FORCING HT-HC33 HARDWARE WAKE ---
+[0;32mI (496) gpio: GPIO[5]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+[0;32mI (504) gpio: GPIO[8]| InputEn: 0| OutputEn: 0| OpenDrain: 0| Pullup: 1| Pulldown: 0| Intr:0 [0m
+Resetting Morse chip...

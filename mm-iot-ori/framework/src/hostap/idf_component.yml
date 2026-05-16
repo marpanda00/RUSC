@@ -1,0 +1,13 @@
+# Copyright 2026 Morse Micro
+# SPDX-License-Identifier: Apache-2.0
+
+dependencies:
+    idf:
+        version: ">=5.1.1"
+description: Morse Micro hostap component for the esp32
+targets:
+    - esp32s3
+    - esp32c6
+    - esp32c3
+    - esp32p4
+version: "2.10.4-esp32"

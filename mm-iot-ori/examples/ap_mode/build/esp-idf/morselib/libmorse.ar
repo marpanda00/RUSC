@@ -1,0 +1,5 @@
+CREATE C:/mm-iot-ori/examples/ap_mode/build/esp-idf/morselib/libmorse.a
+        ADDLIB C:/mm-iot-ori/framework/morselib/lib/esp32s3/libmorse_nosupplicant.a
+        ADDLIB C:/mm-iot-ori/examples/ap_mode/build/esp-idf/hostap/libhostap.a
+        SAVE
+        END

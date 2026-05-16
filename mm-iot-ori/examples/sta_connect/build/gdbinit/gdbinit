@@ -1,0 +1,2 @@
+source C:/mm-iot-ori/examples/sta_connect/build/gdbinit/symbols
+source C:/mm-iot-ori/examples/sta_connect/build/gdbinit/connect

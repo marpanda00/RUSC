@@ -1,0 +1,1 @@
+could not open port '\\\\.\\COM6': FileNotFoundError(2, 'Impossibile trovare il file specificato.', None, 2)

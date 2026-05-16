@@ -1,0 +1,653 @@
+: chip revision: v0.2�ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0x1 (POWERON),boot:0x2b (SPI_FAST_FLASH_BOOT)
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2810,len:0x1564
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xd24
+load:0x403cb700,len:0x2ed4
+entry 0x403c8928
+[0;32mI (27) boot: ESP-IDF v5.4.4 2nd stage bootloader[0m
+[0;32mI (27) boot: compile time May 10 2026 19:41:37[0m
+[0;32mI (27) boot: Multicore bootloader[0m
+[0;32mI (27) boot: chip revision: v0.2[0m
+[0;32mI (30) boot: efuse block revision: v1.3[0m
+[0;32mI (34) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (37) boot.esp32s3: SPI Mode       : DIO[0m
+[0;32mI (41) boot.esp32s3: SPI Flash Size : 16MB[0m
+[0;32mI (45) boot: Enabling RNG early entropy source...[0m
+[0;32mI (49) boot: Partition Table:[0m
+[0;32mI (52) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (58) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (65) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (71) boot:  2 factory          factory app      00 00 00010000 00177000[0m
+[0;32mI (78) boot: End of partition table[0m
+[0;32mI (81) esp_image: segment 0: paddr=00010020 vaddr=3c0b0020 size=9d25ch (643676) map[0m
+[0;32mI (202) esp_image: segment 1: paddr=000ad284 vaddr=3fc99500 size=02d94h ( 11668) load[0m
+[0;32mI (205) esp_image: segment 2: paddr=000b0020 vaddr=42000020 size=aaa7ch (699004) map[0m
+[0;32mI (329) esp_image: segment 3: paddr=0015aaa4 vaddr=3fc9c294 size=00428h (  1064) load[0m
+[0;32mI (330) esp_image: segment 4: paddr=0015aed4 vaddr=40374000 size=15490h ( 87184) load[0m
+[0;32mI (352) esp_image: segment 5: paddr=0017036c vaddr=50000000 size=0001ch (    28) load[0m
+[0;32mI (360) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (360) boot: Disabling RNG early entropy source...[0m
+[0;32mI (370) cpu_start: Multicore app[0m
+[0;32mI (379) cpu_start: GPIO 44 and 43 are used as console UART I/O pins[0m
+[0;32mI (379) cpu_start: Pro cpu start user code[0m
+[0;32mI (380) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (381) app_init: Application information:[0m
+[0;32mI (385) app_init: Project name:     main[0m
+[0;32mI (389) app_init: App version:      1[0m
+[0;32mI (392) app_init: Compile time:     May 10 2026 19:37:44[0m
+[0;32mI (397) app_init: ELF file SHA256:  8246a793b...[0m
+[0;32mI (401) app_init: ESP-IDF:          v5.4.4[0m
+[0;32mI (405) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (409) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (413) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (417) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (423) heap_init: At 3FCA0EA0 len 00048870 (290 KiB): RAM[0m
+[0;32mI (428) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (433) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (439) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM[0m
+[0;32mI (445) spi_flash: detected chip: winbond[0m
+[0;32mI (448) spi_flash: flash io: dio[0m
+[0;32mI (451) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (457) sleep_gpio: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (464) main_task: Started on CPU0[0m
+[0;32mI (495) main_task: Calling app_main()[0m
+[0;32mI (513) Device1_GPS: === RUSC Device 1: GPS Collector + HALow UDP ===[0m
+[0;32mI (513) Device1_GPS: Starting MorseMicro HALow radio initialization...[0m
+[0;32mI (615) gpio: GPIO[8]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (615) Device1_GPS: Setting regulatory domain to US...[0m
+[0;32mI (617) Device1_GPS: Regulatory domain set to US (Op Class 1, Channel 3)[0m
+[0;32mI (623) Device1_GPS: Attempting mmwlan_boot...[0m
+[0;32mI (628) gpio: GPIO[2]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (636) gpio: GPIO[9]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (644) gpio: GPIO[7]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (652) gpio: GPIO[6]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+Actual SPI CLK 40000kHz
+[0;32mI (1284) Device1_GPS: Radio boot successful![0m
+Morse LwIP interface initialised.
+[0;32mI (1301) Device1_GPS: Network interface initialized[0m
+[0;32mI (1302) Device1_GPS: Configuring HaLow STA connection for AP: MorseMicro[0m
+[0;32mI (1302) Device1_GPS: Attempting MorseMicro STA mode to connect to MorseMicro...[0m
+[0;32mI (1309) Device1_GPS: [DEBUG] STA connection parameters:[0m
+[0;32mI (1314) Device1_GPS:   SSID: MorseMicro (len=10)[0m
+[0;32mI (1318) Device1_GPS:   Security: 2 (MMWLAN_SAE=2)[0m
+[0;32mI (1323) Device1_GPS:   PMF: 0 (REQUIRED=0)[0m
+[0;32mI (1400) Device1_GPS: [DEBUG] mmwlan_sta_enable(with callback) returned: 0 (SUCCESS=0)[0m
+[0;32mI (1400) Device1_GPS: [DEBUG] STA enable SUCCESS - connection should be initiating[0m
+[0;32mI (1408) Device1_GPS: Waiting for SAE authentication (STA CONNECTED state)...[0m
+[0;32mI (4524) Device1_GPS: [CALLBACK] sta_status_callback fired! state=1[0m
+[0;32mI (4525) Device1_GPS: STA state: CONNECTING (1)[0m
+[0;32mI (6515) Device1_GPS: [CALLBACK] sta_status_callback fired! state=2[0m
+[0;32mI (6515) Device1_GPS: STA state: CONNECTED (2) - SAE auth successful![0m
+Morse STA interface up with MAC address 02:00:45:a4:59:f0
+[0;32mI (6521) Device1_GPS: [CALLBACK] mmipal_link_status_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (6522) Device1_GPS: [CALLBACK] mmwlan_link_state_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (6529) Device1_GPS: ✓ LWIP LINK IS UP - Ready to send UDP packets! IP: 192.168.1.2[0m
+[0;32mI (6538) Device1_GPS: Link went Up[0m
+[0;32mI (6529) Device1_GPS: ✓ SAE authentication successful[0m
+[0;32mI (6553) Device1_GPS: Waiting for LWIP link to be ready...[0m
+[0;32mI (6561) Device1_GPS: ✓ LWIP link is UP - ready to send data![0m
+[0;32mI (6563) Device1_GPS: Starting GPS UART task with 16KB stack...[0m
+[0;32mI (6570) Device1_GPS: GPS UART initialized on pins RX=18 TX=17[0m
+[0;32mI (7064) Device1_GPS: [GPS_RAW] $GPRMC,041016.00,A,4222.31189,N,07106.66418,W,0.440,,110526,,,A*68[0m
+[0;32mI (7064) Device1_GPS: [GPS_PARSED] lat=42.594982 lon=-71.177711 speed=0.44[0m
+[0;32mI (7189) Device1_GPS: [GPS_RAW] $GPGGA,041016.00,4222.31189,N,07106.66418,W,1,04,3.45,16.3,M,-33.1,M,,*5B[0m
+[0;32mI (7574) Device1_GPS: UDP socket created, ready to send to 192.168.1.1:5001[0m
+[0;32mI (7575) Device1_GPS: Sent GPS data: lat=42.594982 lon=-71.177711[0m
+[0;32mI (8062) Device1_GPS: [GPS_RAW] $GPRMC,041017.00,A,4222.31153,N,07106.66448,W,0.693,,110526,,,A*67[0m
+[0;32mI (8062) Device1_GPS: [GPS_PARSED] lat=42.594975 lon=-71.177719 speed=0.69[0m
+[0;32mI (8187) Device1_GPS: [GPS_RAW] $GPGGA,041017.00,4222.31153,N,07106.66448,W,1,04,3.45,15.9,M,-33.1,M,,*51[0m
+[0;32mI (8584) Device1_GPS: Sent GPS data: lat=42.594975 lon=-71.177719[0m
+[0;32mI (9062) Device1_GPS: [GPS_RAW] $GPRMC,041018.00,A,4222.31114,N,07106.66474,W,0.860,,110526,,,A*66[0m
+[0;32mI (9062) Device1_GPS: [GPS_PARSED] lat=42.594963 lon=-71.177727 speed=0.86[0m
+[0;32mI (9187) Device1_GPS: [GPS_RAW] $GPGGA,041018.00,4222.31114,N,07106.66474,W,1,04,3.45,15.4,M,-33.1,M,,*5F[0m
+[0;32mI (9592) Device1_GPS: Sent GPS data: lat=42.594963 lon=-71.177727[0m
+[0;32mI (10060) Device1_GPS: [GPS_RAW] $GPRMC,041019.00,A,4222.31103,N,07106.66476,W,0.632,,110526,,,A*6A[0m
+[0;32mI (10060) Device1_GPS: [GPS_PARSED] lat=42.594959 lon=-71.177727 speed=0.63[0m
+[0;32mI (10185) Device1_GPS: [GPS_RAW] $GPGGA,041019.00,4222.31103,N,07106.66476,W,1,04,3.45,15.0,M,-33.1,M,,*5E[0m
+[0;32mI (10593) Device1_GPS: Sent GPS data: lat=42.594959 lon=-71.177727[0m
+[0;32mI (11064) Device1_GPS: [GPS_RAW] $GPRMC,041020.00,A,4222.31076,N,07106.66491,W,0.563,,110526,,,A*6D[0m
+[0;32mI (11064) Device1_GPS: [GPS_PARSED] lat=42.594952 lon=-71.177734 speed=0.56[0m
+[0;32mI (11189) Device1_GPS: [GPS_RAW] $GPGGA,041020.00,4222.31076,N,07106.66491,W,1,04,3.45,14.4,M,-33.1,M,,*5B[0m
+[0;32mI (11597) Device1_GPS: Sent GPS data: lat=42.594952 lon=-71.177734[0m
+[0;32mI (12057) Device1_GPS: [GPS_RAW] $GPRMC,041021.00,A,4222.31047,N,07106.66503,W,0.607,,110526,,,A*65[0m
+[0;32mI (12057) Device1_GPS: [GPS_PARSED] lat=42.594948 lon=-71.177734 speed=0.61[0m
+[0;32mI (12182) Device1_GPS: [GPS_RAW] $GPGGA,041021.00,4222.31047,N,07106.66503,W,1,04,3.45,13.9,M,-33.1,M,,*58[0m
+[0;32mI (12605) Device1_GPS: Sent GPS data: lat=42.594948 lon=-71.177734[0m
+[0;32mI (13062) Device1_GPS: [GPS_RAW] $GPRMC,041022.00,A,4222.31031,N,07106.66510,W,0.552,,110526,,,A*66[0m
+[0;32mI (13062) Device1_GPS: [GPS_PARSED] lat=42.594940 lon=-71.177734 speed=0.55[0m
+[0;32mI (13187) Device1_GPS: [GPS_RAW] $GPGGA,041022.00,4222.31031,N,07106.66510,W,1,04,3.45,13.4,M,-33.1,M,,*55[0m
+[0;32mI (13612) Device1_GPS: Sent GPS data: lat=42.594940 lon=-71.177734[0m
+[0;32mI (14062) Device1_GPS: [GPS_RAW] $GPRMC,041023.00,A,4222.31014,N,07106.66515,W,0.490,,110526,,,A*6A[0m
+[0;32mI (14062) Device1_GPS: [GPS_PARSED] lat=42.594936 lon=-71.177734 speed=0.49[0m
+[0;32mI (14187) Device1_GPS: [GPS_RAW] $GPGGA,041023.00,4222.31014,N,07106.66515,W,1,04,3.45,12.4,M,-33.1,M,,*57[0m
+[0;32mI (14618) Device1_GPS: Sent GPS data: lat=42.594936 lon=-71.177734[0m
+[0;32mI (15066) Device1_GPS: [GPS_RAW] $GPRMC,041024.00,A,4222.30987,N,07106.66517,W,0.497,,110526,,,A*6A[0m
+[0;32mI (15066) Device1_GPS: [GPS_PARSED] lat=42.594929 lon=-71.177734 speed=0.50[0m
+[0;32mI (15191) Device1_GPS: [GPS_RAW] $GPGGA,041024.00,4222.30987,N,07106.66517,W,1,04,3.45,11.5,M,-33.1,M,,*52[0m
+[0;32mI (15625) Device1_GPS: Sent GPS data: lat=42.594929 lon=-71.177734[0m
+[0;32mI (16061) Device1_GPS: [GPS_RAW] $GPRMC,041025.00,A,4222.30986,N,07106.66512,W,0.330,,110526,,,A*65[0m
+[0;32mI (16061) Device1_GPS: [GPS_PARSED] lat=42.594929 lon=-71.177734 speed=0.33[0m
+[0;32mI (16186) Device1_GPS: [GPS_RAW] $GPGGA,041025.00,4222.30986,N,07106.66512,W,1,04,3.45,10.5,M,-33.1,M,,*56[0m
+[0;32mI (16631) Device1_GPS: Sent GPS data: lat=42.594929 lon=-71.177734[0m
+[0;32mI (17065) Device1_GPS: [GPS_RAW] $GPRMC,041026.00,A,4222.30973,N,07106.66515,W,0.333,,110526,,,A*68[0m
+[0;32mI (17065) Device1_GPS: [GPS_PARSED] lat=42.594929 lon=-71.177734 speed=0.33[0m
+[0;32mI (17190) Device1_GPS: [GPS_RAW] $GPGGA,041026.00,4222.30973,N,07106.66515,W,1,04,3.45,9.7,M,-33.1,M,,*62[0m
+[0;32mI (17635) Device1_GPS: Sent GPS data: lat=42.594929 lon=-71.177734[0m
+[0;32mI (18062) Device1_GPS: [GPS_RAW] $GPRMC,041027.00,A,4222.30961,N,07106.66512,W,0.293,,110526,,,A*66[0m
+[0;32mI (18062) Device1_GPS: [GPS_PARSED] lat=42.594921 lon=-71.177734 speed=0.29[0m
+[0;32mI (18187) Device1_GPS: [GPS_RAW] $GPGGA,041027.00,4222.30961,N,07106.66512,W,1,04,3.45,8.8,M,-33.1,M,,*69[0m
+[0;32mI (18637) Device1_GPS: Sent GPS data: lat=42.594921 lon=-71.177734[0m
+[0;32mI (19062) Device1_GPS: [GPS_RAW] $GPRMC,041028.00,A,4222.30941,N,07106.66514,W,0.320,,110526,,,A*64[0m
+[0;32mI (19062) Device1_GPS: [GPS_PARSED] lat=42.594917 lon=-71.177734 speed=0.32[0m
+[0;32mI (19187) Device1_GPS: [GPS_RAW] $GPGGA,041028.00,4222.30941,N,07106.66514,W,1,04,3.45,7.8,M,-33.1,M,,*6D[0m
+[0;32mI (19639) Device1_GPS: Sent GPS data: lat=42.594917 lon=-71.177734[0m
+[0;32mI (20062) Device1_GPS: [GPS_RAW] $GPRMC,041029.00,A,4222.30910,N,07106.66515,W,0.445,,110526,,,A*64[0m
+[0;32mI (20062) Device1_GPS: [GPS_PARSED] lat=42.594910 lon=-71.177734 speed=0.45[0m
+[0;32mI (20187) Device1_GPS: [GPS_RAW] $GPGGA,041029.00,4222.30910,N,07106.66515,W,1,04,3.45,6.7,M,-33.1,M,,*67[0m
+[0;32mI (20641) Device1_GPS: Sent GPS data: lat=42.594910 lon=-71.177734[0m
+[0;32mI (21064) Device1_GPS: [GPS_RAW] $GPRMC,041030.00,A,4222.30883,N,07106.66512,W,0.550,,110526,,,A*65[0m
+[0;32mI (21064) Device1_GPS: [GPS_PARSED] lat=42.594902 lon=-71.177734 speed=0.55[0m
+[0;32mI (21189) Device1_GPS: [GPS_RAW] $GPGGA,041030.00,4222.30883,N,07106.66512,W,1,04,3.45,6.0,M,-33.1,M,,*64[0m
+[0;32mI (21644) Device1_GPS: Sent GPS data: lat=42.594902 lon=-71.177734[0m
+[0;32mI (22061) Device1_GPS: [GPS_RAW] $GPRMC,041031.00,A,4222.30905,N,07106.66509,W,0.249,,110526,,,A*6E[0m
+[0;32mI (22061) Device1_GPS: [GPS_PARSED] lat=42.594910 lon=-71.177734 speed=0.25[0m
+[0;32mI (22186) Device1_GPS: [GPS_RAW] $GPGGA,041031.00,4222.30905,N,07106.66509,W,1,04,3.45,4.6,M,-33.1,M,,*64[0m
+[0;32mI (22645) Device1_GPS: Sent GPS data: lat=42.594910 lon=-71.177734[0m
+[0;32mI (23059) Device1_GPS: [GPS_RAW] $GPRMC,041032.00,A,4222.30893,N,07106.66497,W,0.120,,110526,,,A*69[0m
+[0;32mI (23059) Device1_GPS: [GPS_PARSED] lat=42.594906 lon=-71.177734 speed=0.12[0m
+[0;32mI (23184) Device1_GPS: [GPS_RAW] $GPGGA,041032.00,4222.30893,N,07106.66497,W,1,04,3.45,3.2,M,-33.1,M,,*6C[0m
+[0;32mI (23648) Device1_GPS: Sent GPS data: lat=42.594906 lon=-71.177734[0m
+[0;32mI (24061) Device1_GPS: [GPS_RAW] $GPRMC,041033.00,A,4222.30861,N,07106.66496,W,0.141,,110526,,,A*63[0m
+[0;32mI (24061) Device1_GPS: [GPS_PARSED] lat=42.594898 lon=-71.177734 speed=0.14[0m
+[0;32mI (24186) Device1_GPS: [GPS_RAW] $GPGGA,041033.00,4222.30861,N,07106.66496,W,1,04,3.45,2.2,M,-33.1,M,,*60[0m
+[0;32mI (24649) Device1_GPS: Sent GPS data: lat=42.594898 lon=-71.177734[0m
+[0;32mI (25063) Device1_GPS: [GPS_RAW] $GPRMC,041034.00,A,4222.30823,N,07106.66458,W,0.396,,110526,,,A*68[0m
+[0;32mI (25063) Device1_GPS: [GPS_PARSED] lat=42.594887 lon=-71.177719 speed=0.40[0m
+[0;32mI (25188) Device1_GPS: [GPS_RAW] $GPGGA,041034.00,4222.30823,N,07106.66458,W,1,04,3.45,1.2,M,-33.1,M,,*60[0m
+[0;32mI (25652) Device1_GPS: Sent GPS data: lat=42.594887 lon=-71.177719[0m
+[0;32mI (26062) Device1_GPS: [GPS_RAW] $GPRMC,041035.00,A,4222.30808,N,07106.66467,W,0.461,,110526,,,A*63[0m
+[0;32mI (26062) Device1_GPS: [GPS_PARSED] lat=42.594879 lon=-71.177727 speed=0.46[0m
+[0;32mI (26187) Device1_GPS: [GPS_RAW] $GPGGA,041035.00,4222.30808,N,07106.66467,W,1,04,3.45,0.9,M,-33.1,M,,*6E[0m
+[0;32mI (26653) Device1_GPS: Sent GPS data: lat=42.594879 lon=-71.177727[0m
+[0;32mI (27065) Device1_GPS: [GPS_RAW] $GPRMC,041036.00,A,4222.30841,N,07106.66473,W,0.239,,110526,,,A*63[0m
+[0;32mI (27065) Device1_GPS: [GPS_PARSED] lat=42.594891 lon=-71.177727 speed=0.24[0m
+[0;32mI (27190) Device1_GPS: [GPS_RAW] $GPGGA,041036.00,4222.30841,N,07106.66473,W,1,04,3.45,-0.5,M,-33.1,M,,*44[0m
+[0;32mI (27655) Device1_GPS: Sent GPS data: lat=42.594891 lon=-71.177727[0m
+[0;32mI (28062) Device1_GPS: [GPS_RAW] $GPRMC,041037.00,A,4222.30855,N,07106.66484,W,0.306,,110526,,,A*62[0m
+[0;32mI (28062) Device1_GPS: [GPS_PARSED] lat=42.594898 lon=-71.177734 speed=0.31[0m
+[0;32mI (28187) Device1_GPS: [GPS_RAW] $GPGGA,041037.00,4222.30855,N,07106.66484,W,1,04,3.45,-1.7,M,-33.1,M,,*4B[0m
+[0;32mI (28658) Device1_GPS: Sent GPS data: lat=42.594898 lon=-71.177734[0m
+[0;32mI (29063) Device1_GPS: [GPS_RAW] $GPRMC,041038.00,A,4222.30827,N,07106.66579,W,0.859,,110526,,,A*6A[0m
+[0;32mI (29063) Device1_GPS: [GPS_PARSED] lat=42.594887 lon=-71.177757 speed=0.86[0m
+[0;32mI (29188) Device1_GPS: [GPS_RAW] $GPGGA,041038.00,4222.30827,N,07106.66579,W,1,04,3.45,-4.0,M,-33.1,M,,*40[0m
+[0;32mI (29659) Device1_GPS: Sent GPS data: lat=42.594887 lon=-71.177757[0m
+[0;32mI (30062) Device1_GPS: [GPS_RAW] $GPRMC,041039.00,A,4222.30766,N,07106.66566,W,0.698,,110526,,,A*6C[0m
+[0;32mI (30062) Device1_GPS: [GPS_PARSED] lat=42.594872 lon=-71.177750 speed=0.70[0m
+[0;32mI (30187) Device1_GPS: [GPS_RAW] $GPGGA,041039.00,4222.30766,N,07106.66566,W,1,04,3.45,-4.9,M,-33.1,M,,*4C[0m
+[0;32mI (30661) Device1_GPS: Sent GPS data: lat=42.594872 lon=-71.177750[0m
+[0;32mI (31064) Device1_GPS: [GPS_RAW] $GPRMC,041040.00,A,4222.30766,N,07106.66557,W,0.509,,110526,,,A*6B[0m
+[0;32mI (31064) Device1_GPS: [GPS_PARSED] lat=42.594872 lon=-71.177750 speed=0.51[0m
+[0;32mI (31189) Device1_GPS: [GPS_RAW] $GPGGA,041040.00,4222.30766,N,07106.66557,W,1,04,3.45,-5.9,M,-33.1,M,,*41[0m
+[0;32mI (31662) Device1_GPS: Sent GPS data: lat=42.594872 lon=-71.177750[0m
+[0;32mI (32063) Device1_GPS: [GPS_RAW] $GPRMC,041041.00,A,4222.30691,N,07106.66523,W,0.828,,110526,,,A*6E[0m
+[0;32mI (32063) Device1_GPS: [GPS_PARSED] lat=42.594849 lon=-71.177734 speed=0.83[0m
+[0;32mI (32187) Device1_GPS: [GPS_RAW] $GPGGA,041041.00,4222.30691,N,07106.66523,W,1,04,3.45,-6.7,M,-33.1,M,,*47[0m
+[0;32mI (32668) Device1_GPS: Sent GPS data: lat=42.594849 lon=-71.177734[0m
+[0;32mI (33064) Device1_GPS: [GPS_RAW] $GPRMC,041042.00,A,4222.30673,N,07106.66497,W,0.768,,110526,,,A*64[0m
+[0;32mI (33064) Device1_GPS: [GPS_PARSED] lat=42.594849 lon=-71.177734 speed=0.77[0m
+[0;32mI (33189) Device1_GPS: [GPS_RAW] $GPGGA,041042.00,4222.30673,N,07106.66497,W,1,04,3.45,-7.7,M,-33.1,M,,*47[0m
+[0;32mI (33674) Device1_GPS: Sent GPS data: lat=42.594849 lon=-71.177734[0m
+E    33216 Failed to write page: -32768
+E    33216 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (34058) Device1_GPS: [GPS_RAW] $GPRMC,041043.00,A,4222.30658,N,07106.66473,W,0.730,,110526,,,A*6B[0m
+[0;32mI (34058) Device1_GPS: [GPS_PARSED] lat=42.594841 lon=-71.177727 speed=0.73[0m
+[0;32mI (34183) Device1_GPS: [GPS_RAW] $GPGGA,041043.00,4222.30658,N,07106.66473,W,1,04,3.45,-8.3,M,-33.1,M,,*4E[0m
+[0;32mI (34680) Device1_GPS: Sent GPS data: lat=42.594841 lon=-71.177727[0m
+E    34218 Failed to write page: -32768
+E    34219 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (35065) Device1_GPS: [GPS_RAW] $GPRMC,041044.00,A,4222.30721,N,07106.66462,W,0.178,,110526,,,A*69[0m
+[0;32mI (35065) Device1_GPS: [GPS_PARSED] lat=42.594860 lon=-71.177719 speed=0.18[0m
+[0;32mI (35189) Device1_GPS: [GPS_RAW] $GPGGA,041044.00,4222.30721,N,07106.66462,W,1,04,3.45,-9.6,M,-33.1,M,,*42[0m
+[0;32mI (35688) Device1_GPS: Sent GPS data: lat=42.594860 lon=-71.177719[0m
+E    35226 Failed to write page: -32768
+E    35227 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (36062) Device1_GPS: [GPS_RAW] $GPRMC,041045.00,A,4222.30723,N,07106.66446,W,0.172,,110526,,,A*66[0m
+[0;32mI (36062) Device1_GPS: [GPS_PARSED] lat=42.594860 lon=-71.177719 speed=0.17[0m
+[0;32mI (36187) Device1_GPS: [GPS_RAW] $GPGGA,041045.00,4222.30723,N,07106.66446,W,1,04,3.45,-10.0,M,-33.1,M,,*79[0m
+[0;32mI (36689) Device1_GPS: Sent GPS data: lat=42.594860 lon=-71.177719[0m
+E    36227 Failed to write page: -32768
+E    36227 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (37064) Device1_GPS: [GPS_RAW] $GPRMC,041046.00,A,4222.30720,N,07106.66439,W,0.189,,110526,,,A*6A[0m
+[0;32mI (37064) Device1_GPS: [GPS_PARSED] lat=42.594860 lon=-71.177719 speed=0.19[0m
+[0;32mI (37189) Device1_GPS: [GPS_RAW] $GPGGA,041046.00,4222.30720,N,07106.66439,W,1,04,3.45,-10.3,M,-33.1,M,,*72[0m
+[0;32mI (37697) Device1_GPS: Sent GPS data: lat=42.594860 lon=-71.177719[0m
+E    37235 Failed to write page: -32768
+E    37236 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (38061) Device1_GPS: [GPS_RAW] $GPRMC,041047.00,A,4222.30751,N,07106.66397,W,0.196,,110526,,,A*60[0m
+[0;32mI (38061) Device1_GPS: [GPS_PARSED] lat=42.594868 lon=-71.177711 speed=0.20[0m
+[0;32mI (38186) Device1_GPS: [GPS_RAW] $GPGGA,041047.00,4222.30751,N,07106.66397,W,1,04,3.45,-11.4,M,-33.1,M,,*70[0m
+[0;32mI (38705) Device1_GPS: Sent GPS data: lat=42.594868 lon=-71.177711[0m
+E    38243 Failed to write page: -32768
+E    38244 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+E    38249 Failed to write page: -32768
+E    38252 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+[0;32mI (39062) Device1_GPS: [GPS_RAW] $GPRMC,041048.00,A,4222.30748,N,07106.66383,W,0.210,,110526,,,A*6F[0m
+[0;32mI (39062) Device1_GPS: [GPS_PARSED] lat=42.594868 lon=-71.177696 speed=0.21[0m
+[0;32mI (39187) Device1_GPS: [GPS_RAW] $GPGGA,041048.00,4222.30748,N,07106.66383,W,1,04,3.45,-11.7,M,-33.1,M,,*71[0m
+E    39244 Failed to write page: -32768
+E    39244 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+[0;32mI (39724) Device1_GPS: Sent GPS data: lat=42.594868 lon=-71.177696[0m
+E    39261 Failed to write page: -32768
+E    39262 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (40066) Device1_GPS: [GPS_RAW] $GPRMC,041049.00,A,4222.30650,N,07106.66334,W,0.595,,110526,,,A*60[0m
+[0;32mI (40066) Device1_GPS: [GPS_PARSED] lat=42.594841 lon=-71.177689 speed=0.59[0m
+[0;32mI (40191) Device1_GPS: [GPS_RAW] $GPGGA,041049.00,4222.30650,N,07106.66334,W,1,04,3.45,-12.1,M,-33.1,M,,*71[0m
+E    40244 Failed to write page: -32768
+E    40245 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=1
+[0;32mI (40731) Device1_GPS: Sent GPS data: lat=42.594841 lon=-71.177689[0m
+E    40269 Failed to write page: -32768
+E    40270 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (41061) Device1_GPS: [GPS_RAW] $GPRMC,041050.00,A,4222.30615,N,07106.66293,W,0.509,,110526,,,A*60[0m
+[0;32mI (41061) Device1_GPS: [GPS_PARSED] lat=42.594830 lon=-71.177673 speed=0.51[0m
+[0;32mI (41186) Device1_GPS: [GPS_RAW] $GPGGA,041050.00,4222.30615,N,07106.66293,W,1,04,3.45,-13.2,M,-33.1,M,,*76[0m
+Guru Meditation Error: Core  1 panic'ed (LoadProhibited). Exception was unhandled.
+
+Core  1 register dump:
+PC      : 0x4037d150  PS      : 0x00060b33  A0      : 0x8037d4eb  A1      : 0x3fcaa7b0  
+A2      : 0x3fcaacd8  A3      : 0x00000000  A4      : 0x00000000  A5      : 0x00060b23  
+A6      : 0x00000001  A7      : 0x00060920  A8      : 0x00000000  A9      : 0x3fcaa7a0  
+A10     : 0x00000000  A11     : 0x00000000  A12     : 0x00000000  A13     : 0x00060b23  
+A14     : 0x0000a11c  A15     : 0x3fcaad24  SAR     : 0x00000007  EXCCAUSE: 0x0000001c  
+EXCVADDR: 0x00060958  LBEG    : 0x4205df26  LEND    : 0x4205df40  LCOUNT  : 0x00000003  
+
+
+Backtrace: 0x4037d14d:0x3fcaa7b0 0x4037d4e8:0x3fcaa7e0 0x4200eb9e:0x3fcaa820 0x4205c310:0x3fcaa840 0x4205e114:0x3fcaa8b0 0x4200ead0:0x3fcaa8d0 0x4037db0d:0x3fcaa900
+
+
+
+
+ELF file SHA256: 8246a793b
+
+Rebooting...
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x2b (SPI_FAST_FLASH_BOOT)
+Saved PC:0x4209c60c
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2810,len:0x1564
+load:0x403c8700,len:0x4
+load:0x403c8704,len:0xd24
+load:0x403cb700,len:0x2ed4
+entry 0x403c8928
+[0;32mI (31) boot: ESP-IDF v5.4.4 2nd stage bootloader[0m
+[0;32mI (31) boot: compile time May 10 2026 19:41:37[0m
+[0;32mI (31) boot: Multicore bootloader[0m
+[0;32mI (32) boot: chip revision: v0.2[0m
+I (34) boot: efuse block revision: v1.3
+[0;32mI (38) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (42) boot.esp32s3: SPI Mode       : DIO[0m
+[0;32mI (46) boot.esp32s3: SPI Flash Size : 16MB[0m
+[0;32mI (49) boot: Enabling RNG early entropy source...[0m
+[0;32mI (54) boot: Partition Table:[0m
+[0;32mI (56) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (63) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (69) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (76) boot:  2 factory          factory app      00 00 00010000 00177000[0m
+[0;32mI (82) boot: End of partition table[0m
+[0;32mI (86) esp_image: segment 0: paddr=00010020 vaddr=3c0b0020 size=9d25ch (643676) map[0m
+[0;32mI (207) esp_image: segment 1: paddr=000ad284 vaddr=3fc99500 size=02d94h ( 11668) load[0m
+[0;32mI (210) esp_image: segment 2: paddr=000b0020 vaddr=42000020 size=aaa7ch (699004) map[0m
+[0;32mI (335) esp_image: segment 3: paddr=0015aaa4 vaddr=3fc9c294 size=00428h (  1064) load[0m
+[0;32mI (335) esp_image: segment 4: paddr=0015aed4 vaddr=40374000 size=15490h ( 87184) load[0m
+[0;32mI (357) esp_image: segment 5: paddr=0017036c vaddr=50000000 size=0001ch (    28) load[0m
+[0;32mI (366) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (366) boot: Disabling RNG early entropy source...[0m
+[0;32mI (376) cpu_start: Multicore app[0m
+[0;32mI (384) cpu_start: GPIO 44 and 43 are used as console UART I/O pins[0m
+[0;32mI (385) cpu_start: Pro cpu start user code[0m
+[0;32mI (385) cpu_start: cpu freq: 160000000 Hz[0m
+[0;32mI (387) app_init: Application information:[0m
+[0;32mI (390) app_init: Project name:     main[0m
+[0;32mI (394) app_init: App version:      1[0m
+[0;32mI (398) app_init: Compile time:     May 10 2026 19:37:44[0m
+[0;32mI (403) app_init: ELF file SHA256:  8246a793b...[0m
+[0;32mI (407) app_init: ESP-IDF:          v5.4.4[0m
+[0;32mI (411) efuse_init: Min chip rev:     v0.0[0m
+[0;32mI (415) efuse_init: Max chip rev:     v0.99 [0m
+[0;32mI (419) efuse_init: Chip rev:         v0.2[0m
+[0;32mI (422) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (429) heap_init: At 3FCA0EA0 len 00048870 (290 KiB): RAM[0m
+[0;32mI (434) heap_init: At 3FCE9710 len 00005724 (21 KiB): RAM[0m
+[0;32mI (439) heap_init: At 3FCF0000 len 00008000 (32 KiB): DRAM[0m
+[0;32mI (444) heap_init: At 600FE000 len 00001FE8 (7 KiB): RTCRAM[0m
+[0;32mI (450) spi_flash: detected chip: winbond[0m
+[0;32mI (453) spi_flash: flash io: dio[0m
+[0;32mI (457) sleep_gpio: Configure to isolate all GPIO pins in sleep state[0m
+[0;32mI (463) sleep_gpio: Enable automatic switching of GPIO sleep configuration[0m
+[0;32mI (469) main_task: Started on CPU0[0m
+[0;32mI (500) main_task: Calling app_main()[0m
+[0;32mI (518) Device1_GPS: === RUSC Device 1: GPS Collector + HALow UDP ===[0m
+[0;32mI (518) Device1_GPS: Starting MorseMicro HALow radio initialization...[0m
+[0;32mI (620) gpio: GPIO[8]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (620) Device1_GPS: Setting regulatory domain to US...[0m
+[0;32mI (622) Device1_GPS: Regulatory domain set to US (Op Class 1, Channel 3)[0m
+[0;32mI (628) Device1_GPS: Attempting mmwlan_boot...[0m
+[0;32mI (633) gpio: GPIO[2]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (641) gpio: GPIO[9]| InputEn: 0| OutputEn: 1| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+[0;32mI (649) gpio: GPIO[7]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 1| Intr:0 [0m
+[0;32mI (657) gpio: GPIO[6]| InputEn: 1| OutputEn: 0| OpenDrain: 0| Pullup: 0| Pulldown: 0| Intr:0 [0m
+Actual SPI CLK 40000kHz
+[0;32mI (1299) Device1_GPS: Radio boot successful![0m
+Morse LwIP interface initialised.
+[0;32mI (1316) Device1_GPS: Network interface initialized[0m
+[0;32mI (1317) Device1_GPS: Configuring HaLow STA connection for AP: MorseMicro[0m
+[0;32mI (1317) Device1_GPS: Attempting MorseMicro STA mode to connect to MorseMicro...[0m
+[0;32mI (1324) Device1_GPS: [DEBUG] STA connection parameters:[0m
+[0;32mI (1329) Device1_GPS:   SSID: MorseMicro (len=10)[0m
+[0;32mI (1333) Device1_GPS:   Security: 2 (MMWLAN_SAE=2)[0m
+[0;32mI (1338) Device1_GPS:   PMF: 0 (REQUIRED=0)[0m
+[0;32mI (1414) Device1_GPS: [DEBUG] mmwlan_sta_enable(with callback) returned: 0 (SUCCESS=0)[0m
+[0;32mI (1415) Device1_GPS: [DEBUG] STA enable SUCCESS - connection should be initiating[0m
+[0;32mI (1423) Device1_GPS: Waiting for SAE authentication (STA CONNECTED state)...[0m
+[0;32mI (4537) Device1_GPS: [CALLBACK] sta_status_callback fired! state=1[0m
+[0;32mI (4537) Device1_GPS: STA state: CONNECTING (1)[0m
+[0;32mI (6680) Device1_GPS: [CALLBACK] sta_status_callback fired! state=2[0m
+[0;32mI (6680) Device1_GPS: STA state: CONNECTED (2) - SAE auth successful![0m
+Morse STA interface up with MAC address 02:00:45:a4:59:f0
+[0;32mI (6686) Device1_GPS: [CALLBACK] mmipal_link_status_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (6687) Device1_GPS: [CALLBACK] mmwlan_link_state_callback fired! link_state=1 (UP=1)[0m
+[0;32mI (6694) Device1_GPS: ✓ LWIP LINK IS UP - Ready to send UDP packets! IP: 192.168.1.2[0m
+[0;32mI (6703) Device1_GPS: Link went Up[0m
+[0;32mI (6694) Device1_GPS: ✓ SAE authentication successful[0m
+[0;32mI (6718) Device1_GPS: Waiting for LWIP link to be ready...[0m
+[0;32mI (6726) Device1_GPS: ✓ LWIP link is UP - ready to send data![0m
+[0;32mI (6728) Device1_GPS: Starting GPS UART task with 16KB stack...[0m
+[0;32mI (6735) Device1_GPS: GPS UART initialized on pins RX=18 TX=17[0m
+[0;32mI (7226) Device1_GPS: [GPS_RAW] $GPRMC,041058.00,A,4222.30280,N,07106.66029,W,1.041,,110526,,,A*6B[0m
+[0;32mI (7226) Device1_GPS: [GPS_PARSED] lat=42.594738 lon=-71.177612 speed=1.04[0m
+[0;32mI (7351) Device1_GPS: [GPS_RAW] $GPGGA,041058.00,4222.30280,N,07106.66029,W,1,04,3.45,-18.5,M,-33.1,M,,*79[0m
+[0;32mI (7739) Device1_GPS: UDP socket created, ready to send to 192.168.1.1:5001[0m
+[0;32mI (7740) Device1_GPS: Sent GPS data: lat=42.594738 lon=-71.177612[0m
+[0;32mI (8223) Device1_GPS: [GPS_RAW] $GPRMC,041059.00,A,4222.30283,N,07106.65998,W,1.212,,110526,,,A*6D[0m
+[0;32mI (8223) Device1_GPS: [GPS_PARSED] lat=42.594746 lon=-71.177597 speed=1.21[0m
+[0;32mI (8348) Device1_GPS: [GPS_RAW] $GPGGA,041059.00,4222.30283,N,07106.65998,W,1,04,3.45,-18.4,M,-33.1,M,,*7A[0m
+[0;32mI (8749) Device1_GPS: Sent GPS data: lat=42.594746 lon=-71.177597[0m
+[0;32mI (9226) Device1_GPS: [GPS_RAW] $GPRMC,041100.00,A,4222.30259,N,07106.65944,W,1.368,,110526,,,A*6A[0m
+[0;32mI (9226) Device1_GPS: [GPS_PARSED] lat=42.594734 lon=-71.177589 speed=1.37[0m
+[0;32mI (9350) Device1_GPS: [GPS_RAW] $GPGGA,041100.00,4222.30259,N,07106.65944,W,1,04,3.45,-18.1,M,-33.1,M,,*74[0m
+[0;32mI (9757) Device1_GPS: Sent GPS data: lat=42.594734 lon=-71.177589[0m
+[0;32mI (10225) Device1_GPS: [GPS_RAW] $GPRMC,041101.00,A,4222.30183,N,07106.65956,W,1.088,,110526,,,A*61[0m
+[0;32mI (10225) Device1_GPS: [GPS_PARSED] lat=42.594715 lon=-71.177589 speed=1.09[0m
+[0;32mI (10350) Device1_GPS: [GPS_RAW] $GPGGA,041101.00,4222.30183,N,07106.65956,W,1,04,3.45,-18.5,M,-33.1,M,,*76[0m
+[0;32mI (10763) Device1_GPS: Sent GPS data: lat=42.594715 lon=-71.177589[0m
+[0;32mI (11227) Device1_GPS: [GPS_RAW] $GPRMC,041102.00,A,4222.30193,N,07106.65932,W,0.734,,110526,,,A*60[0m
+[0;32mI (11227) Device1_GPS: [GPS_PARSED] lat=42.594719 lon=-71.177589 speed=0.73[0m
+[0;32mI (11352) Device1_GPS: [GPS_RAW] $GPGGA,041102.00,4222.30193,N,07106.65932,W,1,04,3.45,-18.3,M,-33.1,M,,*70[0m
+[0;32mI (11769) Device1_GPS: Sent GPS data: lat=42.594719 lon=-71.177589[0m
+[0;32mI (12226) Device1_GPS: [GPS_RAW] $GPRMC,041103.00,A,4222.30214,N,07106.65927,W,0.207,,110526,,,A*6C[0m
+[0;32mI (12226) Device1_GPS: [GPS_PARSED] lat=42.594727 lon=-71.177574 speed=0.21[0m
+[0;32mI (12351) Device1_GPS: [GPS_RAW] $GPGGA,041103.00,4222.30214,N,07106.65927,W,1,04,3.45,-18.7,M,-33.1,M,,*7D[0m
+[0;32mI (12775) Device1_GPS: Sent GPS data: lat=42.594727 lon=-71.177574[0m
+[0;32mI (13231) Device1_GPS: [GPS_RAW] $GPRMC,041104.00,A,4222.30129,N,07106.65895,W,0.549,,110526,,,A*63[0m
+[0;32mI (13231) Device1_GPS: [GPS_PARSED] lat=42.594700 lon=-71.177574 speed=0.55[0m
+[0;32mI (13355) Device1_GPS: [GPS_RAW] $GPGGA,041104.00,4222.30129,N,07106.65895,W,1,04,3.46,-19.2,M,-33.1,M,,*78[0m
+[0;32mI (13781) Device1_GPS: Sent GPS data: lat=42.594700 lon=-71.177574[0m
+[0;32mI (14225) Device1_GPS: [GPS_RAW] $GPRMC,041105.00,A,4222.30159,N,07106.65872,W,0.177,,110526,,,A*65[0m
+[0;32mI (14225) Device1_GPS: [GPS_PARSED] lat=42.594707 lon=-71.177567 speed=0.18[0m
+[0;32mI (14350) Device1_GPS: [GPS_RAW] $GPGGA,041105.00,4222.30159,N,07106.65872,W,1,04,3.46,-19.3,M,-33.1,M,,*76[0m
+[0;32mI (14787) Device1_GPS: Sent GPS data: lat=42.594707 lon=-71.177567[0m
+E    14324 Failed to write page: -32768
+E    14324 morse_pageset_tx could not write 1 pkts - rc=-32768 items=1 pages=16
+[0;32mI (15227) Device1_GPS: [GPS_RAW] $GPRMC,041106.00,A,4222.30083,N,07106.65841,W,0.559,,110526,,,A*68[0m
+[0;32mI (15227) Device1_GPS: [GPS_PARSED] lat=42.594688 lon=-71.177559 speed=0.56[0m
+[0;32mI (15352) Device1_GPS: [GPS_RAW] $GPGGA,041106.00,4222.30083,N,07106.65841,W,1,04,3.46,-19.4,M,-33.1,M,,*74[0m
+[0;32mI (15798) Device1_GPS: Sent GPS data: lat=42.594688 lon=-71.177559[0m
+[0;32mI (16225) Device1_GPS: [GPS_RAW] $GPRMC,041107.00,A,4222.30062,N,07106.65864,W,0.561,,110526,,,A*6A[0m
+[0;32mI (16225) Device1_GPS: [GPS_PARSED] lat=42.594685 lon=-71.177567 speed=0.56[0m
+[0;32mI (16350) Device1_GPS: [GPS_RAW] $GPGGA,041107.00,4222.30062,N,07106.65864,W,1,04,3.46,-20.0,M,-33.1,M,,*73[0m
+[0;32mI (16800) Device1_GPS: Sent GPS data: lat=42.594685 lon=-71.177567[0m
+[0;32mI (17229) Device1_GPS: [GPS_RAW] $GPRMC,041108.00,A,4222.30011,N,07106.65867,W,0.799,,110526,,,A*67[0m
+[0;32mI (17229) Device1_GPS: [GPS_PARSED] lat=42.594669 lon=-71.177567 speed=0.80[0m
+[0;32mI (17354) Device1_GPS: [GPS_RAW] $GPGGA,041108.00,4222.30011,N,07106.65867,W,1,04,3.46,-20.1,M,-33.1,M,,*7A[0m
+[0;32mI (17802) Device1_GPS: Sent GPS data: lat=42.594669 lon=-71.177567[0m
+[0;32mI (18224) Device1_GPS: [GPS_RAW] $GPRMC,041109.00,A,4222.29972,N,07106.65897,W,1.017,,110526,,,A*6D[0m
+[0;32mI (18224) Device1_GPS: [GPS_PARSED] lat=42.594658 lon=-71.177574 speed=1.02[0m
+[0;32mI (18349) Device1_GPS: [GPS_RAW] $GPGGA,041109.00,4222.29972,N,07106.65897,W,1,04,3.46,-20.3,M,-33.1,M,,*72[0m
+[0;32mI (18804) Device1_GPS: Sent GPS data: lat=42.594658 lon=-71.177574[0m
+[0;32mI (19228) Device1_GPS: [GPS_RAW] $GPRMC,041110.00,A,4222.29927,N,07106.65952,W,1.409,,110526,,,A*66[0m
+[0;32mI (19228) Device1_GPS: [GPS_PARSED] lat=42.594646 lon=-71.177589 speed=1.41[0m
+[0;32mI (19353) Device1_GPS: [GPS_RAW] $GPGGA,041110.00,4222.29927,N,07106.65952,W,1,04,3.46,-19.8,M,-33.1,M,,*73[0m
+[0;32mI (19806) Device1_GPS: Sent GPS data: lat=42.594646 lon=-71.177589[0m
+[0;32mI (20225) Device1_GPS: [GPS_RAW] $GPRMC,041111.00,A,4222.29913,N,07106.65850,W,1.140,,110526,,,A*6B[0m
+[0;32mI (20225) Device1_GPS: [GPS_PARSED] lat=42.594643 lon=-71.177559 speed=1.14[0m
+[0;32mI (20350) Device1_GPS: [GPS_RAW] $GPGGA,041111.00,4222.29913,N,07106.65850,W,1,04,3.46,-19.6,M,-33.1,M,,*78[0m
+[0;32mI (20808) Device1_GPS: Sent GPS data: lat=42.594643 lon=-71.177559[0m
+[0;32mI (21224) Device1_GPS: [GPS_RAW] $GPRMC,041112.00,A,4222.29932,N,07106.65856,W,1.031,,110526,,,A*6A[0m
+[0;32mI (21224) Device1_GPS: [GPS_PARSED] lat=42.594646 lon=-71.177567 speed=1.03[0m
+[0;32mI (21349) Device1_GPS: [GPS_RAW] $GPGGA,041112.00,4222.29932,N,07106.65856,W,1,04,3.46,-19.8,M,-33.1,M,,*70[0m
+[0;32mI (21810) Device1_GPS: Sent GPS data: lat=42.594646 lon=-71.177567[0m
+[0;32mI (22226) Device1_GPS: [GPS_RAW] $GPRMC,041113.00,A,4222.30028,N,07106.65718,W,0.531,,110526,,,A*60[0m
+[0;32mI (22226) Device1_GPS: [GPS_PARSED] lat=42.594673 lon=-71.177528 speed=0.53[0m
+[0;32mI (22351) Device1_GPS: [GPS_RAW] $GPGGA,041113.00,4222.30028,N,07106.65718,W,1,04,3.46,-19.8,M,-33.1,M,,*7E[0m
+[0;32mI (22812) Device1_GPS: Sent GPS data: lat=42.594673 lon=-71.177528[0m
+[0;32mI (23228) Device1_GPS: [GPS_RAW] $GPRMC,041114.00,A,4222.30044,N,07106.65700,W,0.504,,110526,,,A*62[0m
+[0;32mI (23228) Device1_GPS: [GPS_PARSED] lat=42.594677 lon=-71.177513 speed=0.50[0m
+[0;32mI (23353) Device1_GPS: [GPS_RAW] $GPGGA,041114.00,4222.30044,N,07106.65700,W,1,04,3.46,-20.0,M,-33.1,M,,*78[0m
+[0;32mI (23814) Device1_GPS: Sent GPS data: lat=42.594677 lon=-71.177513[0m
+[0;32mI (24227) Device1_GPS: [GPS_RAW] $GPRMC,041115.00,A,4222.30062,N,07106.65656,W,0.574,,110526,,,A*62[0m
+[0;32mI (24227) Device1_GPS: [GPS_PARSED] lat=42.594685 lon=-71.177505 speed=0.57[0m
+[0;32mI (24351) Device1_GPS: [GPS_RAW] $GPGGA,041115.00,4222.30062,N,07106.65656,W,1,04,3.46,-20.1,M,-33.1,M,,*7E[0m
+[0;32mI (24816) Device1_GPS: Sent GPS data: lat=42.594685 lon=-71.177505[0m
+[0;32mI (25227) Device1_GPS: [GPS_RAW] $GPRMC,041116.00,A,4222.30128,N,07106.65633,W,0.323,,110526,,,A*69[0m
+[0;32mI (25227) Device1_GPS: [GPS_PARSED] lat=42.594700 lon=-71.177505 speed=0.32[0m
+[0;32mI (25352) Device1_GPS: [GPS_RAW] $GPGGA,041116.00,4222.30128,N,07106.65633,W,1,04,3.46,-20.5,M,-33.1,M,,*75[0m
+[0;32mI (25818) Device1_GPS: Sent GPS data: lat=42.594700 lon=-71.177505[0m
+[0;32mI (26227) Device1_GPS: [GPS_RAW] $GPRMC,041117.00,A,4222.30256,N,07106.65555,W,0.472,,110526,,,A*62[0m
+[0;32mI (26227) Device1_GPS: [GPS_PARSED] lat=42.594734 lon=-71.177483 speed=0.47[0m
+[0;32mI (26352) Device1_GPS: [GPS_RAW] $GPGGA,041117.00,4222.30256,N,07106.65555,W,1,04,3.46,-20.0,M,-33.1,M,,*78[0m
+[0;32mI (26820) Device1_GPS: Sent GPS data: lat=42.594734 lon=-71.177483[0m
+[0;32mI (27226) Device1_GPS: [GPS_RAW] $GPRMC,041118.00,A,4222.30231,N,07106.65516,W,0.321,,110526,,,A*6A[0m
+[0;32mI (27226) Device1_GPS: [GPS_PARSED] lat=42.594727 lon=-71.177467 speed=0.32[0m
+[0;32mI (27351) Device1_GPS: [GPS_RAW] $GPGGA,041118.00,4222.30231,N,07106.65516,W,1,04,3.46,-19.5,M,-33.1,M,,*7E[0m
+[0;32mI (27824) Device1_GPS: Sent GPS data: lat=42.594727 lon=-71.177467[0m
+[0;32mI (28223) Device1_GPS: [GPS_RAW] $GPRMC,041119.00,A,4222.30314,N,07106.65597,W,0.541,,110526,,,A*64[0m
+[0;32mI (28223) Device1_GPS: [GPS_PARSED] lat=42.594749 lon=-71.177490 speed=0.54[0m
+[0;32mI (28347) Device1_GPS: [GPS_RAW] $GPGGA,041119.00,4222.30314,N,07106.65597,W,1,04,3.46,-19.1,M,-33.1,M,,*74[0m
+[0;32mI (28832) Device1_GPS: Sent GPS data: lat=42.594749 lon=-71.177490[0m
+[0;32mI (29229) Device1_GPS: [GPS_RAW] $GPRMC,041120.00,A,4222.30254,N,07106.65612,W,0.514,,110526,,,A*65[0m
+[0;32mI (29229) Device1_GPS: [GPS_PARSED] lat=42.594734 lon=-71.177498 speed=0.51[0m
+[0;32mI (29354) Device1_GPS: [GPS_RAW] $GPGGA,041120.00,4222.30254,N,07106.65612,W,1,04,3.46,-18.6,M,-33.1,M,,*73[0m
+[0;32mI (29838) Device1_GPS: Sent GPS data: lat=42.594734 lon=-71.177498[0m
+[0;32mI (30226) Device1_GPS: [GPS_RAW] $GPRMC,041121.00,A,4222.30239,N,07106.65609,W,0.674,,110526,,,A*60[0m
+[0;32mI (30226) Device1_GPS: [GPS_PARSED] lat=42.594730 lon=-71.177490 speed=0.67[0m
+[0;32mI (30351) Device1_GPS: [GPS_RAW] $GPGGA,041121.00,4222.30239,N,07106.65609,W,1,04,3.46,-18.1,M,-33.1,M,,*74[0m
+[0;32mI (30840) Device1_GPS: Sent GPS data: lat=42.594730 lon=-71.177490[0m
+[0;32mI (31231) Device1_GPS: [GPS_RAW] $GPRMC,041122.00,A,4222.30835,N,07106.65548,W,0.276,,110526,,,A*65[0m
+[0;32mI (31231) Device1_GPS: [GPS_PARSED] lat=42.594891 lon=-71.177475 speed=0.28[0m
+[0;32mI (31356) Device1_GPS: [GPS_RAW] $GPGGA,041122.00,4222.30835,N,07106.65548,W,1,05,2.37,-8.6,M,-33.1,M,,*47[0m
+[0;32mI (31842) Device1_GPS: Sent GPS data: lat=42.594891 lon=-71.177475[0m
+[0;32mI (32224) Device1_GPS: [GPS_RAW] $GPRMC,041123.00,A,4222.31155,N,07106.65548,W,0.514,,110526,,,A*69[0m
+[0;32mI (32224) Device1_GPS: [GPS_PARSED] lat=42.594975 lon=-71.177475 speed=0.51[0m
+[0;32mI (32349) Device1_GPS: [GPS_RAW] $GPGGA,041123.00,4222.31155,N,07106.65548,W,1,05,2.37,-2.3,M,-33.1,M,,*47[0m
+[0;32mI (32844) Device1_GPS: Sent GPS data: lat=42.594975 lon=-71.177475[0m
+[0;32mI (33231) Device1_GPS: [GPS_RAW] $GPRMC,041124.00,A,4222.31417,N,07106.65497,W,0.852,,110526,,,A*61[0m
+[0;32mI (33231) Device1_GPS: [GPS_PARSED] lat=42.595043 lon=-71.177467 speed=0.85[0m
+[0;32mI (33356) Device1_GPS: [GPS_RAW] $GPGGA,041124.00,4222.31417,N,07106.65497,W,1,05,2.37,1.5,M,-33.1,M,,*68[0m
+[0;32mI (33846) Device1_GPS: Sent GPS data: lat=42.595043 lon=-71.177467[0m
+[0;32mI (34228) Device1_GPS: [GPS_RAW] $GPRMC,041125.00,A,4222.31480,N,07106.65503,W,0.993,,110526,,,A*6E[0m
+[0;32mI (34228) Device1_GPS: [GPS_PARSED] lat=42.595062 lon=-71.177467 speed=0.99[0m
+[0;32mI (34353) Device1_GPS: [GPS_RAW] $GPGGA,041125.00,4222.31480,N,07106.65503,W,1,04,3.46,1.9,M,-33.1,M,,*61[0m
+[0;32mI (34848) Device1_GPS: Sent GPS data: lat=42.595062 lon=-71.177467[0m
+[0;32mI (35230) Device1_GPS: [GPS_RAW] $GPRMC,041126.00,A,4222.31839,N,07106.65462,W,2.309,,110526,,,A*6E[0m
+[0;32mI (35230) Device1_GPS: [GPS_PARSED] lat=42.595158 lon=-71.177452 speed=2.31[0m
+[0;32mI (35355) Device1_GPS: [GPS_RAW] $GPGGA,041126.00,4222.31839,N,07106.65462,W,1,05,2.37,5.3,M,-33.1,M,,*62[0m
+[0;32mI (35850) Device1_GPS: Sent GPS data: lat=42.595158 lon=-71.177452[0m
+[0;32mI (36228) Device1_GPS: [GPS_RAW] $GPRMC,041127.00,A,4222.31971,N,07106.65438,W,1.988,,110526,,,A*6D[0m
+[0;32mI (36228) Device1_GPS: [GPS_PARSED] lat=42.595192 lon=-71.177452 speed=1.99[0m
+[0;32mI (36353) Device1_GPS: [GPS_RAW] $GPGGA,041127.00,4222.31971,N,07106.65438,W,1,05,2.37,8.4,M,-33.1,M,,*6B[0m
+[0;32mI (36852) Device1_GPS: Sent GPS data: lat=42.595192 lon=-71.177452[0m
+[0;32mI (37231) Device1_GPS: [GPS_RAW] $GPRMC,041128.00,A,4222.32104,N,07106.65405,W,1.892,,110526,,,A*6F[0m
+[0;32mI (37231) Device1_GPS: [GPS_PARSED] lat=42.595226 lon=-71.177444 speed=1.89[0m
+[0;32mI (37356) Device1_GPS: [GPS_RAW] $GPGGA,041128.00,4222.32104,N,07106.65405,W,1,05,2.37,10.3,M,-33.1,M,,*5D[0m
+[0;32mI (37856) Device1_GPS: Sent GPS data: lat=42.595226 lon=-71.177444[0m
+[0;32mI (38226) Device1_GPS: [GPS_RAW] $GPRMC,041129.00,A,4222.32162,N,07106.65398,W,1.890,,110526,,,A*6F[0m
+[0;32mI (38226) Device1_GPS: [GPS_PARSED] lat=42.595245 lon=-71.177444 speed=1.89[0m
+[0;32mI (38351) Device1_GPS: [GPS_RAW] $GPGGA,041129.00,4222.32162,N,07106.65398,W,1,04,3.46,10.6,M,-33.1,M,,*5C[0m
+[0;32mI (38862) Device1_GPS: Sent GPS data: lat=42.595245 lon=-71.177444[0m
+[0;32mI (39225) Device1_GPS: [GPS_RAW] $GPRMC,041130.00,A,4222.32144,N,07106.65435,W,1.344,,110526,,,A*61[0m
+[0;32mI (39225) Device1_GPS: [GPS_PARSED] lat=42.595238 lon=-71.177452 speed=1.34[0m
+[0;32mI (39350) Device1_GPS: [GPS_RAW] $GPGGA,041130.00,4222.32144,N,07106.65435,W,1,04,3.46,10.7,M,-33.1,M,,*51[0m
+[0;32mI (39868) Device1_GPS: Sent GPS data: lat=42.595238 lon=-71.177452[0m
+[0;32mI (40224) Device1_GPS: [GPS_RAW] $GPRMC,041131.00,A,4222.32158,N,07106.65472,W,1.156,,110526,,,A*6F[0m
+[0;32mI (40224) Device1_GPS: [GPS_PARSED] lat=42.595242 lon=-71.177452 speed=1.16[0m
+[0;32mI (40349) Device1_GPS: [GPS_RAW] $GPGGA,041131.00,4222.32158,N,07106.65472,W,1,04,3.46,10.9,M,-33.1,M,,*50[0m
+[0;32mI (40874) Device1_GPS: Sent GPS data: lat=42.595242 lon=-71.177452[0m
+[0;32mI (41227) Device1_GPS: [GPS_RAW] $GPRMC,041132.00,A,4222.32228,N,07106.65447,W,1.424,,110526,,,A*6E[0m
+[0;32mI (41227) Device1_GPS: [GPS_PARSED] lat=42.595264 lon=-71.177452 speed=1.42[0m
+[0;32mI (41352) Device1_GPS: [GPS_RAW] $GPGGA,041132.00,4222.32228,N,07106.65447,W,1,04,3.46,10.8,M,-33.1,M,,*50[0m
+[0;32mI (41880) Device1_GPS: Sent GPS data: lat=42.595264 lon=-71.177452[0m
+[0;32mI (42227) Device1_GPS: [GPS_RAW] $GPRMC,041133.00,A,4222.32276,N,07106.65467,W,1.508,,110526,,,A*69[0m
+[0;32mI (42227) Device1_GPS: [GPS_PARSED] lat=42.595276 lon=-71.177452 speed=1.51[0m
+[0;32mI (42352) Device1_GPS: [GPS_RAW] $GPGGA,041133.00,4222.32276,N,07106.65467,W,1,04,3.46,10.9,M,-33.1,M,,*59[0m
+[0;32mI (42886) Device1_GPS: Sent GPS data: lat=42.595276 lon=-71.177452[0m
+[0;32mI (43227) Device1_GPS: [GPS_RAW] $GPRMC,041134.00,A,4222.32308,N,07106.65460,W,1.552,,110526,,,A*6E[0m
+[0;32mI (43227) Device1_GPS: [GPS_PARSED] lat=42.595284 lon=-71.177452 speed=1.55[0m
+[0;32mI (43352) Device1_GPS: [GPS_RAW] $GPGGA,041134.00,4222.32308,N,07106.65460,W,1,04,3.46,11.2,M,-33.1,M,,*5B[0m
+[0;32mI (43892) Device1_GPS: Sent GPS data: lat=42.595284 lon=-71.177452[0m
+[0;32mI (44231) Device1_GPS: [GPS_RAW] $GPRMC,041135.00,A,4222.32408,N,07106.65540,W,1.355,,110526,,,A*6A[0m
+[0;32mI (44231) Device1_GPS: [GPS_PARSED] lat=42.595306 lon=-71.177475 speed=1.35[0m
+[0;32mI (44356) Device1_GPS: [GPS_RAW] $GPGGA,041135.00,4222.32408,N,07106.65540,W,1,05,2.37,12.7,M,-33.1,M,,*5E[0m
+[0;32mI (44898) Device1_GPS: Sent GPS data: lat=42.595306 lon=-71.177475[0m
+[0;32mI (45230) Device1_GPS: [GPS_RAW] $GPRMC,041136.00,A,4222.32503,N,07106.65454,W,1.609,,110526,,,A*6B[0m
+[0;32mI (45230) Device1_GPS: [GPS_PARSED] lat=42.595337 lon=-71.177452 speed=1.61[0m
+[0;32mI (45355) Device1_GPS: [GPS_RAW] $GPGGA,041136.00,4222.32503,N,07106.65454,W,1,05,2.37,14.1,M,-33.1,M,,*53[0m
+[0;32mI (45904) Device1_GPS: Sent GPS data: lat=42.595337 lon=-71.177452[0m
+[0;32mI (46226) Device1_GPS: [GPS_RAW] $GPRMC,041137.00,A,4222.32635,N,07106.65534,W,1.641,,110526,,,A*67[0m
+[0;32mI (46226) Device1_GPS: [GPS_PARSED] lat=42.595367 lon=-71.177475 speed=1.64[0m
+[0;32mI (46351) Device1_GPS: [GPS_RAW] $GPGGA,041137.00,4222.32635,N,07106.65534,W,1,04,6.71,15.3,M,-33.1,M,,*57[0m
+[0;32mI (46906) Device1_GPS: Sent GPS data: lat=42.595367 lon=-71.177475[0m
+[0;32mI (47224) Device1_GPS: [GPS_RAW] $GPRMC,041138.00,A,4222.32623,N,07106.65615,W,1.290,,110526,,,A*67[0m
+[0;32mI (47224) Device1_GPS: [GPS_PARSED] lat=42.595367 lon=-71.177498 speed=1.29[0m
+[0;32mI (47349) Device1_GPS: [GPS_RAW] $GPGGA,041138.00,4222.32623,N,07106.65615,W,1,03,3.99,15.2,M,-33.1,M,,*5A[0m
+[0;32mI (47908) Device1_GPS: Sent GPS data: lat=42.595367 lon=-71.177498[0m
+[0;32mI (48223) Device1_GPS: [GPS_RAW] $GPRMC,041139.00,A,4222.32636,N,07106.65704,W,1.241,,110526,,,A*6F[0m
+[0;32mI (48223) Device1_GPS: [GPS_PARSED] lat=42.595367 lon=-71.177528 speed=1.24[0m
+[0;32mI (48348) Device1_GPS: [GPS_RAW] $GPGGA,041139.00,4222.32636,N,07106.65704,W,1,03,3.99,15.3,M,-33.1,M,,*5F[0m
+[0;32mI (48912) Device1_GPS: Sent GPS data: lat=42.595367 lon=-71.177528[0m
+[0;32mI (49226) Device1_GPS: [GPS_RAW] $GPRMC,041140.00,A,4222.32723,N,07106.65706,W,1.530,,110526,,,A*67[0m
+[0;32mI (49226) Device1_GPS: [GPS_PARSED] lat=42.595390 lon=-71.177528 speed=1.53[0m
+[0;32mI (49350) Device1_GPS: [GPS_RAW] $GPGGA,041140.00,4222.32723,N,07106.65706,W,1,03,3.99,15.3,M,-33.1,M,,*56[0m
+[0;32mI (49914) Device1_GPS: Sent GPS data: lat=42.595390 lon=-71.177528[0m
+[0;32mI (50220) Device1_GPS: [GPS_RAW] $GPRMC,041141.00,A,4222.32721,N,07106.65715,W,1.235,,110526,,,A*64[0m
+[0;32mI (50220) Device1_GPS: [GPS_PARSED] lat=42.595390 lon=-71.177528 speed=1.24[0m
+[0;32mI (50345) Device1_GPS: [GPS_RAW] $GPGGA,041141.00,4222.32721,N,07106.65715,W,1,03,3.99,15.4,M,-33.1,M,,*50[0m
+[0;32mI (50916) Device1_GPS: Sent GPS data: lat=42.595390 lon=-71.177528[0m
+[0;32mI (51225) Device1_GPS: [GPS_RAW] $GPRMC,041142.00,A,4222.32703,N,07106.65804,W,1.029,,110526,,,A*67[0m
+[0;32mI (51225) Device1_GPS: [GPS_PARSED] lat=42.595387 lon=-71.177551 speed=1.03[0m
+[0;32mI (51350) Device1_GPS: [GPS_RAW] $GPGGA,041142.00,4222.32703,N,07106.65804,W,1,03,3.99,15.6,M,-33.1,M,,*5E[0m
+[0;32mI (51917) Device1_GPS: Sent GPS data: lat=42.595387 lon=-71.177551[0m
+[0;32mI (52224) Device1_GPS: [GPS_RAW] $GPRMC,041143.00,A,4222.32816,N,07106.65744,W,1.343,,110526,,,A*69[0m
+[0;32mI (52224) Device1_GPS: [GPS_PARSED] lat=42.595417 lon=-71.177528 speed=1.34[0m
+[0;32mI (52349) Device1_GPS: [GPS_RAW] $GPGGA,041143.00,4222.32816,N,07106.65744,W,1,03,3.98,15.5,M,-33.1,M,,*5D[0m
+[0;32mI (52919) Device1_GPS: Sent GPS data: lat=42.595417 lon=-71.177528[0m
+[0;32mI (53225) Device1_GPS: [GPS_RAW] $GPRMC,041144.00,A,4222.32812,N,07106.65759,W,1.139,,110526,,,A*69[0m
+[0;32mI (53225) Device1_GPS: [GPS_PARSED] lat=42.595417 lon=-71.177536 speed=1.14[0m
+[0;32mI (53350) Device1_GPS: [GPS_RAW] $GPGGA,041144.00,4222.32812,N,07106.65759,W,1,03,3.98,15.6,M,-33.1,M,,*51[0m
+[0;32mI (53921) Device1_GPS: Sent GPS data: lat=42.595417 lon=-71.177536[0m
+[0;32mI (54224) Device1_GPS: [GPS_RAW] $GPRMC,041145.00,A,4222.32864,N,07106.65714,W,1.253,,110526,,,A*6F[0m
+[0;32mI (54224) Device1_GPS: [GPS_PARSED] lat=42.595428 lon=-71.177528 speed=1.25[0m
+[0;32mI (54349) Device1_GPS: [GPS_RAW] $GPGGA,041145.00,4222.32864,N,07106.65714,W,1,03,3.98,15.6,M,-33.1,M,,*58[0m
+[0;32mI (54923) Device1_GPS: Sent GPS data: lat=42.595428 lon=-71.177528[0m
+[0;32mI (55227) Device1_GPS: [GPS_RAW] $GPRMC,041146.00,A,4222.32902,N,07106.65751,W,1.229,,110526,,,A*61[0m
+[0;32mI (55227) Device1_GPS: [GPS_PARSED] lat=42.595440 lon=-71.177536 speed=1.23[0m
+[0;32mI (55352) Device1_GPS: [GPS_RAW] $GPGGA,041146.00,4222.32902,N,07106.65751,W,1,03,3.98,15.7,M,-33.1,M,,*5A[0m
+[0;32mI (55925) Device1_GPS: Sent GPS data: lat=42.595440 lon=-71.177536[0m
+[0;32mI (56223) Device1_GPS: [GPS_RAW] $GPRMC,041147.00,A,4222.32829,N,07106.65736,W,0.771,,110526,,,A*60[0m
+[0;32mI (56223) Device1_GPS: [GPS_PARSED] lat=42.595421 lon=-71.177528 speed=0.77[0m
+[0;32mI (56348) Device1_GPS: [GPS_RAW] $GPGGA,041147.00,4222.32829,N,07106.65736,W,1,03,3.98,15.7,M,-33.1,M,,*52[0m
+[0;32mI (56927) Device1_GPS: Sent GPS data: lat=42.595421 lon=-71.177528[0m
+[0;32mI (57221) Device1_GPS: [GPS_RAW] $GPRMC,041148.00,V,,,,,,,110526,,,N*74[0m
+[0;32mI (57221) Device1_GPS: [GPS_RAW] $GPGGA,041148.00,,,,,0,00,99.99,,,,,,*6E[0m
+[0;32mI (57929) Device1_GPS: Sent GPS data: lat=42.595421 lon=-71.177528[0m
+[0;32mI (58221) Device1_GPS: [GPS_RAW] $GPRMC,041149.00,V,,,,,,,110526,,,N*75[0m
+[0;32mI (58221) Device1_GPS: [GPS_RAW] $GPGGA,041149.00,,,,,0,00,99.99,,,,,,*6F[0m
+[0;32mI (58931) Device1_GPS: Sent GPS data: lat=42.595421 lon=-71.177528[0m
+[0;32mI (59217) Device1_GPS: [GPS_RAW] $GPRMC,041150.00,V,,,,,,,110526,,,N*7D[0m
+[0;32mI (59217) Device1_GPS: [GPS_RAW] $GPGGA,041150.00,,,,,0,00,99.99,,,,,,*67[0m
+[0;32mI (59933) Device1_GPS: Sent GPS data: lat=42.595421 lon=-71.177528[0m
+[0;32mI (60217) Device1_GPS: [GPS_RAW] $GPRMC,041151.00,V,,,,,,,110526,,,N*7C[0m
+[0;32mI (60217) Device1_GPS: [GPS_RAW] $GPGGA,041151.00,,,,,0,00,99.99,,,,,,*66[0m
+[0;32mI (60935) Device1_GPS: Sent GPS data: lat=42.595421 lon=-71.177528[0m
+[0;32mI (61216) Device1_GPS: [GPS_RAW] $GPRMC,041152.00,V,,,,,,,110526,,,N*7F[0m
+[0;32mI (61216) Device1_GPS: [GPS_RAW] $GPGGA,041152.00,,,,,0,00,99.99,,,,,,*65[0m
+[0;32mI (61937) Device1_GPS: Sent GPS data: lat=42.595421 lon=-71.177528[0m
+[0;32mI (62219) Device1_GPS: [GPS_RAW] $GPRMC,041153.00,V,,,,,,,110526,,,N*7E[0m
+[0;32mI (62219) Device1_GPS: [GPS_RAW] $GPGGA,041153.00,,,,,0,00,99.99,,,,,,*64[0m
+[0;32mI (62939) Device1_GPS: Sent GPS data: lat=42.595421 lon=-71.177528[0m
+[0;32mI (63229) Device1_GPS: [GPS_RAW] $GPRMC,041154.00,A,4222.32207,N,07106.65710,W,0.946,,110526,,,A*6A[0m
+[0;32mI (63229) Device1_GPS: [GPS_PARSED] lat=42.595257 lon=-71.177528 speed=0.95[0m
+[0;32mI (63353) Device1_GPS: [GPS_RAW] $GPGGA,041154.00,4222.32207,N,07106.65710,W,1,03,3.79,16.6,M,-33.1,M,,*5F[0m
+[0;32mI (63941) Device1_GPS: Sent GPS data: lat=42.595257 lon=-71.177528[0m
+[0;32mI (64219) Device1_GPS: [GPS_RAW] $GPRMC,041155.00,V,,,,,,,110526,,,N*78[0m
+[0;32mI (64219) Device1_GPS: [GPS_RAW] $GPGGA,041155.00,,,,,0,00,99.99,,,,,,*62[0m
+[0;32mI (64943) Device1_GPS: Sent GPS data: lat=42.595257 lon=-71.177528[0m
+[0;32mI (65221) Device1_GPS: [GPS_RAW] $GPRMC,041156.00,V,,,,,,,110526,,,N*7B[0m
+[0;32mI (65221) Device1_GPS: [GPS_RAW] $GPGGA,041156.00,,,,,0,00,99.99,,,,,,*61[0m
+[0;32mI (65945) Device1_GPS: Sent GPS data: lat=42.595257 lon=-71.177528[0m
+[0;32mI (66216) Device1_GPS: [GPS_RAW] $GPRMC,041157.00,V,,,,,,,110526,,,N*7A[0m
+[0;32mI (66216) Device1_GPS: [GPS_RAW] $GPGGA,041157.00,,,,,0,00,99.99,,,,,,*60[0m
+[0;32mI (66946) Device1_GPS: Sent GPS data: lat=42.595257 lon=-71.177528[0m
+[0;32mI (67220) Device1_GPS: [GPS_RAW] $GPRMC,041158.00,V,,,,,,,110526,,,N*75[0m
+[0;32mI (67220) Device1_GPS: [GPS_RAW] $GPGGA,041158.00,,,,,0,00,99.99,,,,,,*6F[0m
+[0;32mI (67948) Device1_GPS: Sent GPS data: lat=42.595257 lon=-71.177528[0m
+[0;32mI (68215) Device1_GPS: [GPS_RAW] $GPRMC,041159.00,V,,,,,,,110526,,,N*74[0m
+[0;32mI (68215) Device1_GPS: [GPS_RAW] $GPGGA,041159.00,,,,,0,00,99.99,,,,,,*6E[0m
+[0;32mI (68950) Device1_GPS: Sent GPS data: lat=42.595257 lon=-71.177528[0m
+[0;32mI (69220) Device1_GPS: [GPS_RAW] $GPRMC,041200.00,V,,,,,,,110526,,,N*7B[0m
+[0;32mI (69220) Device1_GPS: [GPS_RAW] $GPGGA,041200.00,,,,,0,00,99.99,,,,,,*61[0m
+[0;32mI (69952) Device1_GPS: Sent GPS data: lat=42.595257 lon=-71.177528[0m
+[0;32mI (70226) Device1_GPS: [GPS_RAW] $GPRMC,041201.00,A,4222.31068,N,07106.65381,W,2.940,,110526,,,A*69[0m
+[0;32mI (70226) Device1_GPS: [GPS_PARSED] lat=42.594952 lon=-71.177429 speed=2.94[0m
+[0;32mI (70351) Device1_GPS: [GPS_RAW] $GPGGA,041201.00,4222.31068,N,07106.65381,W,1,03,3.80,15.7,M,-33.1,M,,*5C[0m
+[0;32mI (70954) Device1_GPS: Sent GPS data: lat=42.594952 lon=-71.177429[0m
+[0;32mI (71225) Device1_GPS: [GPS_RAW] $GPRMC,041202.00,A,4222.30411,N,07106.65145,W,3.631,,110526,,,A*63[0m
+[0;32mI (71225) Device1_GPS: [GPS_PARSED] lat=42.594776 lon=-71.177368 speed=3.63[0m
+[0;32mI (71350) Device1_GPS: [GPS_RAW] $GPGGA,041202.00,4222.30411,N,07106.65145,W,1,03,3.80,15.1,M,-33.1,M,,*58[0m
+[0;32mI (71956) Device1_GPS: Sent GPS data: lat=42.594776 lon=-71.177368[0m
+[0;32mI (72223) Device1_GPS: [GPS_RAW] $GPRMC,041203.00,A,4222.30038,N,07106.65013,W,3.536,,110526,,,A*6B[0m
+[0;32mI (72223) Device1_GPS: [GPS_PARSED] lat=42.594677 lon=-71.177330 speed=3.54[0m
+[0;32mI (72347) Device1_GPS: [GPS_RAW] $GPGGA,041203.00,4222.30038,N,07106.65013,W,1,03,3.80,15.2,M,-33.1,M,,*57[0m
+[0;32mI (72958) Device1_GPS: Sent GPS data: lat=42.594677 lon=-71.177330[0m
+[0;32mI (73226) Device1_GPS: [GPS_RAW] $GPRMC,041204.00,A,4222.29692,N,07106.64579,W,3.605,,110526,,,A*69[0m
+[0;32mI (73226) Device1_GPS: [GPS_PARSED] lat=42.594585 lon=-71.177223 speed=3.60[0m
+[0;32mI (73351) Device1_GPS: [GPS_RAW] $GPGGA,041204.00,4222.29692,N,07106.64579,W,1,03,3.80,15.3,M,-33.1,M,,*57[0m
+[0;32mI (73960) Device1_GPS: Sent GPS data: lat=42.594585 lon=-71.177223[0m
+[0;32mI (74225) Device1_GPS: [GPS_RAW] $GPRMC,041205.00,A,4222.29282,N,07106.64327,W,4.021,,110526,,,A*67[0m
+[0;32mI (74225) Device1_GPS: [GPS_PARSED] lat=42.594475 lon=-71.177147 speed=4.02[0m
+[0;32mI (74350) Device1_GPS: [GPS_RAW] $GPGGA,041205.00,4222.29282,N,07106.64327,W,1,03,3.80,15.5,M,-33.1,M,,*58[0m
+[0;32mI (74962) Device1_GPS: Sent GPS data: lat=42.594475 lon=-71.177147[0m
+[0;32mI (75227) Device1_GPS: [GPS_RAW] $GPRMC,041206.00,A,4222.29170,N,07106.64048,W,3.794,,110526,,,A*6E[0m
+[0;32mI (75227) Device1_GPS: [GPS_PARSED] lat=42.594444 lon=-71.177078 speed=3.79[0m
+[0;32mI (75352) Device1_GPS: [GPS_RAW] $GPGGA,041206.00,4222.29170,N,07106.64048,W,1,03,3.80,15.7,M,-33.1,M,,*5D[0m
+[0;32mI (75964) Device1_GPS: Sent GPS data: lat=42.594444 lon=-71.177078[0m
+[0;32mI (76225) Device1_GPS: [GPS_RAW] $GPRMC,041207.00,A,4222.28990,N,07106.63794,W,3.671,,110526,,,A*63[0m
+[0;32mI (76225) Device1_GPS: [GPS_PARSED] lat=42.594398 lon=-71.177010 speed=3.67[0m
+[0;32mI (76350) Device1_GPS: [GPS_RAW] $GPGGA,041207.00,4222.28990,N,07106.63794,W,1,03,3.81,15.8,M,-33.1,M,,*54[0m
+[0;32mI (76966) Device1_GPS: Sent GPS data: lat=42.594398 lon=-71.177010[0m
+[0;32mI (77225) Device1_GPS: [GPS_RAW] $GPRMC,041208.00,A,4222.28526,N,07106.63563,W,4.244,,110526,,,A*62[0m
+[0;32mI (77225) Device1_GPS: [GPS_PARSED] lat=42.594273 lon=-71.176949 speed=4.24[0m
+[0;32mI (77350) Device1_GPS: [GPS_RAW] $GPGGA,041208.00,4222.28526,N,07106.63563,W,1,03,3.81,16.2,M,-33.1,M,,*59[0m
+[0;32mI (77968) Device1_GPS: Sent GPS data: lat=42.594273 lon=-71.176949[0m
+[0;32mI (78225) Device1_GPS: [GPS_RAW] $GPRMC,041209.00,A,4222.28157,N,07106.63492,W,4.485,,110526,,,A*65[0m
+[0;32mI (78225) Device1_GPS: [GPS_PARSED] lat=42.594177 lon=-71.176933 speed=4.49[0m
+[0;32mI (78350) Device1_GPS: [GPS_RAW] $GPGGA,041209.00,4222.28157,N,07106.63492,W,1,03,3.81,16.3,M,-33.1,M,,*54[0m
+[0;32mI (78970) Device1_GPS: Sent GPS data: lat=42.594177 lon=-71.176933[0m
+[0;32mI (79224) Device1_GPS: [GPS_RAW] $GPRMC,041210.00,A,4222.27983,N,07106.63403,W,4.143,,110526,,,A*64[0m
+[0;32mI (79224) Device1_GPS: [GPS_PARSED] lat=42.594128 lon=-71.176903 speed=4.14[0m
+[0;32mI (79349) Device1_GPS: [GPS_RAW] $GPGGA,041210.00,4222.27983,N,07106.63403,W,1,03,3.81,16.0,M,-33.1,M,,*59[0m
+[0;32mI (79972) Device1_GPS: Sent GPS data: lat=42.594128 lon=-71.176903[0m

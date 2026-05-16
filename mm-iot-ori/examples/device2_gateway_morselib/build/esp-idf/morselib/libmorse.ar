@@ -1,0 +1,5 @@
+CREATE C:/Code/RUSC/mm-iot-ori/examples/device2_gateway_morselib/build/esp-idf/morselib/libmorse.a
+        ADDLIB C:/Code/RUSC/mm-iot-ori/framework/morselib/lib/esp32s3/libmorse_nosupplicant.a
+        ADDLIB C:/Code/RUSC/mm-iot-ori/examples/device2_gateway_morselib/build/esp-idf/hostap/libhostap.a
+        SAVE
+        END

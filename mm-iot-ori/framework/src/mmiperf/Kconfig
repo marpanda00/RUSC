@@ -1,0 +1,10 @@
+# Copyright 2024 Morse Micro
+# SPDX-License-Identifier: Apache-2.0
+menu "Morse Micro Iperf Configuration"
+    config MMIPERF_STACK_SIZE
+        int "Stack size in words"
+        default 640
+        help
+            Stack size in words to use for MMIPERF tasks
+
+endmenu

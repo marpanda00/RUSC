@@ -1,0 +1,2 @@
+source C:/mm-iot-ori/examples/device1_gps_morselib/build/bootloader/gdbinit/symbols
+source C:/mm-iot-ori/examples/device1_gps_morselib/build/bootloader/gdbinit/connect
