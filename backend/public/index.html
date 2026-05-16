@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>RUSC GPS Tracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 5px;
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 20px;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        #map {
+            width: 100%;
+            height: 600px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card h2 {
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: #333;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .device-item {
+            padding: 12px;
+            border-radius: 6px;
+            background: #f8f9fa;
+            margin-bottom: 10px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .device-id {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .device-status {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 5px;
+            vertical-align: middle;
+        }
+        
+        .status-active {
+            background: #4CAF50;
+        }
+        
+        .status-inactive {
+            background: #f44336;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            margin: 4px 0;
+        }
+        
+        .info-label {
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .info-value {
+            color: #333;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        
+        .stat-box {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .update-time {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            margin-top: 15px;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 8px 12px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+        }
+        
+        button:active {
+            transform: scale(0.98);
+        }
+        
+        .error {
+            color: #f44336;
+            padding: 10px;
+            background: #ffebee;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🗺️ RUSC GPS Tracker</h1>
+        <p>Real-time GPS position tracking via HALow/WiFi gateway</p>
+    </div>
+    
+    <div class="container">
+        <div id="map"></div>
+        
+        <div class="sidebar">
+            <div class="card">
+                <h2>⚙️ Controls</h2>
+                <div class="controls">
+                    <button onclick="centerMap()">Center Map</button>
+                    <button onclick="refreshData()">Refresh</button>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>📊 Statistics</h2>
+                <div id="stats" class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value">-</div>
+                        <div class="stat-label">Active Devices</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value">-</div>
+                        <div class="stat-label">Data Points</div>
+                    </div>
+                </div>
+                <div class="update-time">Last update: <span id="lastUpdate">-</span></div>
+            </div>
+            
+            <div class="card">
+                <h2>📍 Devices</h2>
+                <div id="devices"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script>
+        // Configuration
+        const API_HOST = window.location.hostname;
+        const API_PROTOCOL = window.location.protocol;
+        
+        // Determine API endpoint based on protocol
+        // HTTPS: Use default port 443 (iptables redirects 443→8443 internally)
+        // HTTP: Use port 3000
+        let BACKEND_URL;
+        if (API_PROTOCOL === 'https:') {
+          // For HTTPS, omit port to use default 443 (iptables will redirect to 8443)
+          BACKEND_URL = `https://${API_HOST}/api`;
+        } else {
+          // For HTTP development, use port 3000
+          BACKEND_URL = `http://${API_HOST}:3000/api`;
+        }
+        
+        const REFRESH_INTERVAL = 1000; // 1 second
+        
+        // Map initialization
+        let map;
+        let markers = {};
+        let polylines = {};
+        let homeMarkers = {};
+        
+        function initMap() {
+            map = L.map('map').setView([0, 0], 13);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19
+            }).addTo(map);
+        }
+        
+        function updateDeviceMarker(deviceId, position, speed, course) {
+            const icon = L.divIcon({
+                html: `<div style="
+                    width: 30px;
+                    height: 30px;
+                    background: #667eea;
+                    border: 3px solid white;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 16px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+                    transform: rotate(${course}deg);
+                ">→</div>`,
+                className: '',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            });
+            
+            if (markers[deviceId]) {
+                markers[deviceId].setLatLng([position.latitude, position.longitude]);
+                markers[deviceId].setIcon(icon);
+            } else {
+                const marker = L.marker([position.latitude, position.longitude], { icon })
+                    .addTo(map)
+                    .bindPopup(`<strong>${deviceId}</strong><br/>Speed: ${speed.toFixed(2)} kt`);
+                markers[deviceId] = marker;
+            }
+        }
+        
+        function updateHomeMarker(deviceId, homePoint) {
+            const homeIcon = L.divIcon({
+                html: `<div style="
+                    width: 24px;
+                    height: 24px;
+                    background: #4CAF50;
+                    border: 2px solid white;
+                    border-radius: 50%;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                    font-size: 14px;
+                    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+                ">H</div>`,
+                className: '',
+                iconSize: [24, 24],
+                iconAnchor: [12, 12]
+            });
+            
+            if (homePoint) {
+                if (homeMarkers[deviceId]) {
+                    homeMarkers[deviceId].setLatLng([homePoint.latitude, homePoint.longitude]);
+                } else {
+                    const marker = L.marker([homePoint.latitude, homePoint.longitude], { icon: homeIcon })
+                        .addTo(map)
+                        .bindPopup(`<strong>Home Point</strong>`);
+                    homeMarkers[deviceId] = marker;
+                }
+            } else {
+                if (homeMarkers[deviceId]) {
+                    map.removeLayer(homeMarkers[deviceId]);
+                    delete homeMarkers[deviceId];
+                }
+            }
+        }
+        
+        function updateDeviceHistory(deviceId, history) {
+            const coords = history.map(h => [h.position.latitude, h.position.longitude]);
+            
+            if (polylines[deviceId]) {
+                map.removeLayer(polylines[deviceId]);
+            }
+            
+            if (coords.length > 1) {
+                polylines[deviceId] = L.polyline(coords, {
+                    color: '#667eea',
+                    weight: 2,
+                    opacity: 0.6,
+                    dashArray: '5, 5'
+                }).addTo(map);
+            }
+        }
+        
+        async function fetchData() {
+            try {
+                // Fetch all positions
+                const posResponse = await fetch(`${BACKEND_URL}/positions`);
+                const positions = await posResponse.json();
+                
+                // Fetch stats
+                const statsResponse = await fetch(`${BACKEND_URL}/stats`);
+                const stats = await statsResponse.json();
+                
+                // Update map
+                let centerLat = 0, centerLon = 0, count = 0;
+                
+                for (const [deviceId, data] of Object.entries(positions)) {
+                    if (data.position && data.position.latitude) {
+                        updateDeviceMarker(deviceId, data.position, data.speed_knots, data.course);
+                        updateHomeMarker(deviceId, data.home_point);
+                        
+                        // Fetch history for this device
+                        const histResponse = await fetch(`${BACKEND_URL}/history/${deviceId}`);
+                        const histData = await histResponse.json();
+                        updateDeviceHistory(deviceId, histData.history);
+                        
+                        centerLat += data.position.latitude;
+                        centerLon += data.position.longitude;
+                        count++;
+                    }
+                }
+                
+                // Update sidebar
+                updateDevices(positions);
+                updateStats(stats);
+                
+                // Center map on average position
+                if (count > 0) {
+                    map.panTo([centerLat / count, centerLon / count]);
+                }
+                
+                document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString();
+                
+            } catch (error) {
+                console.error('Fetch error:', error);
+                document.getElementById('devices').innerHTML = 
+                    `<div class="error">⚠️ Failed to connect to backend</div>`;
+            }
+        }
+        
+        function updateDevices(positions) {
+            const devicesDiv = document.getElementById('devices');
+            const now = Date.now();
+            
+            let html = '';
+            for (const [deviceId, data] of Object.entries(positions)) {
+                const isActive = data.last_update && (now - new Date(data.last_update)) < 10000;
+                const statusClass = isActive ? 'status-active' : 'status-inactive';
+                const statusText = isActive ? 'Active' : 'Inactive';
+                
+                let homeHtml = '';
+                if (data.home_point) {
+                    homeHtml = `
+                        <div class="info-row">
+                            <span class="info-label">Home:</span>
+                            <span class="info-value">${data.home_point.latitude.toFixed(4)}° ${data.home_point.longitude.toFixed(4)}°</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Distance:</span>
+                            <span class="info-value">${data.current_distance ? data.current_distance.toFixed(3) : '0.000'} km</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Max Distance:</span>
+                            <span class="info-value" style="color: #667eea; font-weight: bold;">${data.max_distance ? data.max_distance.toFixed(3) : '0.000'} km</span>
+                        </div>
+                        <button onclick="resetHomePoint('${deviceId}')" style="width: 100%; margin-top: 8px; background: #f44336; padding: 6px;">Reset Home</button>
+                    `;
+                } else if (data.current_distance !== undefined) {
+                    homeHtml = `
+                        <div class="info-row">
+                            <span class="info-label">Distance:</span>
+                            <span class="info-value">${data.current_distance.toFixed(3)} km</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Max Distance:</span>
+                            <span class="info-value" style="color: #667eea; font-weight: bold;">${data.max_distance.toFixed(3)} km</span>
+                        </div>
+                    `;
+                }
+                
+                // Signal strength indicator
+                let signalBars = 0;
+                let signalColor = '#f44336';
+                if (data.signal_strength >= -50) { signalBars = 5; signalColor = '#4CAF50'; }
+                else if (data.signal_strength >= -60) { signalBars = 4; signalColor = '#8BC34A'; }
+                else if (data.signal_strength >= -70) { signalBars = 3; signalColor = '#FFC107'; }
+                else if (data.signal_strength >= -80) { signalBars = 2; signalColor = '#FF9800'; }
+                else { signalBars = 1; signalColor = '#f44336'; }
+                
+                html += `
+                    <div class="device-item">
+                        <div class="device-id">${deviceId}</div>
+                        <div class="device-status">
+                            <span class="status-badge ${statusClass}"></span>${statusText}
+                        </div>
+                        ${homeHtml}
+                        <div class="info-row">
+                            <span class="info-label">Lat:</span>
+                            <span class="info-value">${data.position.latitude.toFixed(6)}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Lon:</span>
+                            <span class="info-value">${data.position.longitude.toFixed(6)}</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Speed:</span>
+                            <span class="info-value">${data.speed_knots.toFixed(2)} kt</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Course:</span>
+                            <span class="info-value">${data.course.toFixed(1)}°</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Signal:</span>
+                            <span class="info-value" style="color: ${signalColor};">
+                                ${'▂'.repeat(signalBars)}${'▂'.repeat(5-signalBars)} ${data.signal_strength} dBm
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }
+            devicesDiv.innerHTML = html;
+        }
+        
+        function updateStats(stats) {
+            const statsDiv = document.getElementById('stats');
+            statsDiv.innerHTML = `
+                <div class="stat-box">
+                    <div class="stat-value">${stats.devices_active}</div>
+                    <div class="stat-label">Active Devices</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">${stats.total_data_points}</div>
+                    <div class="stat-label">Data Points</div>
+                </div>
+            `;
+        }
+        
+        function centerMap() {
+            if (Object.keys(markers).length > 0) {
+                const group = new L.featureGroup(Object.values(markers));
+                map.fitBounds(group.getBounds().pad(0.1));
+            }
+        }
+        
+        function refreshData() {
+            fetchData();
+        }
+        
+        function resetHomePoint(deviceId) {
+            fetch(`${BACKEND_URL}/reset/${deviceId}`, { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    console.log(`Reset home point for ${deviceId}`);
+                    fetchData();
+                })
+                .catch(err => console.error('Reset error:', err));
+        }
+        
+        // Initialize
+        window.addEventListener('load', () => {
+            initMap();
+            fetchData();
+            setInterval(fetchData, REFRESH_INTERVAL);
+        });
+    </script>
+</body>
+</html>
