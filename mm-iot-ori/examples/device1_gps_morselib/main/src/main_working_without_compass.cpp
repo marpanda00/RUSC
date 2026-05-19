@@ -10,13 +10,11 @@
 
 #include "driver/uart.h"
 #include "driver/gpio.h"
-#include "driver/i2c_master.h"
 #include "esp_adc/adc_oneshot.h"
 #include "esp_log.h"
 #include "esp_wifi.h"
 #include "esp_event.h"
 #include "esp_netif.h"
-#include "esp_mac.h"
 #include "nvs_flash.h"
 #include "lwip/sockets.h"
 #include "lwip/netdb.h"
@@ -38,30 +36,6 @@ static const char *TAG = "Device1_GPS";
 #define GPS_TX_PIN 17
 #define GPS_BAUD 9600
 #define GPS_BUF_SIZE 256
-
-// I2C compass configuration for HiLetgo GY-9250 / MPU9250.
-#define COMPASS_I2C_PORT I2C_NUM_0
-#define COMPASS_SDA_PIN 13
-#define COMPASS_SCL_PIN 14
-#define COMPASS_I2C_FREQ_HZ 100000
-#define MPU9250_ADDR_LOW 0x68
-#define MPU9250_ADDR_HIGH 0x69
-#define MPU9250_REG_WHO_AM_I 0x75
-#define MPU9250_REG_PWR_MGMT_1 0x6B
-#define MPU9250_REG_GYRO_CONFIG 0x1B
-#define MPU9250_REG_ACCEL_CONFIG 0x1C
-#define MPU9250_REG_INT_PIN_CFG 0x37
-#define MPU9250_REG_ACCEL_XOUT_H 0x3B
-#define AK8963_ADDR 0x0C
-#define AK8963_REG_WHO_AM_I 0x00
-#define AK8963_REG_ST1 0x02
-#define AK8963_REG_HXL 0x03
-#define AK8963_REG_CNTL1 0x0A
-#define AK8963_REG_ASAX 0x10
-#define AK8963_MODE_POWER_DOWN 0x00
-#define AK8963_MODE_FUSE_ROM 0x0F
-#define AK8963_MODE_CONTINUOUS_100HZ_16BIT 0x16
-#define COMPASS_INVALID_CDEG UINT16_MAX
 
 // HALow WiFi Configuration
 //#define HALOW_SSID "RUSC_HaLow_AP"
@@ -87,30 +61,14 @@ static const char *TAG = "Device1_GPS";
 #define TARGET_S1G_CHANNEL 3        // Channel 3 = 915.000 MHz (matches ap_mode example)
 
 #define RUSC_TELEMETRY_MAGIC 0x5254  // "TR" little-endian on the wire
-#define RUSC_TELEMETRY_VERSION 4
+#define RUSC_TELEMETRY_VERSION 1
 #define RUSC_DEVICE_INDEX 1
-#define RUSC_COMMAND_MAGIC 0x4343  // "CC" little-endian on the wire
-#define RUSC_COMMAND_VERSION 1
 
 enum RuscHalowStatus : uint8_t {
     RUSC_HALOW_STATUS_STA_CONNECTED = 0x01,
     RUSC_HALOW_STATUS_LINK_READY = 0x02,
     RUSC_HALOW_STATUS_LAST_SEND_OK = 0x04,
     RUSC_HALOW_STATUS_LAST_SEND_ERROR = 0x08,
-};
-
-enum RuscCalibrationCommand : uint8_t {
-    RUSC_CAL_CMD_NONE = 0,
-    RUSC_CAL_CMD_GYRO = 1,
-    RUSC_CAL_CMD_SET_LEVEL = 2,
-};
-
-enum RuscCalibrationState : uint8_t {
-    RUSC_CAL_STATE_IDLE = 0,
-    RUSC_CAL_STATE_GYRO_RUNNING = 1,
-    RUSC_CAL_STATE_GYRO_DONE = 2,
-    RUSC_CAL_STATE_LEVEL_SET = 3,
-    RUSC_CAL_STATE_ERROR = 255,
 };
 
 #pragma pack(push, 1)
@@ -123,14 +81,6 @@ typedef struct {
     int32_t lon_e7;
     int32_t alt_cm;
     uint16_t speed_centi_knots;
-    uint16_t compass_cdeg;
-    int16_t roll_cdeg;
-    int16_t pitch_cdeg;
-    int16_t yaw_rate_cdeg_s;
-    uint8_t calibration_state;
-    uint8_t calibration_progress;
-    uint16_t last_command_id;
-    uint8_t device_mac[6];
     uint8_t sats;
     uint8_t quality;
     uint16_t battery_mv;
@@ -138,20 +88,9 @@ typedef struct {
     uint8_t halow_status;
     uint16_t crc16;
 } rusc_telemetry_packet_t;
-
-typedef struct {
-    uint16_t magic;
-    uint8_t version;
-    uint8_t device_index;
-    uint16_t command_id;
-    uint8_t command;
-    uint16_t duration_ms;
-    uint16_t crc16;
-} rusc_command_packet_t;
 #pragma pack(pop)
 
-static_assert(sizeof(rusc_telemetry_packet_t) == 46, "Unexpected telemetry packet size");
-static_assert(sizeof(rusc_command_packet_t) == 11, "Unexpected command packet size");
+static_assert(sizeof(rusc_telemetry_packet_t) == 28, "Unexpected telemetry packet size");
 
 // GPS Data Structure
 typedef struct {
@@ -172,19 +111,6 @@ static bool g_halow_sta_connected = false;
 static bool g_halow_link_ready = false;
 static bool g_last_send_ok = false;
 static uint16_t g_packet_seq = 0;
-static uint8_t g_mpu9250_addr = MPU9250_ADDR_LOW;
-static i2c_master_bus_handle_t g_compass_i2c_bus = NULL;
-static i2c_master_dev_handle_t g_mpu9250_i2c = NULL;
-static i2c_master_dev_handle_t g_ak8963_i2c = NULL;
-static float g_mag_adjust[3] = {1.0f, 1.0f, 1.0f};
-static bool g_compass_ready = false;
-static float g_gyro_bias_dps[3] = {0.0f, 0.0f, 0.0f};
-static float g_level_roll_offset_deg = 0.0f;
-static float g_level_pitch_offset_deg = 0.0f;
-static volatile uint8_t g_calibration_state = RUSC_CAL_STATE_IDLE;
-static volatile uint8_t g_calibration_progress = 0;
-static uint16_t g_last_command_id = 0;
-static uint8_t g_device_mac[6] = {0};
 
 static int32_t clamp_i32(int64_t value, int32_t min_value, int32_t max_value) {
     if (value < min_value) return min_value;
@@ -196,268 +122,6 @@ static uint16_t clamp_u16(int value, uint16_t max_value) {
     if (value < 0) return 0;
     if (value > max_value) return max_value;
     return (uint16_t)value;
-}
-
-static int16_t clamp_i16(int value) {
-    if (value < INT16_MIN) return INT16_MIN;
-    if (value > INT16_MAX) return INT16_MAX;
-    return (int16_t)value;
-}
-
-static i2c_master_dev_handle_t compass_device_handle(uint8_t address) {
-    if (address == g_mpu9250_addr) {
-        return g_mpu9250_i2c;
-    }
-    if (address == AK8963_ADDR) {
-        return g_ak8963_i2c;
-    }
-    return NULL;
-}
-
-static esp_err_t i2c_write_byte(uint8_t address, uint8_t reg, uint8_t value) {
-    uint8_t buffer[2] = {reg, value};
-    i2c_master_dev_handle_t device = compass_device_handle(address);
-    if (device == NULL) {
-        return ESP_ERR_INVALID_STATE;
-    }
-    return i2c_master_transmit(device, buffer, sizeof(buffer), 100);
-}
-
-static esp_err_t i2c_read_bytes(uint8_t address, uint8_t reg, uint8_t *buffer, size_t len) {
-    i2c_master_dev_handle_t device = compass_device_handle(address);
-    if (device == NULL) {
-        return ESP_ERR_INVALID_STATE;
-    }
-    return i2c_master_transmit_receive(device, &reg, 1, buffer, len, 100);
-}
-
-static bool init_compass(void) {
-    i2c_master_bus_config_t bus_config = {};
-    bus_config.i2c_port = COMPASS_I2C_PORT;
-    bus_config.sda_io_num = (gpio_num_t)COMPASS_SDA_PIN;
-    bus_config.scl_io_num = (gpio_num_t)COMPASS_SCL_PIN;
-    bus_config.clk_source = I2C_CLK_SRC_DEFAULT;
-    bus_config.glitch_ignore_cnt = 7;
-    bus_config.flags.enable_internal_pullup = true;
-
-    esp_err_t err = i2c_new_master_bus(&bus_config, &g_compass_i2c_bus);
-    if (err != ESP_OK && err != ESP_ERR_INVALID_STATE) {
-        ESP_LOGW(TAG, "Compass I2C bus init failed: %s", esp_err_to_name(err));
-        return false;
-    }
-
-    uint8_t detected_mpu_addr = 0;
-    if (i2c_master_probe(g_compass_i2c_bus, MPU9250_ADDR_LOW, 100) == ESP_OK) {
-        detected_mpu_addr = MPU9250_ADDR_LOW;
-    } else if (i2c_master_probe(g_compass_i2c_bus, MPU9250_ADDR_HIGH, 100) == ESP_OK) {
-        detected_mpu_addr = MPU9250_ADDR_HIGH;
-    } else {
-        ESP_LOGW(TAG, "MPU9250 not found on I2C pins SDA=%d SCL=%d", COMPASS_SDA_PIN, COMPASS_SCL_PIN);
-        return false;
-    }
-    g_mpu9250_addr = detected_mpu_addr;
-
-    i2c_device_config_t mpu_config = {};
-    mpu_config.dev_addr_length = I2C_ADDR_BIT_LEN_7;
-    mpu_config.device_address = g_mpu9250_addr;
-    mpu_config.scl_speed_hz = COMPASS_I2C_FREQ_HZ;
-    if (i2c_master_bus_add_device(g_compass_i2c_bus, &mpu_config, &g_mpu9250_i2c) != ESP_OK) {
-        ESP_LOGW(TAG, "Failed to add MPU9250 I2C device");
-        return false;
-    }
-
-    uint8_t who_am_i = 0;
-    i2c_read_bytes(g_mpu9250_addr, MPU9250_REG_WHO_AM_I, &who_am_i, 1);
-    ESP_LOGI(TAG, "MPU9250 found at 0x%02x WHO_AM_I=0x%02x", g_mpu9250_addr, who_am_i);
-
-    i2c_write_byte(g_mpu9250_addr, MPU9250_REG_PWR_MGMT_1, 0x00);
-    vTaskDelay(pdMS_TO_TICKS(100));
-
-    // Use full-resolution defaults: accelerometer +/-2g, gyro +/-250 dps.
-    i2c_write_byte(g_mpu9250_addr, MPU9250_REG_ACCEL_CONFIG, 0x00);
-    i2c_write_byte(g_mpu9250_addr, MPU9250_REG_GYRO_CONFIG, 0x00);
-
-    // Enable bypass so the ESP32-S3 can talk directly to the AK8963 magnetometer.
-    i2c_write_byte(g_mpu9250_addr, MPU9250_REG_INT_PIN_CFG, 0x02);
-    vTaskDelay(pdMS_TO_TICKS(10));
-
-    if (i2c_master_probe(g_compass_i2c_bus, AK8963_ADDR, 100) != ESP_OK) {
-        ESP_LOGW(TAG, "AK8963 magnetometer not found through MPU9250 bypass");
-        return false;
-    }
-
-    i2c_device_config_t ak_config = {};
-    ak_config.dev_addr_length = I2C_ADDR_BIT_LEN_7;
-    ak_config.device_address = AK8963_ADDR;
-    ak_config.scl_speed_hz = COMPASS_I2C_FREQ_HZ;
-    if (i2c_master_bus_add_device(g_compass_i2c_bus, &ak_config, &g_ak8963_i2c) != ESP_OK) {
-        ESP_LOGW(TAG, "Failed to add AK8963 I2C device");
-        return false;
-    }
-
-    uint8_t ak_who_am_i = 0;
-    if (i2c_read_bytes(AK8963_ADDR, AK8963_REG_WHO_AM_I, &ak_who_am_i, 1) != ESP_OK) {
-        ESP_LOGW(TAG, "AK8963 magnetometer not found through MPU9250 bypass");
-        return false;
-    }
-
-    i2c_write_byte(AK8963_ADDR, AK8963_REG_CNTL1, AK8963_MODE_POWER_DOWN);
-    vTaskDelay(pdMS_TO_TICKS(10));
-    i2c_write_byte(AK8963_ADDR, AK8963_REG_CNTL1, AK8963_MODE_FUSE_ROM);
-    vTaskDelay(pdMS_TO_TICKS(10));
-
-    uint8_t asa[3] = {128, 128, 128};
-    if (i2c_read_bytes(AK8963_ADDR, AK8963_REG_ASAX, asa, sizeof(asa)) == ESP_OK) {
-        for (int i = 0; i < 3; i++) {
-            g_mag_adjust[i] = (((float)asa[i] - 128.0f) / 256.0f) + 1.0f;
-        }
-    }
-
-    i2c_write_byte(AK8963_ADDR, AK8963_REG_CNTL1, AK8963_MODE_POWER_DOWN);
-    vTaskDelay(pdMS_TO_TICKS(10));
-    i2c_write_byte(AK8963_ADDR, AK8963_REG_CNTL1, AK8963_MODE_CONTINUOUS_100HZ_16BIT);
-    vTaskDelay(pdMS_TO_TICKS(10));
-
-    ESP_LOGI(TAG, "Compass ready: AK8963 WHO_AM_I=0x%02x ASA=%u/%u/%u", ak_who_am_i, asa[0], asa[1], asa[2]);
-    return true;
-}
-
-static bool read_compass_heading(float *heading_deg) {
-    if (!g_compass_ready || heading_deg == NULL) {
-        return false;
-    }
-
-    uint8_t st1 = 0;
-    if (i2c_read_bytes(AK8963_ADDR, AK8963_REG_ST1, &st1, 1) != ESP_OK || (st1 & 0x01) == 0) {
-        return false;
-    }
-
-    uint8_t data[7] = {0};
-    if (i2c_read_bytes(AK8963_ADDR, AK8963_REG_HXL, data, sizeof(data)) != ESP_OK) {
-        return false;
-    }
-
-    if (data[6] & 0x08) {
-        ESP_LOGW(TAG, "Compass magnetic sensor overflow");
-        return false;
-    }
-
-    int16_t mag_x = (int16_t)((data[1] << 8) | data[0]);
-    int16_t mag_y = (int16_t)((data[3] << 8) | data[2]);
-
-    float adjusted_x = (float)mag_x * g_mag_adjust[0];
-    float adjusted_y = (float)mag_y * g_mag_adjust[1];
-    float heading = atan2f(adjusted_y, adjusted_x) * 180.0f / 3.14159265f;
-    if (heading < 0.0f) {
-        heading += 360.0f;
-    }
-
-    *heading_deg = heading;
-    return true;
-}
-
-typedef struct {
-    float accel_g[3];
-    float gyro_dps[3];
-    float roll_deg;
-    float pitch_deg;
-    float yaw_rate_dps;
-} imu_motion_t;
-
-static bool read_mpu_motion(imu_motion_t *motion) {
-    if (!g_compass_ready || motion == NULL) {
-        return false;
-    }
-
-    uint8_t raw[14] = {0};
-    if (i2c_read_bytes(g_mpu9250_addr, MPU9250_REG_ACCEL_XOUT_H, raw, sizeof(raw)) != ESP_OK) {
-        return false;
-    }
-
-    int16_t ax = (int16_t)((raw[0] << 8) | raw[1]);
-    int16_t ay = (int16_t)((raw[2] << 8) | raw[3]);
-    int16_t az = (int16_t)((raw[4] << 8) | raw[5]);
-    int16_t gx = (int16_t)((raw[8] << 8) | raw[9]);
-    int16_t gy = (int16_t)((raw[10] << 8) | raw[11]);
-    int16_t gz = (int16_t)((raw[12] << 8) | raw[13]);
-
-    motion->accel_g[0] = (float)ax / 16384.0f;
-    motion->accel_g[1] = (float)ay / 16384.0f;
-    motion->accel_g[2] = (float)az / 16384.0f;
-    motion->gyro_dps[0] = ((float)gx / 131.0f) - g_gyro_bias_dps[0];
-    motion->gyro_dps[1] = ((float)gy / 131.0f) - g_gyro_bias_dps[1];
-    motion->gyro_dps[2] = ((float)gz / 131.0f) - g_gyro_bias_dps[2];
-
-    float raw_roll = atan2f(motion->accel_g[1], motion->accel_g[2]) * 180.0f / 3.14159265f;
-    float raw_pitch = atan2f(
-        -motion->accel_g[0],
-        sqrtf((motion->accel_g[1] * motion->accel_g[1]) + (motion->accel_g[2] * motion->accel_g[2]))
-    ) * 180.0f / 3.14159265f;
-
-    motion->roll_deg = raw_roll - g_level_roll_offset_deg;
-    motion->pitch_deg = raw_pitch - g_level_pitch_offset_deg;
-    motion->yaw_rate_dps = motion->gyro_dps[2];
-    return true;
-}
-
-static bool calibrate_gyro_bias(uint16_t duration_ms) {
-    const uint16_t actual_duration_ms = duration_ms < 1000 ? 5000 : duration_ms;
-    const int sample_interval_ms = 20;
-    const int sample_count = actual_duration_ms / sample_interval_ms;
-    float gyro_sum[3] = {0.0f, 0.0f, 0.0f};
-    int good_samples = 0;
-
-    g_calibration_state = RUSC_CAL_STATE_GYRO_RUNNING;
-    g_calibration_progress = 0;
-
-    for (int i = 0; i < sample_count; i++) {
-        uint8_t raw[14] = {0};
-        if (i2c_read_bytes(g_mpu9250_addr, MPU9250_REG_ACCEL_XOUT_H, raw, sizeof(raw)) == ESP_OK) {
-            int16_t gx = (int16_t)((raw[8] << 8) | raw[9]);
-            int16_t gy = (int16_t)((raw[10] << 8) | raw[11]);
-            int16_t gz = (int16_t)((raw[12] << 8) | raw[13]);
-            gyro_sum[0] += (float)gx / 131.0f;
-            gyro_sum[1] += (float)gy / 131.0f;
-            gyro_sum[2] += (float)gz / 131.0f;
-            good_samples++;
-        }
-        g_calibration_progress = (uint8_t)(((i + 1) * 100) / sample_count);
-        vTaskDelay(pdMS_TO_TICKS(sample_interval_ms));
-    }
-
-    if (good_samples < sample_count / 2) {
-        g_calibration_state = RUSC_CAL_STATE_ERROR;
-        g_calibration_progress = 0;
-        return false;
-    }
-
-    g_gyro_bias_dps[0] = gyro_sum[0] / good_samples;
-    g_gyro_bias_dps[1] = gyro_sum[1] / good_samples;
-    g_gyro_bias_dps[2] = gyro_sum[2] / good_samples;
-    g_calibration_state = RUSC_CAL_STATE_GYRO_DONE;
-    g_calibration_progress = 100;
-    ESP_LOGI(TAG, "Gyro bias calibrated: x=%.3f y=%.3f z=%.3f dps",
-             g_gyro_bias_dps[0], g_gyro_bias_dps[1], g_gyro_bias_dps[2]);
-    return true;
-}
-
-static bool set_level_offsets(void) {
-    imu_motion_t motion = {};
-    g_calibration_state = RUSC_CAL_STATE_IDLE;
-    g_calibration_progress = 0;
-
-    if (!read_mpu_motion(&motion)) {
-        g_calibration_state = RUSC_CAL_STATE_ERROR;
-        return false;
-    }
-
-    g_level_roll_offset_deg += motion.roll_deg;
-    g_level_pitch_offset_deg += motion.pitch_deg;
-    g_calibration_state = RUSC_CAL_STATE_LEVEL_SET;
-    g_calibration_progress = 100;
-    ESP_LOGI(TAG, "Boat level set: roll_offset=%.2f pitch_offset=%.2f",
-             g_level_roll_offset_deg, g_level_pitch_offset_deg);
-    return true;
 }
 
 static uint8_t battery_percent_from_mv(uint16_t battery_mv) {
@@ -475,57 +139,6 @@ static uint16_t crc16_ccitt(const uint8_t *data, size_t len) {
         }
     }
     return crc;
-}
-
-static bool process_command_packet(const uint8_t *data, int len) {
-    if (len != sizeof(rusc_command_packet_t)) {
-        return false;
-    }
-
-    rusc_command_packet_t command;
-    memcpy(&command, data, sizeof(command));
-    if (command.magic != RUSC_COMMAND_MAGIC || command.version != RUSC_COMMAND_VERSION ||
-        command.device_index != RUSC_DEVICE_INDEX) {
-        return false;
-    }
-
-    uint16_t received_crc = command.crc16;
-    command.crc16 = 0;
-    uint16_t calculated_crc = crc16_ccitt((const uint8_t *)&command, sizeof(command));
-    if (received_crc != calculated_crc) {
-        ESP_LOGW(TAG, "Command CRC mismatch: rx=0x%04x calc=0x%04x", received_crc, calculated_crc);
-        return true;
-    }
-
-    g_last_command_id = command.command_id;
-    ESP_LOGI(TAG, "Received calibration command id=%u command=%u duration=%u",
-             command.command_id, command.command, command.duration_ms);
-
-    switch (command.command) {
-        case RUSC_CAL_CMD_GYRO:
-            calibrate_gyro_bias(command.duration_ms);
-            return true;
-        case RUSC_CAL_CMD_SET_LEVEL:
-            set_level_offsets();
-            return true;
-        default:
-            ESP_LOGW(TAG, "Unsupported calibration command: %u", command.command);
-            g_calibration_state = RUSC_CAL_STATE_ERROR;
-            return true;
-    }
-}
-
-static void receive_gateway_commands(int socket_fd) {
-    uint8_t command_buffer[64];
-    while (1) {
-        int received = recvfrom(socket_fd, command_buffer, sizeof(command_buffer), MSG_DONTWAIT, NULL, NULL);
-        if (received <= 0) {
-            return;
-        }
-        if (!process_command_packet(command_buffer, received)) {
-            ESP_LOGW(TAG, "Ignored unknown command packet length=%d", received);
-        }
-    }
 }
 
 static void init_battery_adc(void) {
@@ -930,13 +543,8 @@ extern "C" void app_main(void) {
     g_wifi_connected = xSemaphoreCreateBinary();
     g_link_up = xSemaphoreCreateBinary();
     init_battery_adc();
-    g_compass_ready = init_compass();
-    esp_read_mac(g_device_mac, ESP_MAC_WIFI_STA);
     
-    ESP_LOGI(TAG, "=== RUSC Device 1: GPS + Compass Collector + HALow UDP ===");
-    ESP_LOGI(TAG, "Device MAC: %02x:%02x:%02x:%02x:%02x:%02x",
-             g_device_mac[0], g_device_mac[1], g_device_mac[2],
-             g_device_mac[3], g_device_mac[4], g_device_mac[5]);
+    ESP_LOGI(TAG, "=== RUSC Device 1: GPS Collector + HALow UDP ===");
     
     // ============ CRITICAL: MorseMicro Radio Boot Sequence ============
     ESP_LOGI(TAG, "Starting MorseMicro HALow radio initialization...");
@@ -1084,10 +692,6 @@ extern "C" void app_main(void) {
     while (1) {
         rusc_telemetry_packet_t packet = {};
         gps_data_t gps_snapshot;
-        float compass_heading = 0.0f;
-        bool compass_valid = read_compass_heading(&compass_heading);
-        imu_motion_t motion = {};
-        bool motion_valid = read_mpu_motion(&motion);
         
         xSemaphoreTake(g_gps_mutex, portMAX_DELAY);
         gps_snapshot = g_gps_data;
@@ -1102,16 +706,6 @@ extern "C" void app_main(void) {
         packet.lon_e7 = clamp_i32((int64_t)llround((double)gps_snapshot.longitude * 10000000.0), INT32_MIN, INT32_MAX);
         packet.alt_cm = clamp_i32((int64_t)llround((double)gps_snapshot.altitude * 100.0), INT32_MIN, INT32_MAX);
         packet.speed_centi_knots = clamp_u16((int)lroundf(gps_snapshot.speed * 100.0f), UINT16_MAX);
-        packet.compass_cdeg = compass_valid
-            ? clamp_u16((int)lroundf(compass_heading * 100.0f), 35999)
-            : COMPASS_INVALID_CDEG;
-        packet.roll_cdeg = motion_valid ? clamp_i16((int)lroundf(motion.roll_deg * 100.0f)) : 0;
-        packet.pitch_cdeg = motion_valid ? clamp_i16((int)lroundf(motion.pitch_deg * 100.0f)) : 0;
-        packet.yaw_rate_cdeg_s = motion_valid ? clamp_i16((int)lroundf(motion.yaw_rate_dps * 100.0f)) : 0;
-        packet.calibration_state = g_calibration_state;
-        packet.calibration_progress = g_calibration_progress;
-        packet.last_command_id = g_last_command_id;
-        memcpy(packet.device_mac, g_device_mac, sizeof(packet.device_mac));
         packet.sats = (uint8_t)clamp_u16(gps_snapshot.satellites, UINT8_MAX);
         packet.quality = (uint8_t)clamp_u16(gps_snapshot.quality, UINT8_MAX);
         packet.battery_mv = battery_mv;
@@ -1127,23 +721,14 @@ extern "C" void app_main(void) {
             ESP_LOGW(TAG, "Failed to send UDP packet");
         } else {
             g_last_send_ok = true;
-            ESP_LOGI(TAG, "Sent telemetry: seq=%u lat=%.6f lon=%.6f heading=%s%.2f roll=%.2f pitch=%.2f yaw_rate=%.2f cal=%u/%u bat=%umV/%u%% status=0x%02x",
+            ESP_LOGI(TAG, "Sent compact GPS: seq=%u lat=%.6f lon=%.6f bat=%umV/%u%% status=0x%02x",
                      packet.seq,
                      gps_snapshot.latitude,
                      gps_snapshot.longitude,
-                     compass_valid ? "" : "invalid/",
-                     compass_valid ? compass_heading : -1.0f,
-                     motion_valid ? motion.roll_deg : 0.0f,
-                     motion_valid ? motion.pitch_deg : 0.0f,
-                     motion_valid ? motion.yaw_rate_dps : 0.0f,
-                     packet.calibration_state,
-                     packet.calibration_progress,
                      packet.battery_mv,
                      packet.battery_pct,
                      packet.halow_status);
         }
-
-        receive_gateway_commands(socket_fd);
         
         vTaskDelay(pdMS_TO_TICKS(SEND_INTERVAL_MS));
     }

@@ -16,6 +16,7 @@
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: #f5f5f5;
+            overflow: hidden;
         }
         
         .header {
@@ -29,14 +30,32 @@
             font-size: 28px;
             margin-bottom: 5px;
         }
+
+        .top-nav {
+            margin-top: 14px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 999px;
+            padding: 8px 14px;
+        }
+
+        .top-nav a:hover {
+            background: rgba(255, 255, 255, 0.28);
+        }
         
         .container {
-            display: grid;
-            grid-template-columns: 1fr 350px;
-            gap: 20px;
-            padding: 20px;
-            max-width: 1400px;
-            margin: 0 auto;
+            padding: 0;
+            width: 100vw;
+            height: calc(100vh - 129px);
         }
         
         @media (max-width: 768px) {
@@ -47,15 +66,81 @@
         
         #map {
             width: 100%;
-            height: 600px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: 100%;
         }
         
         .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 2000;
+            width: min(390px, 92vw);
+            height: 100vh;
+            overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 14px;
+            background: #f5f5f5;
+            padding: 18px;
+            box-shadow: 4px 0 18px rgba(0, 0, 0, 0.22);
+            transform: translateX(-105%);
+            transition: transform 0.25s ease;
+        }
+
+        .sidebar.open {
+            transform: translateX(0);
+        }
+
+        .menu-toggle {
+            position: fixed;
+            top: 16px;
+            left: 16px;
+            z-index: 2100;
+            width: 44px;
+            height: 44px;
+            padding: 0;
+            border-radius: 10px;
+            background: #667eea;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.25);
+            font-size: 24px;
+            line-height: 44px;
+        }
+
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .drawer-header h2 {
+            color: #333;
+            font-size: 20px;
+        }
+
+        .drawer-close {
+            flex: 0;
+            width: 38px;
+            height: 38px;
+            padding: 0;
+            background: #777;
+        }
+
+        .device-name-row {
+            display: flex;
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .device-name-row input {
+            flex: 1;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 8px;
+            font-size: 13px;
+        }
+
+        .device-name-row button {
+            flex: 0;
         }
         
         .card {
@@ -85,6 +170,13 @@
             font-weight: bold;
             color: #333;
             margin-bottom: 5px;
+        }
+
+        .device-identity {
+            font-size: 11px;
+            color: #777;
+            word-break: break-all;
+            margin-bottom: 8px;
         }
         
         .device-status {
@@ -171,6 +263,19 @@
             gap: 10px;
             margin-bottom: 10px;
         }
+
+        .controls.vertical {
+            flex-direction: column;
+        }
+
+        .calibration-status {
+            font-size: 13px;
+            color: #555;
+            background: #f8f9fa;
+            border-radius: 6px;
+            padding: 10px;
+            margin-top: 10px;
+        }
         
         button {
             flex: 1;
@@ -203,58 +308,33 @@
     </style>
 </head>
 <body>
+    <button class="menu-toggle" onclick="toggleDrawer()" aria-label="Open device menu">☰</button>
     <div class="header">
         <h1>🗺️ RUSC GPS Tracker</h1>
         <p>Real-time GPS position tracking via HALow/WiFi gateway</p>
+        <nav class="top-nav" aria-label="Main navigation">
+            <a href="index.html">Live Tracking</a>
+            <a href="technical-solution.html">Technical Solution</a>
+        </nav>
     </div>
     
     <div class="container">
         <div id="map"></div>
         
-        <div class="sidebar">
+        <aside id="deviceDrawer" class="sidebar" aria-label="Device menu">
+            <div class="drawer-header">
+                <h2>Devices</h2>
+                <button class="drawer-close" onclick="toggleDrawer(false)" aria-label="Close device menu">×</button>
+            </div>
             <div class="card">
-                <h2>⚙️ Controls</h2>
                 <div class="controls">
                     <button onclick="centerMap()">Center Map</button>
                     <button onclick="refreshData()">Refresh</button>
                 </div>
-            </div>
-            
-            <div class="card">
-                <h2>📊 Statistics</h2>
-                <div id="stats" class="stats-grid">
-                    <div class="stat-box">
-                        <div class="stat-value">-</div>
-                        <div class="stat-label">Active Devices</div>
-                    </div>
-                    <div class="stat-box">
-                        <div class="stat-value">-</div>
-                        <div class="stat-label">Data Points</div>
-                    </div>
-                </div>
                 <div class="update-time">Last update: <span id="lastUpdate">-</span></div>
-            </div>
-            
-            <div class="card">
-                <h2>📍 Devices</h2>
                 <div id="devices"></div>
             </div>
-
-            <div class="card">
-                <h2>Gateway Battery</h2>
-                <div id="gatewayBattery">
-                    <div class="battery-percent">-</div>
-                    <div class="info-row">
-                        <span class="info-label">Voltage:</span>
-                        <span class="info-value">-</span>
-                    </div>
-                    <div class="info-row">
-                        <span class="info-label">Status:</span>
-                        <span class="info-value">-</span>
-                    </div>
-                </div>
-            </div>
-        </div>
+        </aside>
     </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
@@ -282,6 +362,7 @@
         let markers = {};
         let polylines = {};
         let homeMarkers = {};
+        let deviceNameEdits = {};
         
         function initMap() {
             map = L.map('map').setView([0, 0], 13);
@@ -292,26 +373,64 @@
             }).addTo(map);
         }
         
-        function updateDeviceMarker(deviceId, position, speed, course) {
+        function escapeHtml(value) {
+            return String(value ?? '').replace(/[&<>"']/g, (char) => ({
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#39;'
+            }[char]));
+        }
+
+        function toggleDrawer(force) {
+            const drawer = document.getElementById('deviceDrawer');
+            drawer.classList.toggle('open', typeof force === 'boolean' ? force : !drawer.classList.contains('open'));
+        }
+
+        function hasActiveNameEdit() {
+            const activeElement = document.activeElement;
+            return (activeElement && activeElement.classList.contains('device-name-input')) ||
+                Object.keys(deviceNameEdits).length > 0;
+        }
+
+        function trackDeviceNameEdit(deviceId, value) {
+            deviceNameEdits[deviceId] = value;
+        }
+
+        function updateDeviceMarker(deviceId, position, speed, course, label) {
+            const heading = Number.isFinite(course) ? course : 0;
+            const safeLabel = escapeHtml(label || deviceId);
             const icon = L.divIcon({
-                html: `<div style="
-                    width: 30px;
-                    height: 30px;
-                    background: #667eea;
-                    border: 3px solid white;
-                    border-radius: 50%;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    color: white;
-                    font-weight: bold;
-                    font-size: 16px;
-                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-                    transform: rotate(${course}deg);
-                ">→</div>`,
+                html: `<div style="display:flex; flex-direction:column; align-items:center;">
+                    <div style="
+                        width: 38px;
+                        height: 46px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        transform: rotate(${heading}deg);
+                        transform-origin: 50% 50%;
+                    ">
+                        <svg width="38" height="46" viewBox="0 0 38 46" aria-label="Boat heading ${heading.toFixed(1)} degrees">
+                            <path d="M19 2 L32 40 L19 34 L6 40 Z"
+                                  fill="#667eea"
+                                  stroke="#ffffff"
+                                  stroke-width="3"
+                                  stroke-linejoin="round"
+                                  filter="drop-shadow(0 2px 4px rgba(0, 0, 0, 0.35))" />
+                            <path d="M19 8 L19 31"
+                                  stroke="#ffffff"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  opacity="0.85" />
+                        </svg>
+                    </div>
+                    <div style="background:white; color:#333; border-radius:999px; padding:2px 8px; font-size:12px; font-weight:700; box-shadow:0 1px 4px rgba(0,0,0,0.25); white-space:nowrap;">${safeLabel}</div>
+                </div>`,
                 className: '',
-                iconSize: [30, 30],
-                iconAnchor: [15, 15]
+                iconSize: [120, 68],
+                iconAnchor: [60, 34]
             });
             
             if (markers[deviceId]) {
@@ -320,7 +439,7 @@
             } else {
                 const marker = L.marker([position.latitude, position.longitude], { icon })
                     .addTo(map)
-                    .bindPopup(`<strong>${deviceId}</strong><br/>Speed: ${speed.toFixed(2)} kt`);
+                    .bindPopup(`<strong>${safeLabel}</strong><br/>${deviceId}<br/>Speed: ${speed.toFixed(2)} kt`);
                 markers[deviceId] = marker;
             }
         }
@@ -386,19 +505,12 @@
                 const posResponse = await fetch(`${BACKEND_URL}/positions`);
                 const positions = await posResponse.json();
                 
-                // Fetch stats
-                const statsResponse = await fetch(`${BACKEND_URL}/stats`);
-                const stats = await statsResponse.json();
-
-                const gatewayResponse = await fetch(`${BACKEND_URL}/gateway/status`);
-                const gatewayStatus = await gatewayResponse.json();
-                
                 // Update map
                 let centerLat = 0, centerLon = 0, count = 0;
                 
                 for (const [deviceId, data] of Object.entries(positions)) {
                     if (data.position && data.position.latitude) {
-                        updateDeviceMarker(deviceId, data.position, data.speed_knots, data.course);
+                        updateDeviceMarker(deviceId, data.position, data.speed_knots, data.course, data.display_name);
                         updateHomeMarker(deviceId, data.home_point);
                         
                         // Fetch history for this device
@@ -414,8 +526,6 @@
                 
                 // Update sidebar
                 updateDevices(positions);
-                updateStats(stats);
-                updateGatewayBattery(gatewayStatus);
                 
                 // Center map on average position
                 if (count > 0) {
@@ -433,13 +543,17 @@
         
         function updateDevices(positions) {
             const devicesDiv = document.getElementById('devices');
-            const now = Date.now();
+
+            if (devicesDiv.children.length > 0 && hasActiveNameEdit()) {
+                return;
+            }
             
             let html = '';
             for (const [deviceId, data] of Object.entries(positions)) {
-                const isActive = data.last_update && (now - new Date(data.last_update)) < 10000;
-                const statusClass = isActive ? 'status-active' : 'status-inactive';
-                const statusText = isActive ? 'Active' : 'Inactive';
+                const statusClass = 'status-active';
+                const statusText = 'Communicating';
+                const displayName = data.display_name || data.source_device_id || deviceId;
+                const editedName = deviceNameEdits[deviceId] ?? displayName;
                 
                 let homeHtml = '';
                 if (data.home_point) {
@@ -482,7 +596,12 @@
                 
                 html += `
                     <div class="device-item">
-                        <div class="device-id">${deviceId}</div>
+                        <div class="device-id">${escapeHtml(displayName)}</div>
+                        <div class="device-identity">MAC/ID: ${escapeHtml(data.mac || deviceId)}</div>
+                        <div class="device-name-row">
+                            <input class="device-name-input" id="deviceName-${deviceId}" value="${escapeHtml(editedName)}" placeholder="Boat or athlete name" oninput="trackDeviceNameEdit('${deviceId}', this.value)">
+                            <button onclick="saveDeviceName('${deviceId}')">Save</button>
+                        </div>
                         <div class="device-status">
                             <span class="status-badge ${statusClass}"></span>${statusText}
                         </div>
@@ -504,6 +623,18 @@
                             <span class="info-value">${data.course.toFixed(1)}°</span>
                         </div>
                         <div class="info-row">
+                            <span class="info-label">Roll:</span>
+                            <span class="info-value">${(data.roll || 0).toFixed(1)}°</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Pitch:</span>
+                            <span class="info-value">${(data.pitch || 0).toFixed(1)}°</span>
+                        </div>
+                        <div class="info-row">
+                            <span class="info-label">Yaw rate:</span>
+                            <span class="info-value">${(data.yaw_rate || 0).toFixed(1)}°/s</span>
+                        </div>
+                        <div class="info-row">
                             <span class="info-label">Signal:</span>
                             <span class="info-value" style="color: ${signalColor};">
                                 ${'▂'.repeat(signalBars)}${'▂'.repeat(5-signalBars)} ${data.signal_strength} dBm
@@ -517,10 +648,90 @@
                             <span class="info-label">HaLow:</span>
                             <span class="info-value">0x${(data.halow_status || 0).toString(16).padStart(2, '0')}</span>
                         </div>
+                        <div class="calibration-status" id="calibrationStatus-${deviceId}">
+                            <div class="info-row">
+                                <span class="info-label">IMU state:</span>
+                                <span class="info-value">${calibrationStateText(data.calibration_state || 0)}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Progress:</span>
+                                <span class="info-value">${data.calibration_progress || 0}%</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">Last command:</span>
+                                <span class="info-value">${data.last_command_id || '-'}</span>
+                            </div>
+                        </div>
+                        <div class="controls vertical">
+                            <button onclick="sendCalibrationCommand('${deviceId}', 'calibrate_gyro')">Calibrate Gyro</button>
+                            <button onclick="sendCalibrationCommand('${deviceId}', 'set_level')">Set Boat Level</button>
+                        </div>
                     </div>
                 `;
             }
             devicesDiv.innerHTML = html;
+            if (!html) {
+                devicesDiv.innerHTML = '<div class="error">No communicating devices right now.</div>';
+            }
+        }
+
+        function calibrationStateText(state) {
+            switch (state) {
+                case 0: return 'Idle';
+                case 1: return 'Gyro calibration running';
+                case 2: return 'Gyro calibration complete';
+                case 3: return 'Boat level set';
+                case 255: return 'Calibration error';
+                default: return `Unknown (${state})`;
+            }
+        }
+
+        async function sendCalibrationCommand(deviceId, command) {
+            const duration = command === 'calibrate_gyro' ? 8000 : 1000;
+            const statusDiv = document.getElementById(`calibrationStatus-${deviceId}`);
+            if (statusDiv) {
+                statusDiv.innerHTML = `Command pending: ${command}. Progress: 0%`;
+            }
+
+            const response = await fetch(`${BACKEND_URL}/devices/${deviceId}/calibration`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ command, duration_ms: duration })
+            });
+
+            const result = await response.json();
+            if (!response.ok) {
+                alert(result.error || 'Calibration command failed');
+                return;
+            }
+
+            if (statusDiv) {
+                statusDiv.innerHTML = `Command ${result.command_id} sent: ${command}. Progress: 0%`;
+            }
+            fetchData();
+        }
+
+        async function saveDeviceName(deviceId) {
+            const input = document.getElementById(`deviceName-${deviceId}`);
+            const name = input ? input.value.trim() : '';
+            if (!name) {
+                alert('Please enter a name.');
+                return;
+            }
+
+            const response = await fetch(`${BACKEND_URL}/devices/${deviceId}/name`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name })
+            });
+
+            const result = await response.json();
+            if (!response.ok) {
+                alert(result.error || 'Failed to save device name');
+                return;
+            }
+            delete deviceNameEdits[deviceId];
+            fetchData();
         }
 
         function updateGatewayBattery(status) {

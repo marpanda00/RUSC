@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+    <title>RUSC Technical Solution</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #263238;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 28px 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-inner,
+        .content {
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .header h1 {
+            font-size: 30px;
+            margin-bottom: 6px;
+        }
+
+        .top-nav {
+            margin-top: 16px;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .top-nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            border-radius: 999px;
+            padding: 8px 14px;
+        }
+
+        .top-nav a:hover,
+        .top-nav a.active {
+            background: rgba(255, 255, 255, 0.30);
+        }
+
+        .content {
+            padding: 24px 20px 48px;
+        }
+
+        .hero {
+            background: white;
+            border-radius: 14px;
+            padding: 26px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+            margin-bottom: 22px;
+        }
+
+        .hero h2 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 18px;
+            margin: 22px 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            border-left: 4px solid #667eea;
+        }
+
+        .card h3 {
+            font-size: 18px;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .card ul,
+        .card ol {
+            padding-left: 20px;
+        }
+
+        .card li {
+            margin: 8px 0;
+        }
+
+        .diagram {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 22px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+            margin: 22px 0;
+        }
+
+        .diagram h3 {
+            margin-bottom: 12px;
+            color: #333;
+        }
+
+        .diagram svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .badge-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #eef0ff;
+            color: #4f5fc7;
+            border-radius: 999px;
+            padding: 7px 12px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .note {
+            background: #fff8e1;
+            border-left: 4px solid #ffc107;
+            border-radius: 10px;
+            padding: 16px 18px;
+            margin-top: 14px;
+            color: #5d4900;
+        }
+
+        .future {
+            border-left-color: #4CAF50;
+        }
+
+        @media (max-width: 800px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-inner">
+            <h1>RUSC Technical Solution</h1>
+            <p>Boat telemetry, long-range Wi-Fi HaLow transport, and cloud-backed coaching data.</p>
+            <nav class="top-nav" aria-label="Main navigation">
+                <a href="index.html">Live Tracking</a>
+                <a class="active" href="technical-solution.html">Technical Solution</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="content">
+        <section class="hero">
+            <h2>Overview</h2>
+            <p>
+                RUSC is designed for sailing schools that need live visibility of training boats while they are on the water.
+                Each boat carries a compact device that reads GPS position, compass heading, battery level, and link status,
+                then sends the data over Wi-Fi HaLow to a beach-side gateway. The gateway forwards the stream to the current
+                cloud backend, where the website shows boat position and direction in real time.
+            </p>
+            <div class="badge-row">
+                <span class="badge">Device1: boat node</span>
+                <span class="badge">Device2: beach gateway</span>
+                <span class="badge">Wi-Fi HaLow over water</span>
+                <span class="badge">Cloud backend today</span>
+            </div>
+        </section>
+
+        <section class="diagram">
+            <h3>End-to-End Architecture</h3>
+            <svg viewBox="0 0 1100 360" role="img" aria-label="RUSC architecture diagram">
+                <defs>
+                    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#667eea"></path>
+                    </marker>
+                    <style>
+                        .box { fill: #ffffff; stroke: #667eea; stroke-width: 3; rx: 14; }
+                        .title { font: 700 22px sans-serif; fill: #263238; }
+                        .text { font: 16px sans-serif; fill: #455a64; }
+                        .link { stroke: #667eea; stroke-width: 4; marker-end: url(#arrow); fill: none; }
+                        .water { fill: #e3f2fd; }
+                    </style>
+                </defs>
+                <rect class="water" x="0" y="210" width="1100" height="150" rx="18"></rect>
+                <rect class="box" x="40" y="60" width="240" height="130"></rect>
+                <text class="title" x="70" y="100">Boat node</text>
+                <text class="text" x="70" y="130">HT-HC33 + GPS</text>
+                <text class="text" x="70" y="154">MPU9250 compass</text>
+                <text class="text" x="70" y="178">Mounted high astern</text>
+
+                <rect class="box" x="425" y="60" width="250" height="130"></rect>
+                <text class="title" x="455" y="100">Beach gateway</text>
+                <text class="text" x="455" y="130">HT-HC33 gateway</text>
+                <text class="text" x="455" y="154">HaLow + Wi-Fi</text>
+                <text class="text" x="455" y="178">Yagi antenna option</text>
+
+                <rect class="box" x="820" y="60" width="240" height="130"></rect>
+                <text class="title" x="850" y="100">Cloud backend</text>
+                <text class="text" x="850" y="130">TCP ingestion</text>
+                <text class="text" x="850" y="154">REST API</text>
+                <text class="text" x="850" y="178">Live website</text>
+
+                <path class="link" d="M 280 125 C 340 125, 360 125, 425 125"></path>
+                <text class="text" x="315" y="105">Wi-Fi HaLow</text>
+
+                <path class="link" d="M 675 125 C 735 125, 760 125, 820 125"></path>
+                <text class="text" x="710" y="105">Wi-Fi / internet</text>
+
+                <path d="M80 260 C160 230, 250 290, 340 260 C430 230, 520 290, 610 260 C700 230, 790 290, 880 260 C950 238, 1010 248, 1060 270"
+                      fill="none" stroke="#90caf9" stroke-width="8" stroke-linecap="round"></path>
+                <text class="text" x="450" y="315">Training area on the water</text>
+            </svg>
+        </section>
+
+        <section class="grid">
+            <article class="card">
+                <h3>Boat Device Placement</h3>
+                <p>
+                    The device is intended to be attached with a stick at the back of the boat. This keeps the electronics
+                    higher above the water, improves the radio position, and gives the onboard camera a strategic view of
+                    the whole boat, including the athletes.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Why Wi-Fi HaLow</h3>
+                <p>
+                    Wi-Fi HaLow is still Wi-Fi: it keeps the familiar IP networking model, security concepts, sockets,
+                    gateway routing, and backend integration patterns. That simplifies the technical solution compared with
+                    custom radio protocols because telemetry can travel as normal network data.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Range and Antenna Strategy</h3>
+                <p>
+                    The HT-HC33/HaLow platform is designed for long-range links. With a directional Yagi antenna on the
+                    beach-side gateway, clear line of sight over water, correct alignment, and local regulatory limits,
+                    the school can target course-scale coverage in the 1-2 km class, with longer links possible in favorable
+                    conditions and lower data-rate settings.
+                </p>
+                <div class="note">
+                    Actual distance depends on antenna gain, mounting height, sea state, interference, allowed transmit power,
+                    country settings, and the selected HaLow channel width/data rate.
+                </div>
+            </article>
+
+            <article class="card">
+                <h3>Fleet Capacity</h3>
+                <p>
+                    Wi-Fi HaLow was created for dense IoT networks and the 802.11ah standard can address up to 8191
+                    stations per access point. In practice, a sailing school fleet will be sized by airtime, update rate,
+                    payload size, antenna coverage, and gateway configuration. Current firmware is optimized for a small
+                    fleet first and can be tuned upward as the use case grows.
+                </p>
+            </article>
+        </section>
+
+        <section class="diagram">
+            <h3>Network Roles and Data Flow</h3>
+            <svg viewBox="0 0 1100 300" role="img" aria-label="Network data flow diagram">
+                <defs>
+                    <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                        <path d="M 0 0 L 10 5 L 0 10 z" fill="#4CAF50"></path>
+                    </marker>
+                    <style>
+                        .node { fill: #fff; stroke: #4CAF50; stroke-width: 3; rx: 14; }
+                        .node2 { fill: #fff; stroke: #667eea; stroke-width: 3; rx: 14; }
+                        .flow { stroke: #4CAF50; stroke-width: 4; marker-end: url(#arrow2); fill: none; }
+                        .label { font: 700 18px sans-serif; fill: #263238; }
+                        .small { font: 15px sans-serif; fill: #455a64; }
+                    </style>
+                </defs>
+                <rect class="node" x="40" y="70" width="190" height="120"></rect>
+                <text class="label" x="70" y="108">Device1</text>
+                <text class="small" x="70" y="138">GPS position</text>
+                <text class="small" x="70" y="162">Compass heading</text>
+
+                <rect class="node" x="310" y="70" width="210" height="120"></rect>
+                <text class="label" x="340" y="108">HaLow link</text>
+                <text class="small" x="340" y="138">Long-range Wi-Fi</text>
+                <text class="small" x="340" y="162">UDP telemetry</text>
+
+                <rect class="node2" x="600" y="70" width="210" height="120"></rect>
+                <text class="label" x="630" y="108">Device2</text>
+                <text class="small" x="630" y="138">Gateway decode</text>
+                <text class="small" x="630" y="162">Cloud forwarder</text>
+
+                <rect class="node2" x="890" y="70" width="170" height="120"></rect>
+                <text class="label" x="920" y="108">Website</text>
+                <text class="small" x="920" y="138">Map</text>
+                <text class="small" x="920" y="162">Boat direction</text>
+
+                <path class="flow" d="M 230 130 L 310 130"></path>
+                <path class="flow" d="M 520 130 L 600 130"></path>
+                <path class="flow" d="M 810 130 L 890 130"></path>
+
+                <text class="small" x="325" y="235">Wi-Fi provisioning lets the school configure its own local Wi-Fi, for example a phone hotspot,</text>
+                <text class="small" x="325" y="258">so gateway-to-cloud transfer can happen in real time where internet is available.</text>
+            </svg>
+        </section>
+
+        <section class="grid">
+            <article class="card">
+                <h3>Wi-Fi Provisioning</h3>
+                <p>
+                    The gateway includes Wi-Fi provisioning so the sailing school can configure its own local internet path.
+                    For example, an instructor can use a phone hotspot on the beach and let the gateway send live data to
+                    the cloud backend without changing firmware.
+                </p>
+            </article>
+
+            <article class="card">
+                <h3>Current Cloud Backend</h3>
+                <p>
+                    The current backend runs in the cloud. Device2 forwards decoded telemetry to the backend, and the
+                    website reads the latest positions through the REST API. This keeps the live tracking page reachable
+                    from normal browsers and makes future event and athlete workflows easier to add.
+                </p>
+            </article>
+        </section>
+
+        <section class="card future">
+            <h3>Future Evolutions</h3>
+            <ol>
+                <li>
+                    The HiLetgo MPU9250 is also an accelerometer and gyroscope, so future telemetry can add tilt, yaw,
+                    and acceleration parameters for boat handling analysis.
+                </li>
+                <li>
+                    The HT-HC33 device also has a camera. Real-time video is not expected over the long-range link, but
+                    video can be stored onboard and later transferred via Wi-Fi so the instructor or coach can review the
+                    session with the athlete.
+                </li>
+                <li>
+                    Accessories can be added around the device, for example a wind sensor, taking advantage of the Bluetooth
+                    environment and accessory interfaces.
+                </li>
+                <li>
+                    Buoys can have their own dedicated devices, possibly including wind sensors, so the course itself
+                    becomes instrumented.
+                </li>
+                <li>
+                    The website will be ready to register athletes, boats, devices, and events, linking live telemetry to
+                    structured training and evaluation sessions.
+                </li>
+            </ol>
+        </section>
+    </main>
+</body>
+</html>

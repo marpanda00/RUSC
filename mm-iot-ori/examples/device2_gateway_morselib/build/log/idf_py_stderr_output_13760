@@ -1,5 +1,0 @@
-CMake Error at CMakeLists.txt:9 (message):
-  MMIOT_ROOT environment variable not defined.  Please set as the path to the
-  framework directory in the MM-IoT-SDK
-
-

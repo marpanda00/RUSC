@@ -21,28 +21,15 @@ const websiteApp = express();
 // API Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.static('public')); // Serve website pages on the HTTP endpoint too.
 
 // Website App Middleware (HTTPS)
 websiteApp.use(cors());
 websiteApp.use(express.json());
 websiteApp.use(express.static('public')); // Serve static files on HTTPS
 
-// In-memory data storage
-let gpsData = {
-  device1: {
-    device_id: "gps_device_1",
-    last_update: null,
-    position: { latitude: 0, longitude: 0 },
-    speed_knots: 0,
-    course: 0,
-    quality: 0,
-    signal_strength: 0,  // WiFi signal in dBm
-    history: [], // Keep last 100 points
-    home_point: null, // Set on first GPS fix
-    current_distance: 0, // Distance from home in km
-    max_distance: 0 // Max distance reached from home
-  }
-};
+// In-memory data storage. Devices are keyed by stable hardware identity when available.
+let gpsData = {};
 
 let gatewayStatus = {
   device_id: 'device2',
@@ -52,6 +39,38 @@ let gatewayStatus = {
 };
 
 const MAX_HISTORY = 100;
+const ACTIVE_DEVICE_MS = 30000;
+const DEVICE_NAMES_FILE = 'device-names.json';
+let gatewaySocket = null;
+let nextCommandId = 1;
+let calibrationCommands = {};
+let deviceNames = {};
+
+function loadDeviceNames() {
+  try {
+    deviceNames = JSON.parse(fs.readFileSync(DEVICE_NAMES_FILE, 'utf8'));
+  } catch (error) {
+    deviceNames = {};
+  }
+}
+
+function saveDeviceNames() {
+  fs.writeFileSync(DEVICE_NAMES_FILE, JSON.stringify(deviceNames, null, 2));
+}
+
+function normalizeDeviceKey(value) {
+  return String(value || '').trim().toLowerCase();
+}
+
+function defaultDeviceName(deviceKey, fallbackId) {
+  return deviceNames[deviceKey] || fallbackId || deviceKey;
+}
+
+function isDeviceActive(device) {
+  return Boolean(device.last_update && (Date.now() - new Date(device.last_update)) < ACTIVE_DEVICE_MS);
+}
+
+loadDeviceNames();
 
 // ============ Haversine Distance Calculator ============
 
@@ -68,6 +87,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 
 const tcpServer = net.createServer((socket) => {
   console.log(`[TCP] Client connected from ${socket.remoteAddress}`);
+  gatewaySocket = socket;
   
   let buffer = '';
   
@@ -96,10 +116,16 @@ const tcpServer = net.createServer((socket) => {
   
   socket.on('end', () => {
     console.log('[TCP] Client disconnected');
+    if (gatewaySocket === socket) {
+      gatewaySocket = null;
+    }
   });
   
   socket.on('error', (error) => {
     console.error('[TCP] Socket error:', error.message);
+    if (gatewaySocket === socket) {
+      gatewaySocket = null;
+    }
   });
 });
 
@@ -129,7 +155,7 @@ function processGPSData(data) {
   }
   
   // Convert device1 flat format to expected format
-  let position, speed, quality, alt, sats;
+  let position, speed, quality, alt, sats, course;
   
   if (data.position) {
     // Already in expected format
@@ -138,6 +164,7 @@ function processGPSData(data) {
     quality = data.quality || 0;
     alt = data.altitude || 0;
     sats = data.satellites || 0;
+    course = data.course ?? data.heading ?? 0;
   } else if (data.lat !== undefined && data.lon !== undefined) {
     // Device1 flat format
     position = { latitude: data.lat, longitude: data.lon };
@@ -145,18 +172,23 @@ function processGPSData(data) {
     quality = data.quality || 0;
     alt = data.alt || 0;
     sats = data.sats || 0;
-    console.log(`[Data] Device1 GPS received: lat=${data.lat}, lon=${data.lon} (raw)`);
+    course = data.course ?? data.heading ?? 0;
+    console.log(`[Data] Device1 GPS received: lat=${data.lat}, lon=${data.lon}, course=${course} (raw)`);
   } else {
     console.warn('[Data] Invalid GPS data format - missing position or lat/lon');
     console.warn('[Data] Received:', JSON.stringify(data));
     return;
   }
   
-  const deviceId = data.device_id;
+  const sourceDeviceId = data.device_id;
+  const deviceKey = normalizeDeviceKey(data.mac || sourceDeviceId);
   
-  if (!gpsData[deviceId]) {
-    gpsData[deviceId] = {
-      device_id: deviceId,
+  if (!gpsData[deviceKey]) {
+    gpsData[deviceKey] = {
+      device_id: deviceKey,
+      source_device_id: sourceDeviceId,
+      mac: data.mac || null,
+      display_name: defaultDeviceName(deviceKey, sourceDeviceId),
       last_update: null,
       position: { latitude: 0, longitude: 0 },
       speed_knots: 0,
@@ -166,6 +198,12 @@ function processGPSData(data) {
       battery_mv: 0,
       battery: 0,
       halow_status: 0,
+      roll: 0,
+      pitch: 0,
+      yaw_rate: 0,
+      calibration_state: 0,
+      calibration_progress: 0,
+      last_command_id: 0,
       history: [],
       home_point: null,
       current_distance: 0,
@@ -174,53 +212,75 @@ function processGPSData(data) {
   }
   
   // Set home point on first valid fix
-  if (!gpsData[deviceId].home_point) {
-    gpsData[deviceId].home_point = { ...position };
-    console.log(`[${deviceId}] Home point set: ${position.latitude.toFixed(6)}, ${position.longitude.toFixed(6)}`);
+  if (!gpsData[deviceKey].home_point) {
+    gpsData[deviceKey].home_point = { ...position };
+    console.log(`[${deviceKey}] Home point set: ${position.latitude.toFixed(6)}, ${position.longitude.toFixed(6)}`);
   }
   
   // Update current position
-  gpsData[deviceId].last_update = new Date();
-  gpsData[deviceId].position = position;
-  gpsData[deviceId].speed_knots = speed;
-  gpsData[deviceId].quality = quality;
-  gpsData[deviceId].signal_strength = data.signal_strength || 0;
-  gpsData[deviceId].battery_mv = data.battery_mv || 0;
-  gpsData[deviceId].battery = data.battery || 0;
-  gpsData[deviceId].halow_status = data.halow_status || 0;
+  gpsData[deviceKey].source_device_id = sourceDeviceId;
+  gpsData[deviceKey].mac = data.mac || gpsData[deviceKey].mac || null;
+  gpsData[deviceKey].display_name = defaultDeviceName(deviceKey, sourceDeviceId);
+  gpsData[deviceKey].last_update = new Date();
+  gpsData[deviceKey].position = position;
+  gpsData[deviceKey].speed_knots = speed;
+  gpsData[deviceKey].course = course;
+  gpsData[deviceKey].quality = quality;
+  gpsData[deviceKey].signal_strength = data.signal_strength || 0;
+  gpsData[deviceKey].battery_mv = data.battery_mv || 0;
+  gpsData[deviceKey].battery = data.battery || 0;
+  gpsData[deviceKey].halow_status = data.halow_status || 0;
+  gpsData[deviceKey].roll = data.roll ?? gpsData[deviceKey].roll ?? 0;
+  gpsData[deviceKey].pitch = data.pitch ?? gpsData[deviceKey].pitch ?? 0;
+  gpsData[deviceKey].yaw_rate = data.yaw_rate ?? gpsData[deviceKey].yaw_rate ?? 0;
+  gpsData[deviceKey].calibration_state = data.calibration_state ?? gpsData[deviceKey].calibration_state ?? 0;
+  gpsData[deviceKey].calibration_progress = data.calibration_progress ?? gpsData[deviceKey].calibration_progress ?? 0;
+  gpsData[deviceKey].last_command_id = data.last_command_id ?? gpsData[deviceKey].last_command_id ?? 0;
+
+  if (gpsData[deviceKey].last_command_id && calibrationCommands[gpsData[deviceKey].last_command_id]) {
+    calibrationCommands[gpsData[deviceKey].last_command_id].last_update = new Date();
+    calibrationCommands[gpsData[deviceKey].last_command_id].state = gpsData[deviceKey].calibration_state;
+    calibrationCommands[gpsData[deviceKey].last_command_id].progress = gpsData[deviceKey].calibration_progress;
+  }
   
   // Calculate distance from home point
-  if (gpsData[deviceId].home_point) {
+  if (gpsData[deviceKey].home_point) {
     const dist = calculateDistance(
-      gpsData[deviceId].home_point.latitude,
-      gpsData[deviceId].home_point.longitude,
+      gpsData[deviceKey].home_point.latitude,
+      gpsData[deviceKey].home_point.longitude,
       position.latitude,
       position.longitude
     );
-    gpsData[deviceId].current_distance = parseFloat(dist.toFixed(3));
+    gpsData[deviceKey].current_distance = parseFloat(dist.toFixed(3));
     
     // Update max distance if current is greater
-    if (gpsData[deviceId].current_distance > gpsData[deviceId].max_distance) {
-      gpsData[deviceId].max_distance = gpsData[deviceId].current_distance;
+    if (gpsData[deviceKey].current_distance > gpsData[deviceKey].max_distance) {
+      gpsData[deviceKey].max_distance = gpsData[deviceKey].current_distance;
     }
   }
   
   // Add to history
-  gpsData[deviceId].history.push({
-    timestamp: gpsData[deviceId].last_update,
+  gpsData[deviceKey].history.push({
+    timestamp: gpsData[deviceKey].last_update,
     position: { ...position },
     speed_knots: speed,
-    course: data.course || 0,
-    distance_from_home: gpsData[deviceId].current_distance,
-    signal_strength: gpsData[deviceId].signal_strength,
-    battery_mv: gpsData[deviceId].battery_mv,
-    battery: gpsData[deviceId].battery,
-    halow_status: gpsData[deviceId].halow_status
+    course,
+    distance_from_home: gpsData[deviceKey].current_distance,
+    signal_strength: gpsData[deviceKey].signal_strength,
+    battery_mv: gpsData[deviceKey].battery_mv,
+    battery: gpsData[deviceKey].battery,
+    halow_status: gpsData[deviceKey].halow_status,
+    roll: gpsData[deviceKey].roll,
+    pitch: gpsData[deviceKey].pitch,
+    yaw_rate: gpsData[deviceKey].yaw_rate,
+    calibration_state: gpsData[deviceKey].calibration_state,
+    calibration_progress: gpsData[deviceKey].calibration_progress,
+    last_command_id: gpsData[deviceKey].last_command_id
   });
   
   // Keep only last MAX_HISTORY entries
-  if (gpsData[deviceId].history.length > MAX_HISTORY) {
-    gpsData[deviceId].history.shift();
+  if (gpsData[deviceKey].history.length > MAX_HISTORY) {
+    gpsData[deviceKey].history.shift();
   }
   
   //console.log(`[${deviceId}] Lat: ${data.position.latitude.toFixed(6)}, ` +
@@ -237,17 +297,29 @@ function registerAPIRoutes(expressApp) {
   expressApp.get('/api/positions', (req, res) => {
     const response = {};
     for (const [key, device] of Object.entries(gpsData)) {
+      if (!isDeviceActive(device)) {
+        continue;
+      }
       response[key] = {
         device_id: device.device_id,
+        source_device_id: device.source_device_id,
+        mac: device.mac,
+        display_name: device.display_name || device.device_id,
         last_update: device.last_update,
         position: device.position,
         speed_knots: device.speed_knots,
-        course: 0,
+        course: device.course,
         quality: device.quality,
         signal_strength: device.signal_strength,
         battery_mv: device.battery_mv,
         battery: device.battery,
         halow_status: device.halow_status,
+        roll: device.roll || 0,
+        pitch: device.pitch || 0,
+        yaw_rate: device.yaw_rate || 0,
+        calibration_state: device.calibration_state || 0,
+        calibration_progress: device.calibration_progress || 0,
+        last_command_id: device.last_command_id || 0,
         home_point: device.home_point,
         current_distance: device.current_distance,
         max_distance: device.max_distance
@@ -258,7 +330,7 @@ function registerAPIRoutes(expressApp) {
 
   // Get position of specific device
   expressApp.get('/api/positions/:device_id', (req, res) => {
-    const deviceId = req.params.device_id;
+    const deviceId = normalizeDeviceKey(req.params.device_id);
     const device = gpsData[deviceId];
     
     if (!device) {
@@ -267,6 +339,9 @@ function registerAPIRoutes(expressApp) {
     
     res.json({
       device_id: device.device_id,
+      source_device_id: device.source_device_id,
+      mac: device.mac,
+      display_name: device.display_name || device.device_id,
       last_update: device.last_update,
       position: device.position,
       speed_knots: device.speed_knots,
@@ -276,6 +351,12 @@ function registerAPIRoutes(expressApp) {
       battery_mv: device.battery_mv,
       battery: device.battery,
       halow_status: device.halow_status,
+      roll: device.roll || 0,
+      pitch: device.pitch || 0,
+      yaw_rate: device.yaw_rate || 0,
+      calibration_state: device.calibration_state || 0,
+      calibration_progress: device.calibration_progress || 0,
+      last_command_id: device.last_command_id || 0,
       home_point: device.home_point,
       current_distance: device.current_distance,
       max_distance: device.max_distance
@@ -284,7 +365,7 @@ function registerAPIRoutes(expressApp) {
 
   // Get position history of device
   expressApp.get('/api/history/:device_id', (req, res) => {
-    const deviceId = req.params.device_id;
+    const deviceId = normalizeDeviceKey(req.params.device_id);
     const device = gpsData[deviceId];
     
     if (!device) {
@@ -299,10 +380,13 @@ function registerAPIRoutes(expressApp) {
 
   // Get all devices
   expressApp.get('/api/devices', (req, res) => {
-    const devices = Object.values(gpsData).map(device => ({
+    const devices = Object.values(gpsData).filter(isDeviceActive).map(device => ({
       device_id: device.device_id,
+      source_device_id: device.source_device_id,
+      mac: device.mac,
+      display_name: device.display_name || device.device_id,
       last_update: device.last_update,
-      is_active: device.last_update && (Date.now() - new Date(device.last_update)) < 10000
+      is_active: true
     }));
     
     res.json(devices);
@@ -316,6 +400,86 @@ function registerAPIRoutes(expressApp) {
       ...gatewayStatus,
       is_active: Boolean(isActive)
     });
+  });
+
+  expressApp.post('/api/devices/:device_id/calibration', (req, res) => {
+    const deviceId = normalizeDeviceKey(req.params.device_id);
+    const { command, duration_ms } = req.body || {};
+    const allowedCommands = new Set(['calibrate_gyro', 'set_level']);
+    const device = gpsData[deviceId];
+
+    if (!allowedCommands.has(command)) {
+      return res.status(400).json({ error: 'Unsupported calibration command' });
+    }
+
+    if (!device) {
+      return res.status(404).json({ error: 'Device not found' });
+    }
+
+    if (!gatewaySocket || gatewaySocket.destroyed) {
+      return res.status(503).json({ error: 'Gateway is not connected' });
+    }
+
+    const commandId = nextCommandId++;
+    const payload = {
+      type: 'calibration_command',
+      command_id: commandId,
+      device_id: device.source_device_id || deviceId,
+      command,
+      duration_ms: Number.isFinite(duration_ms) ? duration_ms : 5000
+    };
+
+    calibrationCommands[commandId] = {
+      ...payload,
+      queued_at: new Date(),
+      last_update: null,
+      state: null,
+      progress: 0
+    };
+
+    device.calibration_state = command === 'calibrate_gyro' ? 1 : 0;
+    device.calibration_progress = 0;
+    device.last_command_id = commandId;
+
+    gatewaySocket.write(`${JSON.stringify(payload)}\n`, (error) => {
+      if (error) {
+        calibrationCommands[commandId].error = error.message;
+      }
+    });
+
+    res.json({
+      accepted: true,
+      command_id: commandId,
+      command,
+      device_id: deviceId
+    });
+  });
+
+  expressApp.get('/api/calibration/:command_id', (req, res) => {
+    const command = calibrationCommands[req.params.command_id];
+    if (!command) {
+      return res.status(404).json({ error: 'Calibration command not found' });
+    }
+    res.json(command);
+  });
+
+  expressApp.patch('/api/devices/:device_id/name', (req, res) => {
+    const deviceId = normalizeDeviceKey(req.params.device_id);
+    const device = gpsData[deviceId];
+    const name = String((req.body && req.body.name) || '').trim();
+
+    if (!device) {
+      return res.status(404).json({ error: 'Device not found' });
+    }
+
+    if (!name || name.length > 40) {
+      return res.status(400).json({ error: 'Name must be 1-40 characters' });
+    }
+
+    deviceNames[deviceId] = name;
+    saveDeviceNames();
+    device.display_name = name;
+    res.json({ device_id: deviceId, display_name: name });
   });
 
   // Get statistics
@@ -334,7 +498,7 @@ function registerAPIRoutes(expressApp) {
 
   // Reset home point and max distance for a device
   expressApp.post('/api/reset/:device_id', (req, res) => {
-    const deviceId = req.params.device_id;
+    const deviceId = normalizeDeviceKey(req.params.device_id);
     const device = gpsData[deviceId];
     
     if (!device) {

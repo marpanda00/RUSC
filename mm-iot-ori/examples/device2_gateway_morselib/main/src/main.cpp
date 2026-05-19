@@ -14,6 +14,7 @@
 #include <math.h>
 #include <stdint.h>
 #include <arpa/inet.h>
+#include <fcntl.h>
 
 // ============ ESP-IDF Includes ============
 #include "esp_log.h"
@@ -97,8 +98,17 @@ extern "C" {
 #define STATIC_GATEWAY "192.168.1.1"
 
 #define RUSC_TELEMETRY_MAGIC 0x5254
-#define RUSC_TELEMETRY_VERSION 1
+#define RUSC_TELEMETRY_VERSION 4
 #define RUSC_DEVICE1_ID "device_1_collector"
+#define COMPASS_INVALID_CDEG UINT16_MAX
+#define RUSC_COMMAND_MAGIC 0x4343
+#define RUSC_COMMAND_VERSION 1
+
+enum RuscCalibrationCommand : uint8_t {
+    RUSC_CAL_CMD_NONE = 0,
+    RUSC_CAL_CMD_GYRO = 1,
+    RUSC_CAL_CMD_SET_LEVEL = 2,
+};
 
 #pragma pack(push, 1)
 typedef struct {
@@ -110,6 +120,14 @@ typedef struct {
     int32_t lon_e7;
     int32_t alt_cm;
     uint16_t speed_centi_knots;
+    uint16_t compass_cdeg;
+    int16_t roll_cdeg;
+    int16_t pitch_cdeg;
+    int16_t yaw_rate_cdeg_s;
+    uint8_t calibration_state;
+    uint8_t calibration_progress;
+    uint16_t last_command_id;
+    uint8_t device_mac[6];
     uint8_t sats;
     uint8_t quality;
     uint16_t battery_mv;
@@ -117,9 +135,20 @@ typedef struct {
     uint8_t halow_status;
     uint16_t crc16;
 } rusc_telemetry_packet_t;
+
+typedef struct {
+    uint16_t magic;
+    uint8_t version;
+    uint8_t device_index;
+    uint16_t command_id;
+    uint8_t command;
+    uint16_t duration_ms;
+    uint16_t crc16;
+} rusc_command_packet_t;
 #pragma pack(pop)
 
-static_assert(sizeof(rusc_telemetry_packet_t) == 28, "Unexpected telemetry packet size");
+static_assert(sizeof(rusc_telemetry_packet_t) == 46, "Unexpected telemetry packet size");
+static_assert(sizeof(rusc_command_packet_t) == 11, "Unexpected command packet size");
 // Task configuration
 #define IMPROV_BLE_APP_ID 0
 #define IMPROV_TASK_STACK_SIZE 4096
@@ -389,6 +418,10 @@ static uint32_t total_devices_connected = 0;
 static uint32_t last_halow_check_ms = 0;
 static uint32_t last_log_ms = 0;
 static uint32_t last_gateway_status_ms = 0;
+static struct sockaddr_in device1_addr = {};
+static bool device1_addr_valid = false;
+static char backend_rx_buffer[512];
+static size_t backend_rx_len = 0;
 
 // ============ NVS Credentials Management ============
 
@@ -452,6 +485,14 @@ typedef struct {
     double latitude;
     double longitude;
     double altitude;
+    uint16_t compass_cdeg;
+    int16_t roll_cdeg;
+    int16_t pitch_cdeg;
+    int16_t yaw_rate_cdeg_s;
+    uint8_t calibration_state;
+    uint8_t calibration_progress;
+    uint16_t last_command_id;
+    char device_mac[18];
     uint16_t battery_mv;
     uint8_t battery_pct;
     uint8_t halow_status;
@@ -475,6 +516,34 @@ static uint16_t crc16_ccitt(const uint8_t *data, size_t len) {
         }
     }
     return crc;
+}
+
+static bool send_device1_command(uint16_t command_id, uint8_t command, uint16_t duration_ms) {
+    if (!device1_addr_valid || udp_sock < 0) {
+        LOG_WARN("Cannot forward calibration command: device1 address is not known yet");
+        return false;
+    }
+
+    rusc_command_packet_t packet = {};
+    packet.magic = RUSC_COMMAND_MAGIC;
+    packet.version = RUSC_COMMAND_VERSION;
+    packet.device_index = 1;
+    packet.command_id = command_id;
+    packet.command = command;
+    packet.duration_ms = duration_ms;
+    packet.crc16 = 0;
+    packet.crc16 = crc16_ccitt((const uint8_t *)&packet, sizeof(packet));
+
+    int sent = sendto(udp_sock, &packet, sizeof(packet), 0,
+                      (struct sockaddr *)&device1_addr, sizeof(device1_addr));
+    if (sent == sizeof(packet)) {
+        LOG_INFO("Forwarded calibration command to device1: id=%u command=%u duration=%u",
+                 command_id, command, duration_ms);
+        return true;
+    }
+
+    LOG_WARN("Failed to forward calibration command to device1 (sent=%d errno=%d)", sent, errno);
+    return false;
 }
 
 static uint8_t battery_percent_from_mv(uint16_t mv) {
@@ -868,6 +937,8 @@ static esp_err_t connect_backend_server(void) {
     }
     
     freeaddrinfo(result);
+    int flags = fcntl(backend_sock, F_GETFL, 0);
+    fcntl(backend_sock, F_SETFL, flags | O_NONBLOCK);
     backend_connected = true;
     LOG_INFO("Connected to backend at %s:%d", BACKEND_IP, BACKEND_PORT);
     return ESP_OK;
@@ -891,6 +962,84 @@ static bool send_backend_line(const char *line) {
     backend_sock = -1;
     backend_connected = false;
     return false;
+}
+
+static void process_backend_command_line(const char *line) {
+    cJSON *doc = cJSON_Parse(line);
+    if (doc == NULL) {
+        LOG_WARN("Invalid backend command JSON: %.80s", line);
+        return;
+    }
+
+    cJSON *type = cJSON_GetObjectItem(doc, "type");
+    if (!cJSON_IsString(type) || strcmp(type->valuestring, "calibration_command") != 0) {
+        cJSON_Delete(doc);
+        return;
+    }
+
+    cJSON *target = cJSON_GetObjectItem(doc, "device_id");
+    if (!cJSON_IsString(target) || strcmp(target->valuestring, RUSC_DEVICE1_ID) != 0) {
+        LOG_WARN("Ignoring calibration command for unknown target");
+        cJSON_Delete(doc);
+        return;
+    }
+
+    cJSON *command_item = cJSON_GetObjectItem(doc, "command");
+    cJSON *command_id_item = cJSON_GetObjectItem(doc, "command_id");
+    cJSON *duration_item = cJSON_GetObjectItem(doc, "duration_ms");
+    uint8_t command_code = RUSC_CAL_CMD_NONE;
+    if (cJSON_IsString(command_item)) {
+        if (strcmp(command_item->valuestring, "calibrate_gyro") == 0) {
+            command_code = RUSC_CAL_CMD_GYRO;
+        } else if (strcmp(command_item->valuestring, "set_level") == 0) {
+            command_code = RUSC_CAL_CMD_SET_LEVEL;
+        }
+    }
+
+    if (command_code == RUSC_CAL_CMD_NONE || !cJSON_IsNumber(command_id_item)) {
+        LOG_WARN("Invalid calibration command payload");
+        cJSON_Delete(doc);
+        return;
+    }
+
+    uint16_t command_id = (uint16_t)command_id_item->valueint;
+    uint16_t duration_ms = cJSON_IsNumber(duration_item) ? (uint16_t)duration_item->valueint : 5000;
+    send_device1_command(command_id, command_code, duration_ms);
+    cJSON_Delete(doc);
+}
+
+static void poll_backend_commands(void) {
+    if (!backend_connected || backend_sock < 0) {
+        return;
+    }
+
+    char rx[128];
+    while (1) {
+        int received = recv(backend_sock, rx, sizeof(rx), MSG_DONTWAIT);
+        if (received > 0) {
+            for (int i = 0; i < received; i++) {
+                char ch = rx[i];
+                if (ch == '\n') {
+                    backend_rx_buffer[backend_rx_len] = '\0';
+                    if (backend_rx_len > 0) {
+                        process_backend_command_line(backend_rx_buffer);
+                    }
+                    backend_rx_len = 0;
+                } else if (ch != '\r' && backend_rx_len < sizeof(backend_rx_buffer) - 1) {
+                    backend_rx_buffer[backend_rx_len++] = ch;
+                }
+            }
+            continue;
+        }
+
+        if (received == 0) {
+            LOG_WARN("Backend closed TCP connection");
+            close(backend_sock);
+            backend_sock = -1;
+            backend_connected = false;
+        }
+        return;
+    }
 }
 
 static const char *device_id_from_index(uint8_t device_index) {
@@ -961,6 +1110,14 @@ static bool process_compact_telemetry(const uint8_t *data, int len, const char *
     double lon = packet.lon_e7 / 10000000.0;
     double alt = packet.alt_cm / 100.0;
     double speed = packet.speed_centi_knots / 100.0;
+    double heading = packet.compass_cdeg == COMPASS_INVALID_CDEG ? -1.0 : packet.compass_cdeg / 100.0;
+    double roll = packet.roll_cdeg / 100.0;
+    double pitch = packet.pitch_cdeg / 100.0;
+    double yaw_rate = packet.yaw_rate_cdeg_s / 100.0;
+    char mac_str[18];
+    snprintf(mac_str, sizeof(mac_str), "%02x:%02x:%02x:%02x:%02x:%02x",
+             packet.device_mac[0], packet.device_mac[1], packet.device_mac[2],
+             packet.device_mac[3], packet.device_mac[4], packet.device_mac[5]);
 
     device_info_t *device = upsert_device_info(device_id);
     if (device != NULL) {
@@ -971,6 +1128,14 @@ static bool process_compact_telemetry(const uint8_t *data, int len, const char *
         device->latitude = lat;
         device->longitude = lon;
         device->altitude = alt;
+        device->compass_cdeg = packet.compass_cdeg;
+        device->roll_cdeg = packet.roll_cdeg;
+        device->pitch_cdeg = packet.pitch_cdeg;
+        device->yaw_rate_cdeg_s = packet.yaw_rate_cdeg_s;
+        device->calibration_state = packet.calibration_state;
+        device->calibration_progress = packet.calibration_progress;
+        device->last_command_id = packet.last_command_id;
+        strncpy(device->device_mac, mac_str, sizeof(device->device_mac) - 1);
         device->battery_mv = packet.battery_mv;
         device->battery_pct = packet.battery_pct;
         device->halow_status = packet.halow_status;
@@ -978,16 +1143,26 @@ static bool process_compact_telemetry(const uint8_t *data, int len, const char *
 
     total_packets_received++;
 
-    char json_data[256];
+    char json_data[384];
     snprintf(json_data, sizeof(json_data),
-             "{\"device_id\":\"%s\",\"lat\":%.7f,\"lon\":%.7f,\"alt\":%.2f,\"speed\":%.2f,"
+             "{\"device_id\":\"%s\",\"mac\":\"%s\",\"lat\":%.7f,\"lon\":%.7f,\"alt\":%.2f,\"speed\":%.2f,"
+             "\"heading\":%.2f,\"roll\":%.2f,\"pitch\":%.2f,\"yaw_rate\":%.2f,"
+             "\"calibration_state\":%u,\"calibration_progress\":%u,\"last_command_id\":%u,"
              "\"sats\":%u,\"quality\":%u,\"packet\":%u,\"battery_mv\":%u,\"battery\":%u,"
              "\"halow_status\":%u}",
              device_id,
+             mac_str,
              lat,
              lon,
              alt,
              speed,
+             heading,
+             roll,
+             pitch,
+             yaw_rate,
+             packet.calibration_state,
+             packet.calibration_progress,
+             packet.last_command_id,
              packet.sats,
              packet.quality,
              packet.seq,
@@ -996,7 +1171,9 @@ static bool process_compact_telemetry(const uint8_t *data, int len, const char *
              packet.halow_status);
 
     send_backend_line(json_data);
-    LOG_DEBUG("Decoded compact telemetry: %s seq=%u", device_id, packet.seq);
+    LOG_INFO("Decoded compact telemetry: %s seq=%u heading=%.2f roll=%.2f pitch=%.2f yaw_rate=%.2f cal=%u/%u",
+             device_id, packet.seq, heading, roll, pitch, yaw_rate,
+             packet.calibration_state, packet.calibration_progress);
     return true;
 }
 
@@ -1114,6 +1291,7 @@ static void gateway_task(void *pvParameters) {
         // Log metrics periodically
         log_device_metrics();
         send_gateway_status_if_due(now_ms);
+        poll_backend_commands();
         
         // Monitor heap health - detect memory leaks early
         if (now_ms - last_heap_check >= 10000) {  // Check every 10 seconds
@@ -1147,6 +1325,8 @@ static void gateway_task(void *pvParameters) {
             inet_ntop(AF_INET, &remote_addr.sin_addr, sender_ip, sizeof(sender_ip));
 
             if (process_compact_telemetry((const uint8_t *)buffer, num_recv, sender_ip)) {
+                device1_addr = remote_addr;
+                device1_addr_valid = true;
                 vTaskDelay(pdMS_TO_TICKS(50));
                 continue;
             }
