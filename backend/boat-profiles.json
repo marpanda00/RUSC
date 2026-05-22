@@ -1,0 +1,20 @@
+{
+  "aa:bb:cc:dd:ee:0a": {
+    "displayName": "Boat ee:0a",
+    "boatType": "470",
+    "modelId": "470",
+    "color": "#FDCF30",
+    "hullType": "monohull",
+    "scale": 1,
+    "configured": true
+  },
+  "aa:bb:cc:dd:ee:0b": {
+    "displayName": "Boat ee:0b",
+    "boatType": "470",
+    "modelId": "470",
+    "color": "#FDCF30",
+    "hullType": "monohull",
+    "scale": 1,
+    "configured": true
+  }
+}

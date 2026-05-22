@@ -306,6 +306,7 @@
             margin-bottom: 10px;
         }
     </style>
+    <link rel="stylesheet" href="/css/rusc-device-ui.css">
 </head>
 <body>
     <button class="menu-toggle" onclick="toggleDrawer()" aria-label="Open device menu">☰</button>
@@ -314,6 +315,8 @@
         <p>Real-time GPS position tracking via HALow/WiFi gateway</p>
         <nav class="top-nav" aria-label="Main navigation">
             <a href="index.html">Live Tracking</a>
+            <a href="viewer/">3D Live</a>
+            <a href="regatta-viewer/">Recorded Replay</a>
             <a href="technical-solution.html">Technical Solution</a>
         </nav>
     </div>
@@ -338,6 +341,7 @@
     </div>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script src="/js/rusc-device-ui.js"></script>
     <script>
         // Configuration
         const API_HOST = window.location.hostname;
@@ -362,7 +366,6 @@
         let markers = {};
         let polylines = {};
         let homeMarkers = {};
-        let deviceNameEdits = {};
         
         function initMap() {
             map = L.map('map').setView([0, 0], 13);
@@ -388,19 +391,10 @@
             drawer.classList.toggle('open', typeof force === 'boolean' ? force : !drawer.classList.contains('open'));
         }
 
-        function hasActiveNameEdit() {
-            const activeElement = document.activeElement;
-            return (activeElement && activeElement.classList.contains('device-name-input')) ||
-                Object.keys(deviceNameEdits).length > 0;
-        }
-
-        function trackDeviceNameEdit(deviceId, value) {
-            deviceNameEdits[deviceId] = value;
-        }
-
-        function updateDeviceMarker(deviceId, position, speed, course, label) {
+        function updateDeviceMarker(deviceId, position, speed, course, label, hullColor) {
             const heading = Number.isFinite(course) ? course : 0;
             const safeLabel = escapeHtml(label || deviceId);
+            const fill = hullColor || '#667eea';
             const icon = L.divIcon({
                 html: `<div style="display:flex; flex-direction:column; align-items:center;">
                     <div style="
@@ -414,7 +408,7 @@
                     ">
                         <svg width="38" height="46" viewBox="0 0 38 46" aria-label="Boat heading ${heading.toFixed(1)} degrees">
                             <path d="M19 2 L32 40 L19 34 L6 40 Z"
-                                  fill="#667eea"
+                                  fill="${fill}"
                                   stroke="#ffffff"
                                   stroke-width="3"
                                   stroke-linejoin="round"
@@ -510,7 +504,7 @@
                 
                 for (const [deviceId, data] of Object.entries(positions)) {
                     if (data.position && data.position.latitude) {
-                        updateDeviceMarker(deviceId, data.position, data.speed_knots, data.course, data.display_name);
+                        updateDeviceMarker(deviceId, data.position, data.speed_knots, data.course, data.display_name, data.color);
                         updateHomeMarker(deviceId, data.home_point);
                         
                         // Fetch history for this device
@@ -524,8 +518,7 @@
                     }
                 }
                 
-                // Update sidebar
-                updateDevices(positions);
+                RuscDeviceUI.updateDevicesPanel(positions, 'devices', { showResetHome: true, showCalibration: true });
                 
                 // Center map on average position
                 if (count > 0) {
@@ -541,199 +534,6 @@
             }
         }
         
-        function updateDevices(positions) {
-            const devicesDiv = document.getElementById('devices');
-
-            if (devicesDiv.children.length > 0 && hasActiveNameEdit()) {
-                return;
-            }
-            
-            let html = '';
-            for (const [deviceId, data] of Object.entries(positions)) {
-                const statusClass = 'status-active';
-                const statusText = 'Communicating';
-                const displayName = data.display_name || data.source_device_id || deviceId;
-                const editedName = deviceNameEdits[deviceId] ?? displayName;
-                
-                let homeHtml = '';
-                if (data.home_point) {
-                    homeHtml = `
-                        <div class="info-row">
-                            <span class="info-label">Home:</span>
-                            <span class="info-value">${data.home_point.latitude.toFixed(4)}° ${data.home_point.longitude.toFixed(4)}°</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Distance:</span>
-                            <span class="info-value">${data.current_distance ? data.current_distance.toFixed(3) : '0.000'} km</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Max Distance:</span>
-                            <span class="info-value" style="color: #667eea; font-weight: bold;">${data.max_distance ? data.max_distance.toFixed(3) : '0.000'} km</span>
-                        </div>
-                        <button onclick="resetHomePoint('${deviceId}')" style="width: 100%; margin-top: 8px; background: #f44336; padding: 6px;">Reset Home</button>
-                    `;
-                } else if (data.current_distance !== undefined) {
-                    homeHtml = `
-                        <div class="info-row">
-                            <span class="info-label">Distance:</span>
-                            <span class="info-value">${data.current_distance.toFixed(3)} km</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Max Distance:</span>
-                            <span class="info-value" style="color: #667eea; font-weight: bold;">${data.max_distance.toFixed(3)} km</span>
-                        </div>
-                    `;
-                }
-                
-                // Signal strength indicator
-                let signalBars = 0;
-                let signalColor = '#f44336';
-                if (data.signal_strength >= -50) { signalBars = 5; signalColor = '#4CAF50'; }
-                else if (data.signal_strength >= -60) { signalBars = 4; signalColor = '#8BC34A'; }
-                else if (data.signal_strength >= -70) { signalBars = 3; signalColor = '#FFC107'; }
-                else if (data.signal_strength >= -80) { signalBars = 2; signalColor = '#FF9800'; }
-                else { signalBars = 1; signalColor = '#f44336'; }
-                
-                html += `
-                    <div class="device-item">
-                        <div class="device-id">${escapeHtml(displayName)}</div>
-                        <div class="device-identity">MAC/ID: ${escapeHtml(data.mac || deviceId)}</div>
-                        <div class="device-name-row">
-                            <input class="device-name-input" id="deviceName-${deviceId}" value="${escapeHtml(editedName)}" placeholder="Boat or athlete name" oninput="trackDeviceNameEdit('${deviceId}', this.value)">
-                            <button onclick="saveDeviceName('${deviceId}')">Save</button>
-                        </div>
-                        <div class="device-status">
-                            <span class="status-badge ${statusClass}"></span>${statusText}
-                        </div>
-                        ${homeHtml}
-                        <div class="info-row">
-                            <span class="info-label">Lat:</span>
-                            <span class="info-value">${data.position.latitude.toFixed(6)}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Lon:</span>
-                            <span class="info-value">${data.position.longitude.toFixed(6)}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Speed:</span>
-                            <span class="info-value">${data.speed_knots.toFixed(2)} kt</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Course:</span>
-                            <span class="info-value">${data.course.toFixed(1)}°</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Roll:</span>
-                            <span class="info-value">${(data.roll || 0).toFixed(1)}°</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Pitch:</span>
-                            <span class="info-value">${(data.pitch || 0).toFixed(1)}°</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Yaw rate:</span>
-                            <span class="info-value">${(data.yaw_rate || 0).toFixed(1)}°/s</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Signal:</span>
-                            <span class="info-value" style="color: ${signalColor};">
-                                ${'▂'.repeat(signalBars)}${'▂'.repeat(5-signalBars)} ${data.signal_strength} dBm
-                            </span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">Battery:</span>
-                            <span class="info-value">${data.battery !== undefined ? data.battery + '%' : '-'}</span>
-                        </div>
-                        <div class="info-row">
-                            <span class="info-label">HaLow:</span>
-                            <span class="info-value">0x${(data.halow_status || 0).toString(16).padStart(2, '0')}</span>
-                        </div>
-                        <div class="calibration-status" id="calibrationStatus-${deviceId}">
-                            <div class="info-row">
-                                <span class="info-label">IMU state:</span>
-                                <span class="info-value">${calibrationStateText(data.calibration_state || 0)}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Progress:</span>
-                                <span class="info-value">${data.calibration_progress || 0}%</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">Last command:</span>
-                                <span class="info-value">${data.last_command_id || '-'}</span>
-                            </div>
-                        </div>
-                        <div class="controls vertical">
-                            <button onclick="sendCalibrationCommand('${deviceId}', 'calibrate_gyro')">Calibrate Gyro</button>
-                            <button onclick="sendCalibrationCommand('${deviceId}', 'set_level')">Set Boat Level</button>
-                        </div>
-                    </div>
-                `;
-            }
-            devicesDiv.innerHTML = html;
-            if (!html) {
-                devicesDiv.innerHTML = '<div class="error">No communicating devices right now.</div>';
-            }
-        }
-
-        function calibrationStateText(state) {
-            switch (state) {
-                case 0: return 'Idle';
-                case 1: return 'Gyro calibration running';
-                case 2: return 'Gyro calibration complete';
-                case 3: return 'Boat level set';
-                case 255: return 'Calibration error';
-                default: return `Unknown (${state})`;
-            }
-        }
-
-        async function sendCalibrationCommand(deviceId, command) {
-            const duration = command === 'calibrate_gyro' ? 8000 : 1000;
-            const statusDiv = document.getElementById(`calibrationStatus-${deviceId}`);
-            if (statusDiv) {
-                statusDiv.innerHTML = `Command pending: ${command}. Progress: 0%`;
-            }
-
-            const response = await fetch(`${BACKEND_URL}/devices/${deviceId}/calibration`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ command, duration_ms: duration })
-            });
-
-            const result = await response.json();
-            if (!response.ok) {
-                alert(result.error || 'Calibration command failed');
-                return;
-            }
-
-            if (statusDiv) {
-                statusDiv.innerHTML = `Command ${result.command_id} sent: ${command}. Progress: 0%`;
-            }
-            fetchData();
-        }
-
-        async function saveDeviceName(deviceId) {
-            const input = document.getElementById(`deviceName-${deviceId}`);
-            const name = input ? input.value.trim() : '';
-            if (!name) {
-                alert('Please enter a name.');
-                return;
-            }
-
-            const response = await fetch(`${BACKEND_URL}/devices/${deviceId}/name`, {
-                method: 'PATCH',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name })
-            });
-
-            const result = await response.json();
-            if (!response.ok) {
-                alert(result.error || 'Failed to save device name');
-                return;
-            }
-            delete deviceNameEdits[deviceId];
-            fetchData();
-        }
-
         function updateGatewayBattery(status) {
             const batteryDiv = document.getElementById('gatewayBattery');
             const lastUpdate = status.last_update ? new Date(status.last_update) : null;
@@ -792,8 +592,9 @@
         }
         
         // Initialize
-        window.addEventListener('load', () => {
+        window.addEventListener('load', async () => {
             initMap();
+            await RuscDeviceUI.loadCatalog();
             fetchData();
             setInterval(fetchData, REFRESH_INTERVAL);
         });

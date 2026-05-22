@@ -8,12 +8,15 @@ const cors = require('cors');
 const net = require('net');
 const https = require('https');
 const fs = require('fs');
+const http = require('http');
+const { WebSocketServer } = require('ws');
 require('dotenv').config();
 
 const app = express();
 const API_PORT = process.env.API_PORT || 3000;
 const HTTPS_PORT = process.env.HTTPS_PORT || 8443;
 const TCP_PORT = process.env.TCP_PORT || 3001;
+const LIVE_WS_PORT = process.env.LIVE_WS_PORT || 3002;
 
 // Create separate app for HTTPS website
 const websiteApp = express();
@@ -41,29 +44,160 @@ let gatewayStatus = {
 const MAX_HISTORY = 100;
 const ACTIVE_DEVICE_MS = 30000;
 const DEVICE_NAMES_FILE = 'device-names.json';
+const BOAT_PROFILES_FILE = 'boat-profiles.json';
+const BOAT_MODELS_FILE = 'boat-models.json';
+const BOAT_TYPES_FILE = 'boat-types.json';
+const LIVE_CONFIG_FILE = 'live-config.json';
+
 let gatewaySocket = null;
 let nextCommandId = 1;
 let calibrationCommands = {};
 let deviceNames = {};
+let boatProfiles = {};
+let boatModels = {};
+let boatTypes = {};
+let liveConfig = { origin: { latitude: 41.125, longitude: 16.87 } };
+
+const wsClients = new Set();
+
+function loadJsonFile(path, fallback) {
+  try {
+    return JSON.parse(fs.readFileSync(path, 'utf8'));
+  } catch (error) {
+    return fallback;
+  }
+}
 
 function loadDeviceNames() {
-  try {
-    deviceNames = JSON.parse(fs.readFileSync(DEVICE_NAMES_FILE, 'utf8'));
-  } catch (error) {
-    deviceNames = {};
-  }
+  deviceNames = loadJsonFile(DEVICE_NAMES_FILE, {});
 }
 
 function saveDeviceNames() {
   fs.writeFileSync(DEVICE_NAMES_FILE, JSON.stringify(deviceNames, null, 2));
 }
 
+function loadBoatCatalog() {
+  boatProfiles = loadJsonFile(BOAT_PROFILES_FILE, {});
+  boatModels = loadJsonFile(BOAT_MODELS_FILE, {});
+  boatTypes = loadJsonFile(BOAT_TYPES_FILE, {});
+  liveConfig = loadJsonFile(LIVE_CONFIG_FILE, liveConfig);
+}
+
+function saveBoatProfiles() {
+  fs.writeFileSync(BOAT_PROFILES_FILE, JSON.stringify(boatProfiles, null, 2));
+}
+
 function normalizeDeviceKey(value) {
   return String(value || '').trim().toLowerCase();
 }
 
-function defaultDeviceName(deviceKey, fallbackId) {
+function macSuffix(mac) {
+  const parts = String(mac || '').split(':').filter(Boolean);
+  return parts.length >= 2 ? parts.slice(-2).join(':') : 'new';
+}
+
+function hullTypeForModel(modelId) {
+  const model = boatModels[modelId];
+  if (model && model.hullType) {
+    return model.hullType;
+  }
+  return modelId === 'catamaran' ? 'multihull' : 'monohull';
+}
+
+function defaultProfileForMac(mac) {
+  const type = boatTypes.default || { modelId: '470', color: '#2563eb' };
+  const modelId = type.modelId || '470';
+  return {
+    displayName: `Boat ${macSuffix(mac)}`,
+    boatType: 'default',
+    modelId,
+    color: type.color || '#2563eb',
+    hullType: type.hullType || hullTypeForModel(modelId),
+    scale: 1.0,
+    configured: false
+  };
+}
+
+function ensureBoatProfile(deviceKey) {
+  if (!deviceKey || boatProfiles[deviceKey]) {
+    return boatProfiles[deviceKey];
+  }
+  const legacyName = deviceNames[deviceKey];
+  boatProfiles[deviceKey] = {
+    ...defaultProfileForMac(deviceKey),
+    ...(legacyName ? { displayName: legacyName, configured: true } : {})
+  };
+  saveBoatProfiles();
+  return boatProfiles[deviceKey];
+}
+
+function getBoatProfile(deviceKey) {
+  return boatProfiles[deviceKey] || ensureBoatProfile(deviceKey);
+}
+
+function resolveDisplayName(deviceKey, fallbackId) {
+  const profile = boatProfiles[deviceKey];
+  if (profile && profile.displayName) {
+    return profile.displayName;
+  }
   return deviceNames[deviceKey] || fallbackId || deviceKey;
+}
+
+function deviceToApiPayload(device) {
+  const key = device.device_id;
+  const profile = getBoatProfile(key);
+  return {
+    device_id: device.device_id,
+    source_device_id: device.source_device_id,
+    mac: device.mac,
+    display_name: resolveDisplayName(key, device.source_device_id),
+    boatType: profile.boatType,
+    modelId: profile.modelId,
+    color: profile.color,
+    hullType: profile.hullType || hullTypeForModel(profile.modelId),
+    scale: profile.scale ?? 1,
+    configured: Boolean(profile.configured),
+    last_update: device.last_update,
+    position: device.position,
+    altitude_m: device.altitude_m ?? 0,
+    speed_knots: device.speed_knots,
+    course: device.course,
+    quality: device.quality,
+    signal_strength: device.signal_strength,
+    battery_mv: device.battery_mv,
+    battery: device.battery,
+    halow_status: device.halow_status,
+    roll: device.roll || 0,
+    pitch: device.pitch || 0,
+    yaw_rate: device.yaw_rate || 0,
+    calibration_state: device.calibration_state || 0,
+    calibration_progress: device.calibration_progress || 0,
+    last_command_id: device.last_command_id || 0,
+    home_point: device.home_point,
+    current_distance: device.current_distance,
+    max_distance: device.max_distance
+  };
+}
+
+function broadcastBoatUpdate(deviceKey) {
+  const device = gpsData[deviceKey];
+  if (!device || !isDeviceActive(device)) {
+    return;
+  }
+  const payload = deviceToApiPayload(device);
+  const message = JSON.stringify({
+    type: 'boat_update',
+    ...payload,
+    heading_deg: payload.course,
+    lat: payload.position.latitude,
+    lon: payload.position.longitude,
+    ts: device.last_update ? device.last_update.toISOString() : new Date().toISOString()
+  });
+  for (const ws of wsClients) {
+    if (ws.readyState === 1) {
+      ws.send(message);
+    }
+  }
 }
 
 function isDeviceActive(device) {
@@ -71,6 +205,7 @@ function isDeviceActive(device) {
 }
 
 loadDeviceNames();
+loadBoatCatalog();
 
 // ============ Haversine Distance Calculator ============
 
@@ -183,14 +318,17 @@ function processGPSData(data) {
   const sourceDeviceId = data.device_id;
   const deviceKey = normalizeDeviceKey(data.mac || sourceDeviceId);
   
+  ensureBoatProfile(deviceKey);
+
   if (!gpsData[deviceKey]) {
     gpsData[deviceKey] = {
       device_id: deviceKey,
       source_device_id: sourceDeviceId,
       mac: data.mac || null,
-      display_name: defaultDeviceName(deviceKey, sourceDeviceId),
+      display_name: resolveDisplayName(deviceKey, sourceDeviceId),
       last_update: null,
       position: { latitude: 0, longitude: 0 },
+      altitude_m: 0,
       speed_knots: 0,
       course: 0,
       quality: 0,
@@ -220,9 +358,10 @@ function processGPSData(data) {
   // Update current position
   gpsData[deviceKey].source_device_id = sourceDeviceId;
   gpsData[deviceKey].mac = data.mac || gpsData[deviceKey].mac || null;
-  gpsData[deviceKey].display_name = defaultDeviceName(deviceKey, sourceDeviceId);
+  gpsData[deviceKey].display_name = resolveDisplayName(deviceKey, sourceDeviceId);
   gpsData[deviceKey].last_update = new Date();
   gpsData[deviceKey].position = position;
+  gpsData[deviceKey].altitude_m = alt;
   gpsData[deviceKey].speed_knots = speed;
   gpsData[deviceKey].course = course;
   gpsData[deviceKey].quality = quality;
@@ -282,6 +421,8 @@ function processGPSData(data) {
   if (gpsData[deviceKey].history.length > MAX_HISTORY) {
     gpsData[deviceKey].history.shift();
   }
+
+  broadcastBoatUpdate(deviceKey);
   
   //console.log(`[${deviceId}] Lat: ${data.position.latitude.toFixed(6)}, ` +
    //           `Lon: ${data.position.longitude.toFixed(6)}, ` +
@@ -300,30 +441,7 @@ function registerAPIRoutes(expressApp) {
       if (!isDeviceActive(device)) {
         continue;
       }
-      response[key] = {
-        device_id: device.device_id,
-        source_device_id: device.source_device_id,
-        mac: device.mac,
-        display_name: device.display_name || device.device_id,
-        last_update: device.last_update,
-        position: device.position,
-        speed_knots: device.speed_knots,
-        course: device.course,
-        quality: device.quality,
-        signal_strength: device.signal_strength,
-        battery_mv: device.battery_mv,
-        battery: device.battery,
-        halow_status: device.halow_status,
-        roll: device.roll || 0,
-        pitch: device.pitch || 0,
-        yaw_rate: device.yaw_rate || 0,
-        calibration_state: device.calibration_state || 0,
-        calibration_progress: device.calibration_progress || 0,
-        last_command_id: device.last_command_id || 0,
-        home_point: device.home_point,
-        current_distance: device.current_distance,
-        max_distance: device.max_distance
-      };
+      response[key] = deviceToApiPayload(device);
     }
     res.json(response);
   });
@@ -337,30 +455,7 @@ function registerAPIRoutes(expressApp) {
       return res.status(404).json({ error: 'Device not found' });
     }
     
-    res.json({
-      device_id: device.device_id,
-      source_device_id: device.source_device_id,
-      mac: device.mac,
-      display_name: device.display_name || device.device_id,
-      last_update: device.last_update,
-      position: device.position,
-      speed_knots: device.speed_knots,
-      course: device.course,
-      quality: device.quality,
-      signal_strength: device.signal_strength,
-      battery_mv: device.battery_mv,
-      battery: device.battery,
-      halow_status: device.halow_status,
-      roll: device.roll || 0,
-      pitch: device.pitch || 0,
-      yaw_rate: device.yaw_rate || 0,
-      calibration_state: device.calibration_state || 0,
-      calibration_progress: device.calibration_progress || 0,
-      last_command_id: device.last_command_id || 0,
-      home_point: device.home_point,
-      current_distance: device.current_distance,
-      max_distance: device.max_distance
-    });
+    res.json(deviceToApiPayload(device));
   });
 
   // Get position history of device
@@ -478,8 +573,114 @@ function registerAPIRoutes(expressApp) {
 
     deviceNames[deviceId] = name;
     saveDeviceNames();
+    const profile = ensureBoatProfile(deviceId);
+    profile.displayName = name;
+    profile.configured = true;
+    saveBoatProfiles();
     device.display_name = name;
     res.json({ device_id: deviceId, display_name: name });
+  });
+
+  expressApp.get('/api/boat-models', (req, res) => {
+    res.json(boatModels);
+  });
+
+  expressApp.get('/api/boat-types', (req, res) => {
+    res.json(boatTypes);
+  });
+
+  expressApp.get('/api/boats', (req, res) => {
+    const boats = {};
+    for (const [key, device] of Object.entries(gpsData)) {
+      boats[key] = {
+        profile: getBoatProfile(key),
+        live: isDeviceActive(device) ? deviceToApiPayload(device) : null
+      };
+    }
+    for (const mac of Object.keys(boatProfiles)) {
+      if (!boats[mac]) {
+        boats[mac] = { profile: boatProfiles[mac], live: null };
+      }
+    }
+    res.json(boats);
+  });
+
+  expressApp.get('/api/boats/:mac', (req, res) => {
+    const deviceId = normalizeDeviceKey(req.params.mac);
+    const device = gpsData[deviceId];
+    res.json({
+      profile: getBoatProfile(deviceId),
+      live: device ? deviceToApiPayload(device) : null
+    });
+  });
+
+  expressApp.patch('/api/boats/:mac', (req, res) => {
+    const deviceId = normalizeDeviceKey(req.params.mac);
+    const body = req.body || {};
+    const profile = ensureBoatProfile(deviceId);
+
+    if (body.displayName !== undefined) {
+      const name = String(body.displayName).trim();
+      if (!name || name.length > 40) {
+        return res.status(400).json({ error: 'displayName must be 1-40 characters' });
+      }
+      profile.displayName = name;
+      deviceNames[deviceId] = name;
+      saveDeviceNames();
+      if (gpsData[deviceId]) {
+        gpsData[deviceId].display_name = name;
+      }
+    }
+    if (body.boatType !== undefined) {
+      profile.boatType = String(body.boatType);
+      const typePreset = boatTypes[profile.boatType];
+      if (typePreset && body.modelId === undefined) {
+        profile.modelId = typePreset.modelId;
+      }
+      if (typePreset && body.color === undefined) {
+        profile.color = typePreset.color;
+      }
+      if (typePreset && typePreset.hullType) {
+        profile.hullType = typePreset.hullType;
+      }
+    }
+    if (body.modelId !== undefined) {
+      if (!boatModels[body.modelId]) {
+        return res.status(400).json({ error: 'Unknown modelId' });
+      }
+      profile.modelId = body.modelId;
+      profile.hullType = hullTypeForModel(profile.modelId);
+    }
+    if (body.hullType !== undefined) {
+      const ht = String(body.hullType).toLowerCase();
+      if (ht === 'monohull' || ht === 'multihull') {
+        profile.hullType = ht;
+      }
+    }
+    if (body.color !== undefined) {
+      profile.color = String(body.color);
+    }
+    if (body.scale !== undefined) {
+      profile.scale = Number(body.scale) || 1;
+    }
+    profile.configured = true;
+    saveBoatProfiles();
+
+    if (gpsData[deviceId]) {
+      broadcastBoatUpdate(deviceId);
+    }
+
+    res.json({ device_id: deviceId, profile });
+  });
+
+  expressApp.get('/api/live/config', (req, res) => {
+    res.json({
+      viewerVersion: '1.0.0-baseline',
+      origin: liveConfig.origin,
+      boatModels,
+      boatTypes,
+      profiles: boatProfiles
+    });
   });
 
   // Get statistics
@@ -534,23 +735,50 @@ function registerAPIRoutes(expressApp) {
 // Register API routes on HTTP server
 registerAPIRoutes(app);
 
-app.listen(API_PORT, '0.0.0.0', () => {
+const httpServer = http.createServer(app);
+httpServer.listen(API_PORT, '0.0.0.0', () => {
   console.log(`HTTP API server listening on port ${API_PORT}`);
 });
 
+// ============ Live WebSocket (port 3002) ============
+
+const wss = new WebSocketServer({ port: LIVE_WS_PORT });
+wss.on('connection', (ws) => {
+  wsClients.add(ws);
+  for (const [key, device] of Object.entries(gpsData)) {
+    if (isDeviceActive(device)) {
+      const payload = deviceToApiPayload(device);
+      ws.send(JSON.stringify({
+        type: 'boat_update',
+        ...payload,
+        heading_deg: payload.course,
+        lat: payload.position.latitude,
+        lon: payload.position.longitude,
+        ts: device.last_update.toISOString()
+      }));
+    }
+  }
+  ws.on('close', () => wsClients.delete(ws));
+  ws.on('error', () => wsClients.delete(ws));
+});
+
+console.log(`Live WebSocket listening on port ${LIVE_WS_PORT}`);
+
 // ============ Start HTTPS Website + API Server (port 8443) ============
 
-// Register API routes on HTTPS server (for secure frontend access)
 registerAPIRoutes(websiteApp);
 
-const options = {
-  key: fs.readFileSync('private.key'),
-  cert: fs.readFileSync('certificate.crt')
-};
-
-https.createServer(options, websiteApp).listen(HTTPS_PORT, '0.0.0.0', () => {
-  console.log(`HTTPS website + API server listening on port ${HTTPS_PORT}`);
-});
+try {
+  const options = {
+    key: fs.readFileSync('private.key'),
+    cert: fs.readFileSync('certificate.crt')
+  };
+  https.createServer(options, websiteApp).listen(HTTPS_PORT, '0.0.0.0', () => {
+    console.log(`HTTPS website + API server listening on port ${HTTPS_PORT}`);
+  });
+} catch (error) {
+  console.warn(`HTTPS not started (${error.message}). HTTP and WS still available.`);
+}
 
 // ============ Graceful Shutdown ============
 
@@ -564,8 +792,12 @@ console.log('RUSC GPS Backend Server started');
 console.log(`HTTP API: http://0.0.0.0:${API_PORT}`);
 console.log(`HTTPS Website: https://0.0.0.0:${HTTPS_PORT}`);
 console.log(`TCP Data: 0.0.0.0:${TCP_PORT}`);
+console.log(`Live WS: ws://0.0.0.0:${LIVE_WS_PORT}`);
 console.log('\nAvailable Endpoints:');
 console.log(`  GET  /api/positions - All devices with home point & distances`);
 console.log(`  GET  /api/positions/:device_id - Specific device`);
+console.log(`  GET  /api/boats /api/boats/:mac - Boat profiles + live data`);
+console.log(`  PATCH /api/boats/:mac - Associate device (name, type, model, color)`);
+console.log(`  GET  /api/boat-models /api/boat-types /api/live/config`);
 console.log(`  GET  /api/history/:device_id - Position history with distances`);
 console.log(`  POST /api/reset/:device_id - Reset home point and max distance`);

@@ -1,0 +1,4 @@
+{
+  "origin": { "latitude": 41.125, "longitude": 16.87 },
+  "comment": "Map center for 3D viewer (meters offset from here). Simulator orbits this point. Set latitude/longitude to your sailing area."
+}

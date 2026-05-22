@@ -1,0 +1,32 @@
+{
+  "default": {
+    "label": "Default",
+    "modelId": "470",
+    "color": "#2563eb",
+    "hullType": "monohull"
+  },
+  "dinghy": {
+    "label": "Dinghy",
+    "modelId": "dinghy",
+    "color": "#dc2626",
+    "hullType": "monohull"
+  },
+  "keelboat": {
+    "label": "Keelboat",
+    "modelId": "470",
+    "color": "#1d4ed8",
+    "hullType": "monohull"
+  },
+  "470": {
+    "label": "470",
+    "modelId": "470",
+    "color": "#FDCF30",
+    "hullType": "monohull"
+  },
+  "catamaran": {
+    "label": "Catamaran",
+    "modelId": "catamaran",
+    "color": "#16a34a",
+    "hullType": "multihull"
+  }
+}

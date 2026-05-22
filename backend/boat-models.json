@@ -1,0 +1,83 @@
+{
+  "470": {
+    "label": "470 dinghy",
+    "glb": "/models/470.glb",
+    "scale": 1.0,
+    "defaultColor": "#FDCF30",
+    "hullType": "monohull",
+    "leftfoil": "",
+    "rightfoil": ""
+  },
+  "ac75-etnz": {
+    "label": "AC75 — ETNZ",
+    "gltf": "/models/ETNZ/AC75_2020_TNZ.gltf",
+    "scale": 0.04,
+    "defaultColor": "#DD2631",
+    "hullType": "multihull",
+    "leftfoil": "",
+    "rightfoil": ""
+  },
+  "ac75-ineos": {
+    "label": "AC75 — INEOS",
+    "gltf": "/models/Ineos_Team_UK/AC75_INEOS.gltf",
+    "scale": 0.04,
+    "defaultColor": "#FB7722",
+    "hullType": "multihull",
+    "leftfoil": "",
+    "rightfoil": ""
+  },
+  "ac75-lr": {
+    "label": "AC75 — Luna Rossa",
+    "gltf": "/models/Luna_Rossa/AC75_LR.gltf",
+    "scale": 0.04,
+    "defaultColor": "#FDCF30",
+    "hullType": "multihull",
+    "leftfoil": "",
+    "rightfoil": ""
+  },
+  "ac75-am": {
+    "label": "AC75 — American Magic",
+    "gltf": "/models/American_Magic/AC75_AM.gltf",
+    "scale": 0.04,
+    "defaultColor": "#006FFB",
+    "hullType": "multihull",
+    "leftfoil": "",
+    "rightfoil": ""
+  },
+  "ac75-gen": {
+    "label": "AC75 — generic",
+    "gltf": "/models/AC75_gen.gltf",
+    "scale": 0.04,
+    "defaultColor": "#64748b",
+    "hullType": "multihull",
+    "leftfoil": "",
+    "rightfoil": ""
+  },
+  "sailboat-generic": {
+    "label": "Generic sailboat (procedural)",
+    "procedural": true,
+    "scale": 1.0,
+    "defaultColor": "#2563eb",
+    "hullType": "monohull",
+    "leftfoil": "",
+    "rightfoil": ""
+  },
+  "dinghy": {
+    "label": "Dinghy (procedural)",
+    "procedural": true,
+    "scale": 0.85,
+    "defaultColor": "#dc2626",
+    "hullType": "monohull",
+    "leftfoil": "",
+    "rightfoil": ""
+  },
+  "catamaran": {
+    "label": "Catamaran (procedural)",
+    "procedural": true,
+    "scale": 1.1,
+    "defaultColor": "#16a34a",
+    "hullType": "multihull",
+    "leftfoil": "",
+    "rightfoil": ""
+  }
+}
