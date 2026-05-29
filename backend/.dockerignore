@@ -1,0 +1,11 @@
+node_modules
+npm-debug.log
+.env
+.env.*
+!.env.example
+private.key
+certificate.crt
+*.pem
+.git
+deploy.tar.gz
+**/.DS_Store

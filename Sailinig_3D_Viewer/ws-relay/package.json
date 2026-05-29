@@ -1,0 +1,14 @@
+{
+  "name": "sailboat-ws-relay",
+  "version": "1.0.0",
+  "description": "WebSocket relay: converts device JSON telemetry to Virtual Eye binary packets",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "simulate": "node ../scripts/simulate-live-telemetry.js"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}

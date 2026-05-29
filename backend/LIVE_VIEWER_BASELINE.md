@@ -7,6 +7,8 @@ Frozen reference build for **`http://localhost:3000/viewer/`** (Babylon.js + bac
 | Feature | Status |
 |---------|--------|
 | Sea + grid + sky (`clearColor`, no skybox flash) | OK |
+| OpenStreetMap static ground patch (`osmGround` in live-config) | OK |
+| Animated procedural water (`water` in live-config) | OK |
 | GPS → local ENU from `live-config.json` origin | OK (`latitude`/`longitude` normalized) |
 | Procedural boats + optional GLB/GLTF (`470`, AC75 teams) | OK |
 | Wake strips (monohull / multihull) | OK |
@@ -43,7 +45,7 @@ npm run verify-viewer
 
 | File | Purpose |
 |------|---------|
-| `live-config.json` | `origin.latitude` / `origin.longitude` — scene **(0,0)** on the water |
+| `live-config.json` | `origin`, `osmGround`, `water`, `coastalBackdrop`, `boatFloatLiftM`, `seaExtentM` |
 | `boat-models.json` | Model paths, hull type, scale |
 | `boat-types.json` | Presets for device association |
 | `boat-profiles.json` | Per-MAC saved names/colors/models |
@@ -62,11 +64,13 @@ npm run sync-live-models
 |------|------|
 | `public/viewer/index.html` | Live 3D page |
 | `public/js/rusc-scene.js` | Babylon scene, boats, camera |
+| `public/js/rusc-osm-ground.js` | OSM tile stitch + ground mesh |
+| `public/js/rusc-water.js` | Procedural wave water shader |
 | `public/js/rusc-device-ui.js` | Drawer UI |
 | `public/js/rusc-wakes.js` | Wake meshes |
 | `public/js/rusc-viewer-manifest.js` | Version + cache-bust query strings |
 | `scripts/simulate-gps.js` | TCP :3001 test feed |
-| `server.js` | HTTP :3000, WS :3002, `/api/live/config` |
+| `server.js` | HTTP :3000, WS :3002, `/api/live/config`, `/api/map/tiles/...` |
 
 Recorded AC replay is **`/regatta-viewer/`** (different protocol, port 8080 binary WS).
 
@@ -75,10 +79,11 @@ Recorded AC replay is **`/regatta-viewer/`** (different protocol, port 8080 bina
 After load you should see:
 
 ```text
-[RUSC 3D] scene ready — 2 meshes, … origin 41.12500°N 16.87000°E (baseline 1.0.0-baseline)
+[RUSC 3D] scene ready — 2 meshes, … origin 41.28228°N 13.21224°E (baseline 1.0.0-baseline)
+[RUSC 3D] OSM ground: N tiles, z=…, 1000×1000 m, …×… px
 ```
 
-`2 meshes` = water + grid (boats add more when telemetry arrives).
+`2 meshes` at first paint = water + grid; OSM ground adds a third mesh when tiles load.
 
 ## Cutting the next baseline
 

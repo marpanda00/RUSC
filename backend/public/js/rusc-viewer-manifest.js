@@ -6,9 +6,11 @@
   global.RuscViewer = {
     version: '1.0.0-baseline',
     assets: {
-      wakes: 5,
-      deviceUi: 7,
-      scene: 8
+      wakes: 9,
+      deviceUi: 8,
+      osmGround: 2,
+      water: 6,
+      scene: 28
     }
   };
 })(window);

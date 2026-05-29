@@ -20,6 +20,8 @@
 #include "nvs_flash.h"
 #include "lwip/sockets.h"
 #include "lwip/netdb.h"
+#include "rusc_halow_config.h"
+#include "rusc_halow_regulatory.h"
 
 // MorseMicro HALow Stack (wrapped in extern "C" for C++ compatibility)
 extern "C" {
@@ -28,6 +30,7 @@ extern "C" {
     #include "mmutils.h"
     #include "mmipal.h"
     #include "mmregdb.h"
+    #include "mmwlan.h"
 }
 
 static const char *TAG = "Device1_GPS";
@@ -63,28 +66,16 @@ static const char *TAG = "Device1_GPS";
 #define AK8963_MODE_CONTINUOUS_100HZ_16BIT 0x16
 #define COMPASS_INVALID_CDEG UINT16_MAX
 
-// HALow WiFi Configuration
-//#define HALOW_SSID "RUSC_HaLow_AP"
-#define HALOW_SSID "MorseMicro"
-//#define HALOW_PASSWORD "rusc2024"
-#define HALOW_PASSWORD "12345678"
-
-#define GATEWAY_IP "192.168.1.1"
-#define GATEWAY_PORT 5001
 #define DEVICE_ID "device_1_collector"
 #define SEND_INTERVAL_MS 1000
-#define DEVICE_STATIC_IP "192.168.1.2"
+#define HALOW_CONNECT_TIMEOUT_MS RUSC_HALOW_CONNECT_TIMEOUT_MS
+#define HALOW_RECONNECT_INTERVAL_MS RUSC_HALOW_RECONNECT_INTERVAL_MS
 
 // HT-HC33 battery sense: VBAT -> 100K -> ADC_IN/GPIO1 -> 100K -> GND.
 #define BATTERY_ADC_CHANNEL ADC_CHANNEL_0
 #define BATTERY_ADC_ATTEN ADC_ATTEN_DB_12
 #define BATTERY_EMPTY_MV 3000
 #define BATTERY_FULL_MV 4200
-
-// HALow Channel Configuration (must match Device2 AP settings)
-#define COUNTRY_CODE "US"           // Regulatory domain: US (Op Class 68)
-#define TARGET_OP_CLASS 1           // US 915MHz band (Op Class 1) - MUST match gateway
-#define TARGET_S1G_CHANNEL 3        // Channel 3 = 915.000 MHz (matches ap_mode example)
 
 #define RUSC_TELEMETRY_MAGIC 0x5254  // "TR" little-endian on the wire
 #define RUSC_TELEMETRY_VERSION 4
@@ -576,6 +567,246 @@ static uint8_t build_halow_status(void) {
     return status;
 }
 
+static void sta_status_callback(mmwlan_sta_state state);
+
+typedef struct {
+    SemaphoreHandle_t done;
+    bool found_target;
+    uint8_t target_bssid[MMWLAN_MAC_ADDR_LEN];
+    uint32_t target_freq_hz;
+    int16_t target_rssi;
+    int ap_count;
+} halow_scan_ctx_t;
+
+static halow_scan_ctx_t g_scan_ctx = {};
+
+static void halow_log_bcf_metadata(void) {
+    struct mmwlan_bcf_metadata metadata = {};
+    if (mmwlan_get_bcf_metadata(&metadata) == MMWLAN_SUCCESS) {
+        ESP_LOGI(TAG, "BCF: %s build=%s", metadata.board_desc, metadata.build_version);
+    }
+}
+
+static void halow_apply_scan_config(void) {
+    struct mmwlan_scan_config scan_config = MMWLAN_SCAN_CONFIG_INIT;
+    scan_config.dwell_time_ms = RUSC_HALOW_SCAN_DWELL_MS;
+    scan_config.home_channel_dwell_time_ms = RUSC_HALOW_SCAN_DWELL_MS;
+    enum mmwlan_status status = mmwlan_set_scan_config(&scan_config);
+    if (status != MMWLAN_SUCCESS) {
+        ESP_LOGW(TAG, "mmwlan_set_scan_config returned %d", status);
+    }
+}
+
+static void halow_scan_rx_cb(const struct mmwlan_scan_result *result, void *arg) {
+    (void)arg;
+    if (result == NULL || result->ssid_len == 0) {
+        return;
+    }
+
+    char ssid[MMWLAN_SSID_MAXLEN + 1] = {0};
+    size_t ssid_copy = result->ssid_len;
+    if (ssid_copy > MMWLAN_SSID_MAXLEN) {
+        ssid_copy = MMWLAN_SSID_MAXLEN;
+    }
+    memcpy(ssid, result->ssid, ssid_copy);
+    g_scan_ctx.ap_count++;
+
+    ESP_LOGI(TAG, "Scan: SSID=%s RSSI=%d freq=%lu Hz bw=%u MHz",
+             ssid, result->rssi,
+             (unsigned long)result->channel_freq_hz, result->bw_mhz);
+
+    if (result->ssid_len == strlen(HALOW_SSID) &&
+        memcmp(result->ssid, HALOW_SSID, result->ssid_len) == 0) {
+        g_scan_ctx.found_target = true;
+        g_scan_ctx.target_freq_hz = result->channel_freq_hz;
+        g_scan_ctx.target_rssi = result->rssi;
+        if (result->bssid != NULL) {
+            memcpy(g_scan_ctx.target_bssid, result->bssid, MMWLAN_MAC_ADDR_LEN);
+        }
+        ESP_LOGI(TAG, "Target AP %s found at %lu Hz RSSI=%d",
+                 HALOW_SSID, (unsigned long)result->channel_freq_hz, result->rssi);
+    }
+}
+
+static void halow_scan_complete_cb(enum mmwlan_scan_state state, void *arg) {
+    (void)arg;
+    ESP_LOGI(TAG, "Scan finished state=%d APs=%d target_found=%d",
+             state, g_scan_ctx.ap_count, g_scan_ctx.found_target);
+    if (g_scan_ctx.done != NULL) {
+        xSemaphoreGive(g_scan_ctx.done);
+    }
+}
+
+static bool halow_run_scan_pass(bool directed) {
+    g_scan_ctx.ap_count = 0;
+    g_scan_ctx.done = xSemaphoreCreateBinary();
+    if (g_scan_ctx.done == NULL) {
+        ESP_LOGE(TAG, "Failed to allocate scan semaphore");
+        return false;
+    }
+
+    mmwlan_sta_disable();
+    vTaskDelay(pdMS_TO_TICKS(200));
+
+    struct mmwlan_scan_req scan_req = MMWLAN_SCAN_REQ_INIT;
+    scan_req.scan_rx_cb = halow_scan_rx_cb;
+    scan_req.scan_complete_cb = halow_scan_complete_cb;
+    scan_req.args.dwell_time_ms = RUSC_HALOW_SCAN_DWELL_MS;
+    if (directed) {
+        scan_req.args.ssid_len = strlen(HALOW_SSID);
+        memcpy(scan_req.args.ssid, HALOW_SSID, scan_req.args.ssid_len);
+    }
+
+    ESP_LOGI(TAG, "Scan pass (%s, dwell=%d ms)...",
+             directed ? HALOW_SSID : "all SSIDs", RUSC_HALOW_SCAN_DWELL_MS);
+    enum mmwlan_status status = mmwlan_scan_request(&scan_req);
+    if (status != MMWLAN_SUCCESS) {
+        ESP_LOGW(TAG, "mmwlan_scan_request returned %d", status);
+        vSemaphoreDelete(g_scan_ctx.done);
+        g_scan_ctx.done = NULL;
+        return false;
+    }
+
+    xSemaphoreTake(g_scan_ctx.done, pdMS_TO_TICKS(120000));
+    vSemaphoreDelete(g_scan_ctx.done);
+    g_scan_ctx.done = NULL;
+    return true;
+}
+
+static bool halow_scan_for_gateway(void) {
+    memset(&g_scan_ctx, 0, sizeof(g_scan_ctx));
+
+    for (int pass = 1; pass <= RUSC_HALOW_SCAN_PASSES; pass++) {
+        bool directed = (pass % 3) != 0;
+        if (!halow_run_scan_pass(directed)) {
+            return false;
+        }
+        ESP_LOGI(TAG, "Scan pass %d/%d: APs=%d target_found=%d",
+                 pass, RUSC_HALOW_SCAN_PASSES, g_scan_ctx.ap_count, g_scan_ctx.found_target);
+        if (g_scan_ctx.found_target) {
+            return true;
+        }
+        if (pass < RUSC_HALOW_SCAN_PASSES) {
+            vTaskDelay(pdMS_TO_TICKS(RUSC_HALOW_SCAN_PASS_INTERVAL_MS));
+        }
+    }
+
+    ESP_LOGW(TAG, "AP %s not heard after %d passes (other APs seen: %d)",
+             HALOW_SSID, RUSC_HALOW_SCAN_PASSES, g_scan_ctx.ap_count);
+    return false;
+}
+
+static void halow_drain_connection_signals(void) {
+    while (xSemaphoreTake(g_wifi_connected, 0) == pdTRUE) {
+    }
+    while (xSemaphoreTake(g_link_up, 0) == pdTRUE) {
+    }
+}
+
+static void halow_fill_sta_args(struct mmwlan_sta_args *sta_args) {
+    memset(sta_args, 0, sizeof(*sta_args));
+    strncpy((char *)sta_args->ssid, HALOW_SSID, sizeof(sta_args->ssid) - 1);
+    sta_args->ssid_len = strlen(HALOW_SSID);
+    strncpy(sta_args->passphrase, HALOW_PASSWORD, sizeof(sta_args->passphrase) - 1);
+    sta_args->passphrase_len = strlen(HALOW_PASSWORD);
+    sta_args->security_type = MMWLAN_SAE;
+    sta_args->pmf_mode = MMWLAN_PMF_REQUIRED;
+}
+
+static bool halow_wait_connected(uint32_t timeout_ms) {
+    ESP_LOGI(TAG, "Waiting for HaLow link (timeout %lu ms)...", timeout_ms);
+    TickType_t start = xTaskGetTickCount();
+    const TickType_t timeout_ticks = pdMS_TO_TICKS(timeout_ms);
+    enum mmwlan_sta_state last_logged = MMWLAN_STA_DISABLED;
+
+    while ((xTaskGetTickCount() - start) < timeout_ticks) {
+        enum mmwlan_sta_state sta_state = mmwlan_get_sta_state();
+
+        if (g_halow_link_ready) {
+            g_halow_sta_connected = true;
+            ESP_LOGI(TAG, "HaLow link ready (mmipal UP)");
+            return true;
+        }
+
+        if (sta_state != last_logged) {
+            ESP_LOGI(TAG, "STA state: %d", sta_state);
+            last_logged = sta_state;
+        }
+
+        if (sta_state == MMWLAN_STA_CONNECTED) {
+            g_halow_sta_connected = true;
+        }
+
+        if (xSemaphoreTake(g_link_up, pdMS_TO_TICKS(1000)) == pdTRUE && g_halow_link_ready) {
+            g_halow_sta_connected = true;
+            ESP_LOGI(TAG, "HaLow link ready (mmipal UP)");
+            return true;
+        }
+
+        if (xSemaphoreTake(g_wifi_connected, 0) == pdTRUE) {
+            g_halow_sta_connected = true;
+        }
+    }
+
+    ESP_LOGW(TAG, "HaLow connect timeout (sta=%d link_ready=%d sta_connected=%d)",
+             mmwlan_get_sta_state(), g_halow_link_ready, g_halow_sta_connected);
+    return false;
+}
+
+static bool halow_attempt_connect(void) {
+    struct mmwlan_sta_args sta_args;
+
+    g_halow_sta_connected = false;
+    g_halow_link_ready = false;
+    g_last_send_ok = false;
+    halow_drain_connection_signals();
+
+    halow_scan_for_gateway();
+
+    halow_fill_sta_args(&sta_args);
+    if (g_scan_ctx.found_target) {
+        memcpy(sta_args.bssid, g_scan_ctx.target_bssid, MMWLAN_MAC_ADDR_LEN);
+        ESP_LOGI(TAG, "Using BSSID from scan for %s", HALOW_SSID);
+    }
+    ESP_LOGI(TAG, "Connecting HaLow STA to %s...", HALOW_SSID);
+    enum mmwlan_status sta_status = mmwlan_sta_enable(&sta_args, sta_status_callback);
+    if (sta_status != MMWLAN_SUCCESS) {
+        ESP_LOGW(TAG, "mmwlan_sta_enable returned %d", sta_status);
+    }
+
+    return halow_wait_connected(HALOW_CONNECT_TIMEOUT_MS);
+}
+
+static bool halow_reconnect(void) {
+    ESP_LOGW(TAG, "HaLow reconnect: resetting STA...");
+    mmwlan_sta_disable();
+    vTaskDelay(pdMS_TO_TICKS(500));
+    return halow_attempt_connect();
+}
+
+static bool halow_link_usable(void) {
+    return g_halow_sta_connected && g_halow_link_ready;
+}
+
+static bool halow_connect_with_retry(void) {
+    while (!halow_attempt_connect()) {
+        mmwlan_sta_disable();
+        ESP_LOGW(TAG, "HaLow connect failed, retrying in %d ms...", HALOW_RECONNECT_INTERVAL_MS);
+        vTaskDelay(pdMS_TO_TICKS(HALOW_RECONNECT_INTERVAL_MS));
+    }
+    return true;
+}
+
+static void halow_wait_until_connected(void) {
+    while (!halow_link_usable()) {
+        if (halow_reconnect()) {
+            return;
+        }
+        ESP_LOGW(TAG, "HaLow reconnect failed, retrying in %d ms...", HALOW_RECONNECT_INTERVAL_MS);
+        vTaskDelay(pdMS_TO_TICKS(HALOW_RECONNECT_INTERVAL_MS));
+    }
+}
+
 // ==================== GPS PARSING ====================
 
 bool parse_gprmc(const char *sentence, gps_data_t *data) {
@@ -880,6 +1111,7 @@ static void mmwlan_link_state_callback(enum mmwlan_link_state link_state, void *
         ESP_LOGW(TAG, "Link went DOWN (state=%d)", link_state);
         g_halow_sta_connected = false;
         g_halow_link_ready = false;
+        g_last_send_ok = false;
     }
 }
 
@@ -911,6 +1143,7 @@ static void mmipal_link_status_callback(const struct mmipal_link_status *link_st
     } else {
         ESP_LOGI(TAG, "LWIP Link went DOWN");
         g_halow_link_ready = false;
+        g_last_send_ok = false;
     }
 }
 
@@ -958,12 +1191,20 @@ extern "C" void app_main(void) {
     
     // 3. Set regulatory domain BEFORE boot
     ESP_LOGI(TAG, "Setting regulatory domain to %s...", COUNTRY_CODE);
-    const struct mmwlan_s1g_channel_list *channel_list = 
-        mmwlan_lookup_regulatory_domain(get_regulatory_db(), COUNTRY_CODE);
+    const struct mmwlan_s1g_channel_list *channel_list = rusc_halow_get_channel_list();
     if (channel_list != NULL) {
         mmwlan_set_channel_list(channel_list);
-        ESP_LOGI(TAG, "Regulatory domain set to %s (Op Class %d, Channel %d)",
+        halow_apply_scan_config();
+#if RUSC_HALOW_USE_EU && RUSC_HALOW_EU_LOCK_SINGLE_CHANNEL
+        ESP_LOGI(TAG, "Regulatory domain EU: op class %d, ch %d @ 863.5 MHz, %d MHz BW, %d dBm EIRP",
+                 TARGET_OP_CLASS, TARGET_S1G_CHANNEL, RUSC_HALOW_BW_MHZ, RUSC_HALOW_MAX_TX_EIRP_DBM);
+#elif !RUSC_HALOW_USE_EU && RUSC_HALOW_US_LOCK_915MHZ
+        ESP_LOGI(TAG, "Regulatory domain %s: op class %d, ch %d (915.5 MHz only)",
                  COUNTRY_CODE, TARGET_OP_CLASS, TARGET_S1G_CHANNEL);
+#else
+        ESP_LOGI(TAG, "Regulatory domain %s: op class %d, ch %d",
+                 COUNTRY_CODE, TARGET_OP_CLASS, TARGET_S1G_CHANNEL);
+#endif
     } else {
         ESP_LOGW(TAG, "Could not find regulatory domain for %s", COUNTRY_CODE);
     }
@@ -982,6 +1223,7 @@ extern "C" void app_main(void) {
     }
     
     ESP_LOGI(TAG, "Radio boot successful!");
+    halow_log_bcf_metadata();
     
     // 5. Initialize network interface with static IP
     struct mmipal_init_args mmipal_init_args = MMIPAL_INIT_ARGS_DEFAULT;
@@ -1003,59 +1245,12 @@ extern "C" void app_main(void) {
     
     // Configure HaLow STA connection using MorseMicro API
     ESP_LOGI(TAG, "Configuring HaLow STA connection for AP: %s", HALOW_SSID);
-    
-    // Prepare STA connection arguments - use memset to ensure ALL fields initialized
-    struct mmwlan_sta_args sta_args;
-    memset(&sta_args, 0, sizeof(sta_args));
-    
-    strncpy((char *)sta_args.ssid, HALOW_SSID, sizeof(sta_args.ssid) - 1);
-    sta_args.ssid_len = strlen(HALOW_SSID);
-    strncpy(sta_args.passphrase, HALOW_PASSWORD, sizeof(sta_args.passphrase) - 1);
-    sta_args.passphrase_len = strlen(HALOW_PASSWORD);
-    sta_args.security_type = MMWLAN_SAE;
-    sta_args.pmf_mode = MMWLAN_PMF_REQUIRED;
-    
-    // Enable STA mode
-    ESP_LOGI(TAG, "Attempting MorseMicro STA mode to connect to %s...", HALOW_SSID);
-    ESP_LOGI(TAG, "[DEBUG] STA connection parameters:");
-    ESP_LOGI(TAG, "  SSID: %s (len=%d)", sta_args.ssid, sta_args.ssid_len);
-    ESP_LOGI(TAG, "  Security: %d (MMWLAN_SAE=%d)", sta_args.security_type, MMWLAN_SAE);
-    ESP_LOGI(TAG, "  PMF: %d (REQUIRED=%d)", sta_args.pmf_mode, MMWLAN_PMF_REQUIRED);
-    
-    enum mmwlan_status sta_status = mmwlan_sta_enable(&sta_args, sta_status_callback);
-    ESP_LOGI(TAG, "[DEBUG] mmwlan_sta_enable(with callback) returned: %d (SUCCESS=%d)", sta_status, MMWLAN_SUCCESS);
-    
-    if (sta_status != MMWLAN_SUCCESS) {
-        ESP_LOGW(TAG, "STA enable returned status: %d (connection may be pending)", sta_status);
-    } else {
-        ESP_LOGI(TAG, "[DEBUG] STA enable SUCCESS - connection should be initiating");
-    }
-    
+
     // Disable power save to prevent ping loss/latency issues
-    // MorseMicro community note: older SDK versions had issues with AP support for PS STAs,
-    // causing packets to be buffered when device sleeps. Disabling PS keeps device always awake.
     enum mmwlan_status ps_status = mmwlan_set_power_save_mode(MMWLAN_PS_DISABLED);
-    ESP_LOGI(TAG, "Power save disabled (status=%d) - device will stay awake for lower latency/no ping loss", ps_status);
-    
-    // Note: With mpipal STA mode, we need BOTH callbacks to succeed:
-    // 1. sta_status_callback fires when SAE authentication completes (CONNECTED state)
-    // 2. mpipal_link_status_callback fires when LWIP layer is ready
-    
-    // First wait for SAE authentication (STA connection state)
-    ESP_LOGI(TAG, "Waiting for SAE authentication (STA CONNECTED state)...");
-    if (xSemaphoreTake(g_wifi_connected, pdMS_TO_TICKS(10000))) {
-        ESP_LOGI(TAG, "✓ SAE authentication successful");
-    } else {
-        ESP_LOGW(TAG, "SAE authentication timeout - connection not establishing");
-    }
-    
-    // Then wait for LWIP layer to be ready
-    ESP_LOGI(TAG, "Waiting for LWIP link to be ready...");
-    if (xSemaphoreTake(g_link_up, pdMS_TO_TICKS(10000))) {
-        ESP_LOGI(TAG, "✓ LWIP link is UP - ready to send data!");
-    } else {
-        ESP_LOGW(TAG, "LWIP link timeout - may not be able to transmit");
-    }
+    ESP_LOGI(TAG, "Power save disabled (status=%d)", ps_status);
+
+    halow_connect_with_retry();
     
     // Start GPS UART task (significantly increased stack size for mmipal callback safety)
     ESP_LOGI(TAG, "Starting GPS UART task with 16KB stack...");
@@ -1082,6 +1277,11 @@ extern "C" void app_main(void) {
     ESP_LOGI(TAG, "UDP socket created, ready to send to %s:%d", GATEWAY_IP, GATEWAY_PORT);
     
     while (1) {
+        if (!halow_link_usable()) {
+            halow_wait_until_connected();
+            continue;
+        }
+
         rusc_telemetry_packet_t packet = {};
         gps_data_t gps_snapshot;
         float compass_heading = 0.0f;
@@ -1124,7 +1324,10 @@ extern "C" void app_main(void) {
         if (sendto(socket_fd, &packet, sizeof(packet), 0,
                    (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
             g_last_send_ok = false;
-            ESP_LOGW(TAG, "Failed to send UDP packet");
+            g_halow_link_ready = false;
+            g_halow_sta_connected = false;
+            ESP_LOGW(TAG, "Failed to send UDP packet, reconnecting HaLow...");
+            halow_wait_until_connected();
         } else {
             g_last_send_ok = true;
             ESP_LOGI(TAG, "Sent telemetry: seq=%u lat=%.6f lon=%.6f heading=%s%.2f roll=%.2f pitch=%.2f yaw_rate=%.2f cal=%u/%u bat=%umV/%u%% status=0x%02x",

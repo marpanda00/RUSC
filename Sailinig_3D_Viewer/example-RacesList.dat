@@ -1,0 +1,23 @@
+DataFile	= MyRace_1.bin
+Race		= 
+RaceNameA	= Race 1
+RaceNameB	= 
+RaceInfoA	= My Venue
+RaceInfoB	= Fleet Race
+RaceInfoC	= Race 1
+Date		= Jun 01
+DayOfWeek	= Saturday
+Time		= 14:00
+Y1		= 0
+
+DataFile	= MyRace_2.bin
+Race		= 
+RaceNameA	= Race 2
+RaceNameB	= 
+RaceInfoA	= My Venue
+RaceInfoB	= Fleet Race
+RaceInfoC	= Race 2
+Date		= Jun 01
+DayOfWeek	= Saturday
+Time		= 15:30
+Y1		= 0

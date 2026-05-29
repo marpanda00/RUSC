@@ -1,0 +1,114 @@
+{
+    "raceDataSubUrl": "racedata",
+    "raceConfigUrl" : "localconfig.json",
+    "terrainConfig": {
+        "model" : "AucklandTerrain/AucklandOptimised.glb",
+        "location" : {"x" : -36.845, "y" : 174.7686111},
+        "rotation" : { "x" : 0, "y" : 0, "z" : 0}
+    },
+    "defaultboatmodel": {
+        "name" : "470.glb",
+        "hullType" : "monohull",
+        "topMastOffset" : {"x" : 0, "y": 6, "z": 0.5},
+        "defaultbowoffset": 2.5,
+        "jibtarget": "",
+        "mainsailtarget": "",
+        "leftfoil": "",
+        "rightfoil": ""
+    },
+    "defaultbuoymodel": {
+        "model" : "prada_mark.gltf",
+        "buoy_id" : -1
+    },
+    "buoymodels": [
+        {
+            "buoy_id" : 50,
+            "model" : "tetra-buoy.glb"
+        },
+        {
+            "buoy_id" : 100,
+            "model" : "prada-buoy.glb"
+        },
+        {
+            "buoy_id" : 130,
+            "model" : "prada_mark.gltf"
+        }
+    ],
+    "teams": [
+        {
+            "team_id" : 1,
+            "name": "Emirates Team New Zealand",
+            "abbr": "ETNZ",
+            "flag_id" : "nz",
+            "color": "#DD2631",
+            "boatmodel": {
+                "name" : "ETNZ/AC75_2020_TNZ.gltf",
+                "hullType" : "multihull",
+                "topMastOffset" : {"x" : 0, "y": 28, "z": 2.5},
+                "defaultbowoffset": 11.2,
+                "jibtarget": "B_ETNZ_jibBlend_00",
+                "mainsailtarget": "B_ETNZ_mainsail_curl_sweep_Tweaked_21",
+                "leftfoil" : "B_ETNZ_PrtFo_piv",
+                "rightfoil" : "B_ETNZ_StbFo_piv"
+            }
+        },
+        {
+            "team_id" : 2,
+            "name": "Luna Rossa Prada Pirelli Team",
+            "abbr": "LRPP",
+            "flag_id" : "it",
+            "color": "#FDCF30",
+            "boatmodel": {
+                "name" : "470.glb",
+                "hullType" : "monohull",
+                "topMastOffset" : {"x" : 0, "y": 6, "z": 0.5},
+                "defaultbowoffset": 11.2,
+                "jibtarget": "",
+                "mainsailtarget": "",
+                "leftfoil": "",
+                "rightfoil": ""
+            }
+        },
+        {
+            "team_id" : 3,
+            "name": "New York Yacht Club American Magic",
+            "abbr": "NYYC",
+            "flag_id" : "usa",
+            "color": "#006FFB",
+            "boatmodel": {
+                "name" : "American_Magic/AC75_AM.gltf",
+                "hullType" : "multihull",
+                "topMastOffset" : {"x" : 0, "y": 28, "z": 2.5},
+                "defaultbowoffset": 11.2,
+                "jibtarget": "B_AM_jibBlend_00",
+                "mainsailtarget": "B_AM_mainsail_curl_sweep_00",
+                "leftfoil" : "B_AM_PrtFo_piv",
+                "rightfoil" : "B_AM_StbFo_piv"
+            }
+        },
+        {
+            "team_id" : 4,
+            "name": "Ineos Team UK",
+            "abbr": "ITUK",
+            "flag_id" : "uk",
+            "color": "#FB7722",
+            "boatmodel": {
+                "name" : "Ineos_Team_UK/AC75_INEOS.gltf",
+                "hullType" : "multihull",
+                "topMastOffset" : {"x" : 0, "y": 28, "z": 2.5},
+                "defaultbowoffset": 11.2,
+                "jibtarget": "B_ITUK_jibBlend_00",
+                "mainsailtarget": "B_ITUK_mainsail_curl_sweep_Tweaked_21",
+                "leftfoil" : "B_ITUK_PrtFo_piv",
+                "rightfoil" : "B_ITUK_StbFo_piv"
+            }
+        },
+        {
+            "team_id" : 5,
+            "name": "Stars and Stripes Team USA",
+            "abbr": "TUSA",
+            "flag_id" : "usa",
+            "color": "#FEFB38"
+        }
+    ]
+}

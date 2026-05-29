@@ -1,0 +1,8 @@
+{
+    "_comment": "Offline race menu — same shape as ac36 raceconfig.json",
+    "websocketUrl": "ws://localhost:8080",
+    "eventIds": [],
+    "liveEventId": "live",
+    "audioChannels": [],
+    "videoChannels": []
+}

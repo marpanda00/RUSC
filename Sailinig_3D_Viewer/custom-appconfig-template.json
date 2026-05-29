@@ -1,0 +1,86 @@
+{
+    "_comment": "Template appconfig.json for a custom regatta. Copy to viewer/appconfig.json",
+
+    "raceDataSubUrl": "racedata",
+    "raceConfigUrl": "localconfig.json",
+
+    "terrainConfig": {
+        "_comment": "Remove model to disable terrain, or replace with your own .glb",
+        "model": "AucklandTerrain/AucklandOptimised.glb",
+        "location": {"x": -36.845, "y": 174.7686111},
+        "rotation": {"x": 0, "y": 0, "z": 0}
+    },
+
+    "defaultboatmodel": {
+        "_comment": "Fallback model used when team has no specific model defined",
+        "name": "AC75_gen.gltf",
+        "hullType": "multihull",
+        "topMastOffset": {"x": 0, "y": 28, "z": 2.5},
+        "defaultbowoffset": 11.2,
+        "jibtarget": "b_jibBlend",
+        "mainsailtarget": "b_mainsail_curl_sweep",
+        "leftfoil": "",
+        "rightfoil": ""
+    },
+
+    "defaultbuoymodel": {
+        "model": "prada_mark.gltf",
+        "buoy_id": -1
+    },
+
+    "buoymodels": [
+        {"buoy_id": 50,  "model": "tetra-buoy.glb"},
+        {"buoy_id": 100, "model": "prada-buoy.glb"},
+        {"buoy_id": 130, "model": "prada_mark.gltf"}
+    ],
+
+    "teams": [
+        {
+            "_comment": "Team 1 — edit all fields below",
+            "team_id": 1,
+            "name": "My Sailing Club A",
+            "abbr": "MSCA",
+            "flag_id": "",
+            "_flag_id_note": "Use 'nz','it','uk','usa' for a real flag, or '' for color dot",
+            "color": "#DD2631",
+            "boatmodel": {
+                "name": "ETNZ/AC75_2020_TNZ.gltf",
+                "_name_note": "Path under models/. Use any .gltf or .glb file",
+                "hullType": "multihull",
+                "_hullType_note": "monohull = one stern wake; multihull = cat/trimaran wakes (see README)",
+                "topMastOffset": {"x": 0, "y": 28, "z": 2.5},
+                "defaultbowoffset": 11.2,
+                "jibtarget": "B_ETNZ_jibBlend_00",
+                "_jibtarget_note": "Morph target name in your GLTF, or '' to skip sail animation",
+                "mainsailtarget": "B_ETNZ_mainsail_curl_sweep_Tweaked_21",
+                "leftfoil": "B_ETNZ_PrtFo_piv",
+                "rightfoil": "B_ETNZ_StbFo_piv"
+            }
+        },
+        {
+            "team_id": 2,
+            "name": "My Sailing Club B",
+            "abbr": "MSCB",
+            "flag_id": "",
+            "color": "#1A4FA0",
+            "boatmodel": {
+                "name": "470.glb",
+                "hullType": "monohull",
+                "topMastOffset": {"x": 0, "y": 6, "z": 0.5},
+                "defaultbowoffset": 2.5,
+                "jibtarget": "",
+                "mainsailtarget": "",
+                "leftfoil": "",
+                "rightfoil": ""
+            }
+        },
+        {
+            "_comment": "Add more teams by duplicating this block. team_id must be unique.",
+            "team_id": 3,
+            "name": "My Sailing Club C",
+            "abbr": "MSCC",
+            "flag_id": "",
+            "color": "#22AA44"
+        }
+    ]
+}

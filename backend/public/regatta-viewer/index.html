@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <title>RUSC Live 3D</title>
+    <style>
+        html,
+        body {
+            overflow: hidden;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background-color:#000000;
+            /* prevents web-page pinch-to-zoom feature, but need to allow scroll down
+             * after exit fullscreen on android, otherwise the user is trapped */
+            touch-action: pan-y; 
+            overscroll-behavior-y: contain; /* Prevent pull refresh */
+
+        }
+
+        #canvas_wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            -webkit-touch-callout: none;
+            /* iOS Safari */
+            -webkit-user-select: none;
+            /* Safari */
+            -khtml-user-select: none;
+            /* Konqueror HTML */
+            -moz-user-select: none;
+            /* Old versions of Firefox */
+            -ms-user-select: none;
+            /* Internet Explorer/Edge */
+            user-select: none;
+            /* Non-prefixed version, currently
+                                  supported by Chrome, Edge, Opera and Firefox */
+        }
+
+        #renderCanvas {
+            width: 100%;
+            height: 100%;
+            touch-action: none;
+            background:"#000000";
+        }
+        
+
+    </style>
+<link rel="shortcut icon" href="favicon.ico">
+    <base id="ve-base" href="./">
+    <script>
+        (function () {
+            var path = location.pathname || "";
+            var match = path.match(/^(.*\/regatta-viewer\/)/i);
+            if (match) {
+                document.getElementById("ve-base").href = match[1];
+            }
+        })();
+    </script>
+</head>
+
+<body id="body">
+    <div id="canvas_wrapper">
+        <canvas id="renderCanvas" touch-action="none"></canvas>
+        <div id="root"></div>
+    </div>
+<script type="text/javascript" src="vendors~main.bundle.js"></script><script type="text/javascript" src="bundle.js"></script></body>
+
+</html>

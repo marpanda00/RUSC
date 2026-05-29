@@ -15,6 +15,8 @@ const requiredFiles = [
   'public/viewer/index.html',
   'public/js/rusc-viewer-manifest.js',
   'public/js/rusc-scene.js',
+  'public/js/rusc-osm-ground.js',
+  'public/js/rusc-water.js',
   'public/js/rusc-device-ui.js',
   'public/js/rusc-wakes.js',
   'public/css/rusc-device-ui.css',
@@ -52,6 +54,9 @@ if (live?.origin) {
   } else {
     console.log('Origin OK:', lat, lon);
   }
+  if (live.osmGround?.enabled && live.coastalBackdrop?.enabled) {
+    console.warn('WARN: both osmGround and coastalBackdrop enabled — OSM takes precedence');
+  }
 }
 
 const manifestPath = path.join(root, 'public/js/rusc-viewer-manifest.js');
@@ -62,7 +67,7 @@ if (fs.existsSync(manifestPath)) {
   if (m) console.log('Viewer version:', m[1]);
   if (fs.existsSync(indexPath)) {
     const html = fs.readFileSync(indexPath, 'utf8');
-    for (const key of ['wakes', 'deviceUi', 'scene']) {
+    for (const key of ['wakes', 'deviceUi', 'osmGround', 'water', 'scene']) {
       const assetM = text.match(new RegExp(`${key}:\\s*(\\d+)`));
       if (assetM && !html.includes(`?v=${assetM[1]}`)) {
         console.warn(`WARN: index.html cache-bust may not match manifest assets.${key}=${assetM[1]}`);

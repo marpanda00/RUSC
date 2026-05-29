@@ -1,4 +1,93 @@
 {
-  "origin": { "latitude": 41.125, "longitude": 16.87 },
-  "comment": "Map center for 3D viewer (meters offset from here). Simulator orbits this point. Set latitude/longitude to your sailing area."
+
+  "origin": { "latitude": 41.282284, "longitude": 13.212244 },
+
+  "comment": "Map center for 3D viewer (meters offset from here). Simulator orbits this point. Set latitude/longitude to your sailing area.",
+
+  "boatFloatLiftM": 0.60,
+
+  "seaExtentM": 20000,
+
+  "osmGround": {
+
+    "enabled": true,
+
+    "widthM": 10000,
+
+    "heightM": 10000,
+
+    "zoom": 16,
+
+    "maxTexturePx": 8192,
+
+    "maxTiles": 576,
+
+    "yOffsetM": 0.05,
+
+    "tileUrl": "/api/map/tiles/{z}/{x}/{y}.png",
+
+    "attribution": "© OpenStreetMap contributors"
+
+  },
+
+  "water": {
+
+    "enabled": true,
+
+    "shader": "virtualeye",
+
+    "textureBaseUrl": "/viewer/textures",
+
+    "matchOsmSize": true,
+
+    "opacity": 0.88,
+
+    "yOffsetM": 0.08,
+
+    "coastBorder": {
+
+      "enabled": true,
+
+      "landDirection": "north",
+
+      "shorelineM": -200,
+
+      "fadeM": 120
+
+    }
+
+  },
+
+  "coastalBackdrop": {
+
+    "enabled": false,
+
+    "url": "/viewer/textures/Terracina_coastal.png",
+
+    "widthM": 700,
+
+    "heightM": 700,
+
+    "distanceM": 100,
+
+    "facing": "south",
+
+    "invertY": false
+
+  },
+
+  "buoysComment": "Static course marks. latitude/longitude in degrees; color hex; scale multiplies the default ~4 m mark size.",
+
+  "buoys": [
+
+    { "name": "Windward",  "latitude": 41.282900, "longitude": 13.212244, "color": "#ff3b30", "scale": 1 },
+
+    { "name": "Leeward",   "latitude": 41.280022, "longitude": 13.212244, "color": "#ffcc00", "scale": 1 },
+
+    { "name": "Start Pin", "latitude": 41.282284, "longitude": 13.214396, "color": "#34c759", "scale": 1 }
+
+  ]
+
 }
+
+

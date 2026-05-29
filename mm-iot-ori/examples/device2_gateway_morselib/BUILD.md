@@ -1,4 +1,4 @@
-# Device 1: GPS Collector + HALow UDP - Build Instructions
+# Device 2: HaLow Gateway - Build Instructions
 
 ## Prerequisites
 
@@ -6,44 +6,31 @@ Ensure the following are set in your environment:
 
 ```powershell
 $env:IDF_PATH = "C:\esp\esp-idf"
-$env:MMIOT_ROOT = "C:\Code\RUSC\mm-iot-esp32\framework"
+$env:MMIOT_ROOT = "C:\Code\RUSC\mm-iot-ori\framework"
 ```
 
 ## Build Command
 
 ```powershell
-cd C:\Code\RUSC\device1_gps_morselib
-cmd /c "set IDF_PATH=C:\esp\esp-idf && set MMIOT_ROOT=C:\Code\RUSC\mm-iot-esp32\framework && C:\esp\esp-idf\export.bat && idf.py build"
-```
-
-## Flash and Monitor (COM6)
-
-```powershell
-cd C:\Code\RUSC\device1_gps_morselib
-cmd /c "set IDF_PATH=C:\esp\esp-idf && set MMIOT_ROOT=C:\Code\RUSC\mm-iot-esp32\framework && C:\esp\esp-idf\export.bat && idf.py -p COM6 flash monitor"
-```
-
-## Clean Build
-
-```powershell
-cd C:\Code\RUSC\device1_gps_morselib
-del sdkconfig
-rmdir /s /q build
+cd C:\Code\RUSC\mm-iot-ori\examples\device2_gateway_morselib
+cmd /c "set IDF_PATH=C:\esp\esp-idf && set MMIOT_ROOT=C:\Code\RUSC\mm-iot-ori\framework && C:\esp\esp-idf\export.bat && idf.py build"
 ```
 
 ## Hardware
 
 - **Board**: HT-HC33 (Heltec ESP32-S3)
-- **GPS**: NEO 7M (UART1: RX=GPIO18, TX=GPIO17)
-- **HALow**: MorseMicro module
-- **Serial Port**: COM6
+- **HALow**: MorseMicro MM6108 module
+- **Backend**: ESP32 2.4 GHz Wi-Fi + BLE (Improv provisioning)
 
-## Configuration
+## Configuration (HaLow — shared with Device1 via `examples/shared/rusc_halow_config.h`)
 
-- HALow SSID: `RUSC_HALow_AP`
-- HALow Password: `rusc2024`
-- Gateway IP: `192.168.4.1`
-- Gateway Port: `5001`
-- Device ID: `device_1_collector`
-- GPS Baud: `9600`
-- Send Interval: `1000ms`
+Set `RUSC_HALOW_USE_EU` in that header (1 = EU default, 0 = US lab on MF08651).
+
+**Default (EU):** `EU`, op class 6, channel 1 @ 863.5 MHz, **1 MHz**, **25 dBm EIRP**, BCF `bcf_mf08551.mbin`  
+**US:** op class 1, channel 27 @ 915.5 MHz, BCF `bcf_mf08651_us.mbin`
+
+- HALow AP SSID: `MorseMicro`
+- HALow Password: `12345678`
+- HaLow AP IP: `192.168.1.1`
+- UDP Port: `5001` (Device1 sends here)
+- Wi-Fi country (backend): `IT`

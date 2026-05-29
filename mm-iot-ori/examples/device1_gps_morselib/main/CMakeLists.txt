@@ -1,10 +1,12 @@
 # Copyright 2025 Morse Micro
 # SPDX-License-Identifier: Apache-2.0
 set(src
-    "src/main.cpp")
+    "src/main.cpp"
+    "../../shared/rusc_halow_regulatory.c")
 
 set(inc
-    "src")
+    "src"
+    "../../shared")
 
 idf_component_register(SRCS ${src}
                        INCLUDE_DIRS ${inc}

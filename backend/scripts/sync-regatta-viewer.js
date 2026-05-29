@@ -71,9 +71,14 @@ execSync(`node "${path.join(__dirname, 'patch-hull-wakes.js')}" "${dest}"`, {
   cwd: backendRoot
 });
 
-const patchAutoLive = path.join(path.dirname(source), 'scripts', 'patch-auto-live.js');
+const scriptsDir = path.join(path.dirname(source), 'scripts');
+const patchAutoLive = path.join(scriptsDir, 'patch-auto-live.js');
 if (fs.existsSync(patchAutoLive)) {
   execSync(`node "${patchAutoLive}" "${dest}"`, { stdio: 'inherit', cwd: backendRoot });
+}
+const patchViewerGuards = path.join(scriptsDir, 'patch-viewer-guards.js');
+if (fs.existsSync(patchViewerGuards)) {
+  execSync(`node "${patchViewerGuards}" "${dest}"`, { stdio: 'inherit', cwd: backendRoot });
 }
 
 const glb470 = path.join(dest, 'models', '470.glb');

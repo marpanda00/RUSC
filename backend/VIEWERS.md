@@ -38,7 +38,15 @@ npm start
 npm run simulate-gps
 ```
 
-Set your sailing area in `live-config.json` (`origin.latitude` / `origin.longitude`). The simulator and 3D scene use that point as **(0, 0)** on the water; GPS in the ☰ menu should match those coordinates (± small orbit).
+Default center **41.282284°N, 13.212244°E** in `live-config.json`. `simulate-gps` orbits ~40 m around that point; lat/lon in the ☰ menu should match (± orbit). Override: `node scripts/simulate-gps.js --lat 41.282284 --lon 13.212244`.
+
+**OpenStreetMap ground (live `/viewer/`):** static tile mosaic (~1000×1000 m by default) centered on `origin`, stitched at load. Configure in `live-config.json` → `osmGround` (`enabled`, `widthM`, `heightM`, `zoom`: `"auto"` or 10–19). Tiles are fetched via **`GET /api/map/tiles/:z/:x/:y.png`** (backend proxy to OSM with cache). OSM **attribution** appears bottom-right when enabled. Takes precedence over `coastalBackdrop`; set `"coastalBackdrop.enabled": false` when using OSM.
+
+**Coastal backdrop (fallback):** optional photo draped **flat on the ground** (700×700 m by default). Configure in `live-config.json` → `coastalBackdrop` (image under `public/viewer/textures/`). Used when `osmGround.enabled` is false or tile load fails.
+
+**Boat height on water:** tune `boatFloatLiftM` in `live-config.json` (meters, applied live after refresh). Auto mesh align at load uses `WATERLINE_CLEARANCE_M` / `WATERLINE_HULL_FRAC` in `rusc-scene.js` (requires hard-refresh + boats recreated).
+
+**Animated water (live `/viewer/`):** procedural waves via `live-config.json` → `water` (`waveHeightM`, `waveSpeed`, `opacity`, `sizeM`, `subdivisions`). Set `"enabled": false` for the flat blue plane. Wire grid is hidden when animated water is active.
 
 **Virtual Eye regatta viewer** (`/regatta-viewer/`, binary WebSocket on port 8080):
 

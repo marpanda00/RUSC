@@ -12,6 +12,9 @@ build/
 # Node.js
 node_modules/
 
+# OSM tile disk cache (regenerated on demand)
+backend/cache/
+
 # Environment and secrets
 .env
 .env.*

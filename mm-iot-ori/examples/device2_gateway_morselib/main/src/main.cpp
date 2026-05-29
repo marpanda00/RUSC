@@ -3,10 +3,13 @@
  * Pure HaLow AP mode implementation using MorseMicro MM-IoT-SDK
  * 
  * Architecture:
- * - HaLow AP: Listens at 192.168.4.1:5001 for Device1 GPS data
- * - Backend WiFi: Connects to standard WiFi for data forwarding (192.168.12.126:3001)
+ * - HaLow AP: Listens at 192.168.1.1:5001 for Device1 GPS data
+ * - Backend WiFi: Connects to standard WiFi for data forwarding
  * - Dual network: HaLow for device-to-device, WiFi for cloud backend
  */
+
+#include "rusc_halow_config.h"
+#include "rusc_halow_regulatory.h"
 
 #include <string.h>
 #include <stdio.h>
@@ -49,6 +52,7 @@ extern "C" {
     #include "mmutils.h"
     #include "mmipal.h"
     #include "mmregdb.h"
+    #include "mmwlan.h"
 }
 
 // ============ Configuration Constants ============
@@ -67,8 +71,7 @@ extern "C" {
 #define BATTERY_FULL_MV 4200
 #define GATEWAY_STATUS_INTERVAL_MS 30000
 
-// UDP/HaLow configuration
-#define UDP_PORT 5001
+// UDP/HaLow (port and IPs from rusc_halow_config.h)
 #define UDP_BUFFER_SIZE 512
 #define DEVICE_TIMEOUT_MS 30000
 
@@ -86,16 +89,8 @@ extern "C" {
 #define HALOW_CHECK_INTERVAL_MS 5000
 #define LOG_INTERVAL_MS 5000
 
-// HaLow AP configuration (must match Device1 STA connection)
-#define AP_SSID "MorseMicro"
-#define SAE_PASSPHRASE "12345678"
-#define COUNTRY_CODE "US"
-#define OP_CLASS 1                       // US 915MHz band (Op Class 1) - MUST match Device1
-#define S1G_CHANNEL 3                    // Channel 3 = 915.000 MHz (matches ap_mode)
-#define MAX_STAS 5                       // Maximum stations for AP
-#define STATIC_LOCAL_IP "192.168.1.1"
-#define STATIC_NETMASK "255.255.255.0"
-#define STATIC_GATEWAY "192.168.1.1"
+#define WIFI_COUNTRY_CODE "IT"           // ESP32 2.4 GHz Wi-Fi (separate from HaLow EU domain)
+#define MAX_STAS 5                       // Maximum HaLow stations for AP
 
 #define RUSC_TELEMETRY_MAGIC 0x5254
 #define RUSC_TELEMETRY_VERSION 4
@@ -616,9 +611,11 @@ static void handle_ap_sta_status(const struct mmwlan_ap_sta_status *sta_status, 
     if (sta_status->state == MMWLAN_AP_STA_AUTHORIZED) {
         LOG_INFO("[AP] STA AUTHORIZED: %s (AID=%u)", mac_str, sta_status->aid);
         total_devices_connected++;
-    } else if (sta_status->state == MMWLAN_AP_STA_UNKNOWN || sta_status->state == MMWLAN_AP_STA_ASSOCIATED) {
-        LOG_DEBUG("[AP] STA state change: %s (state=%d)", mac_str, sta_status->state);
-        if (total_devices_connected > 0) total_devices_connected--;
+    } else {
+        LOG_INFO("[AP] STA event: %s state=%d AID=%u", mac_str, sta_status->state, sta_status->aid);
+        if (sta_status->state == MMWLAN_AP_STA_UNKNOWN || sta_status->state == MMWLAN_AP_STA_ASSOCIATED) {
+            if (total_devices_connected > 0) total_devices_connected--;
+        }
     }
 }
 
@@ -639,6 +636,16 @@ static void link_status_callback(const struct mmipal_link_status *link_status) {
 // Stringify macro helpers
 #define _STRINGIFY(x) #x
 #define STRINGIFY(x) _STRINGIFY(x)
+
+static void halow_apply_scan_config(void) {
+    struct mmwlan_scan_config scan_config = MMWLAN_SCAN_CONFIG_INIT;
+    scan_config.dwell_time_ms = RUSC_HALOW_SCAN_DWELL_MS;
+    scan_config.home_channel_dwell_time_ms = RUSC_HALOW_SCAN_DWELL_MS;
+    enum mmwlan_status status = mmwlan_set_scan_config(&scan_config);
+    if (status != MMWLAN_SUCCESS) {
+        LOG_WARN("mmwlan_set_scan_config returned %d", status);
+    }
+}
 
 void load_mmwlan_ap_args(struct mmwlan_ap_args *ap_args) {
     // SSID
@@ -689,20 +696,33 @@ static esp_err_t initialize_halow_ap(void) {
     
     // 3. Set regulatory domain BEFORE boot
     LOG_INFO("[DEBUG] Looking up regulatory domain for %s...", COUNTRY_CODE);
-    channel_list = mmwlan_lookup_regulatory_domain(get_regulatory_db(), COUNTRY_CODE);
+    channel_list = rusc_halow_get_channel_list();
     if (channel_list == NULL) {
         LOG_ERROR("Could not find regulatory domain for %s", COUNTRY_CODE);
         return ESP_FAIL;
     }
     LOG_INFO("[DEBUG] Regulatory domain found");
-    
+
     LOG_INFO("[DEBUG] Setting channel list...");
     status = mmwlan_set_channel_list(channel_list);
     if (status != MMWLAN_SUCCESS) {
         LOG_ERROR("Failed to set regulatory domain (status %d)", status);
         return ESP_FAIL;
     }
-    LOG_INFO("[DEBUG] Channel list set successfully. OP Class=%d, Channel=%d", OP_CLASS, S1G_CHANNEL);
+    halow_apply_scan_config();
+#if RUSC_HALOW_USE_EU && RUSC_HALOW_EU_LOCK_SINGLE_CHANNEL
+    LOG_INFO("[DEBUG] Channel list: EU 863.5 MHz only (op class %d, ch %d, %d MHz, %d dBm)",
+             OP_CLASS, S1G_CHANNEL, RUSC_HALOW_BW_MHZ, RUSC_HALOW_MAX_TX_EIRP_DBM);
+#elif !RUSC_HALOW_USE_EU && RUSC_HALOW_US_LOCK_915MHZ
+    LOG_INFO("[DEBUG] Channel list: US 915.5 MHz only (op class %d, ch %d)", OP_CLASS, S1G_CHANNEL);
+#else
+    LOG_INFO("[DEBUG] Channel list set. Op Class=%d, Channel=%d", OP_CLASS, S1G_CHANNEL);
+#endif
+
+    struct mmwlan_bcf_metadata bcf_metadata = {};
+    if (mmwlan_get_bcf_metadata(&bcf_metadata) == MMWLAN_SUCCESS) {
+        LOG_INFO("BCF: %s build=%s", bcf_metadata.board_desc, bcf_metadata.build_version);
+    }
     
     // 4. CRITICAL: Boot the MorseMicro radio chip
     LOG_INFO("[DEBUG] Calling mmwlan_boot() - chip reset and SPI initialization...");
@@ -745,11 +765,20 @@ static esp_err_t initialize_halow_ap(void) {
     
     status = mmwlan_ap_enable(&ap_args);
     if (status == MMWLAN_SUCCESS) {
+        enum mmwlan_status ps_status = mmwlan_set_power_save_mode(MMWLAN_PS_DISABLED);
         LOG_INFO("HaLow AP Mode started successfully!");
         LOG_INFO("  SSID: %s", AP_SSID);
+#if RUSC_HALOW_USE_EU && RUSC_HALOW_EU_LOCK_SINGLE_CHANNEL
+        LOG_INFO("  Channel: %d @ 863.5 MHz (Op Class %d, %d MHz, %d dBm EIRP)",
+                 S1G_CHANNEL, OP_CLASS, RUSC_HALOW_BW_MHZ, RUSC_HALOW_MAX_TX_EIRP_DBM);
+#elif !RUSC_HALOW_USE_EU && RUSC_HALOW_US_LOCK_915MHZ
+        LOG_INFO("  Channel: %d @ 915.5 MHz (Op Class %d)", S1G_CHANNEL, OP_CLASS);
+#else
         LOG_INFO("  Channel: %d (Op Class %d)", S1G_CHANNEL, OP_CLASS);
+#endif
         LOG_INFO("  IP: %s", STATIC_LOCAL_IP);
         LOG_INFO("  Max STAs: %d", MAX_STAS);
+        LOG_INFO("  Power save disabled (status=%d)", ps_status);
         halow_active = true;
         return ESP_OK;
     } else {
@@ -863,6 +892,16 @@ static esp_err_t initialize_backend_wifi(void) {
     // Initialize WiFi subsystem
     wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
     ESP_ERROR_CHECK(esp_wifi_init(&cfg));
+
+    // Italy: channels 1-13 @ 2.4 GHz, max power per EN 300 328 / national implementation.
+    wifi_country_t wifi_country = {
+        .cc = WIFI_COUNTRY_CODE,
+        .schan = 1,
+        .nchan = 13,
+        .max_tx_power = 80,  // 80 * 0.25 dBm = 20 dBm (typical EU/IT 2.4 GHz ceiling)
+        .policy = WIFI_COUNTRY_POLICY_AUTO,
+    };
+    ESP_ERROR_CHECK(esp_wifi_set_country(&wifi_country));
     
     // Register event handlers
     ESP_ERROR_CHECK(esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID, &wifi_event_handler, NULL));
@@ -1100,8 +1139,25 @@ static bool process_compact_telemetry(const uint8_t *data, int len, const char *
         return true;
     }
 
+    char mac_str[18];
+    snprintf(mac_str, sizeof(mac_str), "%02x:%02x:%02x:%02x:%02x:%02x",
+             packet.device_mac[0], packet.device_mac[1], packet.device_mac[2],
+             packet.device_mac[3], packet.device_mac[4], packet.device_mac[5]);
+
+    bool mac_valid = false;
+    for (int i = 0; i < 6; i++) {
+        if (packet.device_mac[i] != 0) {
+            mac_valid = true;
+            break;
+        }
+    }
+
+    char device_id_buf[32] = {0};
     const char *device_id = device_id_from_index(packet.device_index);
-    if (device_id == NULL) {
+    if (mac_valid) {
+        snprintf(device_id_buf, sizeof(device_id_buf), "collector_%s", mac_str);
+        device_id = device_id_buf;
+    } else if (device_id == NULL) {
         LOG_WARN("Unknown compact telemetry device index from %s: %u", sender_ip, packet.device_index);
         return true;
     }
@@ -1114,10 +1170,6 @@ static bool process_compact_telemetry(const uint8_t *data, int len, const char *
     double roll = packet.roll_cdeg / 100.0;
     double pitch = packet.pitch_cdeg / 100.0;
     double yaw_rate = packet.yaw_rate_cdeg_s / 100.0;
-    char mac_str[18];
-    snprintf(mac_str, sizeof(mac_str), "%02x:%02x:%02x:%02x:%02x:%02x",
-             packet.device_mac[0], packet.device_mac[1], packet.device_mac[2],
-             packet.device_mac[3], packet.device_mac[4], packet.device_mac[5]);
 
     device_info_t *device = upsert_device_info(device_id);
     if (device != NULL) {

@@ -56,14 +56,71 @@ let deviceNames = {};
 let boatProfiles = {};
 let boatModels = {};
 let boatTypes = {};
-let liveConfig = { origin: { latitude: 41.125, longitude: 16.87 } };
+let liveConfig = { origin: { latitude: 41.282284, longitude: 13.212244 } };
 
 const wsClients = new Set();
+
+const OSM_TILE_BASE = 'https://tile.openstreetmap.org';
+const OSM_TILE_USER_AGENT = 'RUSC-Regatta-Viewer/1.0 (local development)';
+const TILE_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+const TILE_CACHE_DIR = require('path').join(__dirname, 'cache', 'osm-tiles');
+const tileCache = new Map();
+
+function tileDiskPath(z, x, y) {
+  return require('path').join(TILE_CACHE_DIR, String(z), String(x), `${y}.png`);
+}
+
+// Memory → disk → network. Disk cache survives restarts so we don't re-hammer
+// (and get blocked by) the OSM tile server every time the server restarts.
+function fetchOsmTile(z, x, y) {
+  const key = `${z}/${x}/${y}`;
+  const cached = tileCache.get(key);
+  if (cached && cached.expires > Date.now()) {
+    return Promise.resolve(cached.buf);
+  }
+  const diskPath = tileDiskPath(z, x, y);
+  try {
+    const stat = fs.statSync(diskPath);
+    if (Date.now() - stat.mtimeMs < TILE_CACHE_TTL_MS) {
+      const buf = fs.readFileSync(diskPath);
+      tileCache.set(key, { buf, expires: Date.now() + TILE_CACHE_TTL_MS });
+      return Promise.resolve(buf);
+    }
+  } catch (_) {
+    // not on disk yet
+  }
+  return new Promise((resolve, reject) => {
+    const url = `${OSM_TILE_BASE}/${z}/${x}/${y}.png`;
+    https.get(url, {
+      headers: { 'User-Agent': OSM_TILE_USER_AGENT }
+    }, (res) => {
+      if (res.statusCode !== 200) {
+        reject(new Error(`OSM HTTP ${res.statusCode}`));
+        res.resume();
+        return;
+      }
+      const chunks = [];
+      res.on('data', (chunk) => chunks.push(chunk));
+      res.on('end', () => {
+        const buf = Buffer.concat(chunks);
+        tileCache.set(key, { buf, expires: Date.now() + TILE_CACHE_TTL_MS });
+        try {
+          fs.mkdirSync(require('path').dirname(diskPath), { recursive: true });
+          fs.writeFileSync(diskPath, buf);
+        } catch (e) {
+          console.warn('[map/tiles] disk cache write failed:', e.message);
+        }
+        resolve(buf);
+      });
+    }).on('error', reject);
+  });
+}
 
 function loadJsonFile(path, fallback) {
   try {
     return JSON.parse(fs.readFileSync(path, 'utf8'));
   } catch (error) {
+    console.warn(`[config] failed to load ${path}: ${error.message} — using fallback`);
     return fallback;
   }
 }
@@ -206,6 +263,20 @@ function isDeviceActive(device) {
 
 loadDeviceNames();
 loadBoatCatalog();
+
+// Hot-reload live-config.json on edit so viewer changes (origin, water, osmGround,
+// boatFloatLiftM, …) apply on the next browser refresh — no server restart needed.
+try {
+  fs.watchFile(LIVE_CONFIG_FILE, { interval: 1000 }, () => {
+    const next = loadJsonFile(LIVE_CONFIG_FILE, null);
+    if (next) {
+      liveConfig = next;
+      console.log(`[config] reloaded ${LIVE_CONFIG_FILE} (boatFloatLiftM=${liveConfig.boatFloatLiftM})`);
+    }
+  });
+} catch (e) {
+  console.warn('[config] could not watch live-config.json:', e.message);
+}
 
 // ============ Haversine Distance Calculator ============
 
@@ -674,13 +745,45 @@ function registerAPIRoutes(expressApp) {
   });
 
   expressApp.get('/api/live/config', (req, res) => {
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
     res.json({
       viewerVersion: '1.0.0-baseline',
       origin: liveConfig.origin,
+      coastalBackdrop: liveConfig.coastalBackdrop,
+      osmGround: liveConfig.osmGround,
+      water: liveConfig.water,
+      boatFloatLiftM: liveConfig.boatFloatLiftM,
+      seaExtentM: liveConfig.seaExtentM,
+      buoys: liveConfig.buoys,
       boatModels,
       boatTypes,
       profiles: boatProfiles
     });
+  });
+
+  expressApp.get('/api/map/tiles/:z/:x/:y.png', async (req, res) => {
+    const z = parseInt(req.params.z, 10);
+    const x = parseInt(req.params.x, 10);
+    const y = parseInt(req.params.y, 10);
+    if (!Number.isFinite(z) || z < 10 || z > 19) {
+      return res.status(400).json({ error: 'zoom must be 10–19' });
+    }
+    if (!Number.isFinite(x) || !Number.isFinite(y) || x < 0 || y < 0) {
+      return res.status(400).json({ error: 'invalid tile coordinates' });
+    }
+    const maxIndex = Math.pow(2, z);
+    if (x >= maxIndex || y >= maxIndex) {
+      return res.status(400).json({ error: 'tile out of range' });
+    }
+    try {
+      const buf = await fetchOsmTile(z, x, y);
+      res.set('Content-Type', 'image/png');
+      res.set('Cache-Control', 'public, max-age=604800');
+      res.send(buf);
+    } catch (err) {
+      console.warn('[map/tiles]', z, x, y, err.message);
+      res.status(502).json({ error: 'tile fetch failed' });
+    }
   });
 
   // Get statistics
@@ -740,9 +843,12 @@ httpServer.listen(API_PORT, '0.0.0.0', () => {
   console.log(`HTTP API server listening on port ${API_PORT}`);
 });
 
-// ============ Live WebSocket (port 3002) ============
+// ============ Live WebSocket (same HTTP server in Docker/ECS, or separate port locally) ============
 
-const wss = new WebSocketServer({ port: LIVE_WS_PORT });
+const attachLiveWsToHttp = process.env.LIVE_WS_ATTACH_HTTP !== '0';
+const wss = attachLiveWsToHttp
+  ? new WebSocketServer({ server: httpServer })
+  : new WebSocketServer({ port: LIVE_WS_PORT });
 wss.on('connection', (ws) => {
   wsClients.add(ws);
   for (const [key, device] of Object.entries(gpsData)) {
@@ -792,7 +898,11 @@ console.log('RUSC GPS Backend Server started');
 console.log(`HTTP API: http://0.0.0.0:${API_PORT}`);
 console.log(`HTTPS Website: https://0.0.0.0:${HTTPS_PORT}`);
 console.log(`TCP Data: 0.0.0.0:${TCP_PORT}`);
-console.log(`Live WS: ws://0.0.0.0:${LIVE_WS_PORT}`);
+if (attachLiveWsToHttp) {
+  console.log(`Live WS: attached to HTTP server on port ${API_PORT}`);
+} else {
+  console.log(`Live WS: ws://0.0.0.0:${LIVE_WS_PORT}`);
+}
 console.log('\nAvailable Endpoints:');
 console.log(`  GET  /api/positions - All devices with home point & distances`);
 console.log(`  GET  /api/positions/:device_id - Specific device`);

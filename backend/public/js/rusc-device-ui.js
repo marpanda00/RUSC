@@ -22,8 +22,17 @@
   function getWsUrl() {
     const host = window.location.hostname;
     const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
-    const port = window.location.protocol === 'https:' ? '' : ':3002';
-    return `${protocol}://${host}${port}`;
+    const port = window.location.port;
+    if (protocol === 'wss') {
+      return port ? `wss://${host}:${port}` : `wss://${host}`;
+    }
+    if (port === '3000' || port === '' || port === '80') {
+      return port === '3000' ? `ws://${host}:3000` : `ws://${host}`;
+    }
+    if (port === '8080') {
+      return `ws://${host}:3002`;
+    }
+    return port ? `ws://${host}:${port}` : `ws://${host}:3002`;
   }
 
   function escapeHtml(value) {
