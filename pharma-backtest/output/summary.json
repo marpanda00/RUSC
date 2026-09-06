@@ -1,0 +1,105 @@
+{
+  "total_positions": 447,
+  "unique_companies": 268,
+  "completed_trades": 355,
+  "incomplete_trades": 70,
+  "missing_ticker_mapping": 0,
+  "failed_price_lookup": 22,
+  "portfolio": {
+    "invested_usd": 355,
+    "end_value_usd": 364.47,
+    "total_return_pct": 2.67,
+    "avg_return_per_position_pct": 2.67,
+    "median_return_pct": 0.28,
+    "win_rate_pct": 50.1,
+    "best_trade_pct": 110.94,
+    "worst_trade_pct": -86.09
+  },
+  "eval_relevance": {
+    "pearson_correlation": -0.1131,
+    "pearson_p_value": 0.0332,
+    "spearman_correlation": -0.1684,
+    "spearman_p_value": 0.0015,
+    "interpretation": "weak negative relationship between eval score and 1-month return (statistically significant at 5%)"
+  },
+  "by_eval_bucket": {
+    "0-10%": {
+      "count": 87,
+      "avg_return_pct": 6.13,
+      "median_return_pct": 4.44,
+      "win_rate_pct": 62.07,
+      "avg_eval_pct": 7.75
+    },
+    "10-20%": {
+      "count": 135,
+      "avg_return_pct": 3.8,
+      "median_return_pct": 0.0,
+      "win_rate_pct": 49.63,
+      "avg_eval_pct": 14.97
+    },
+    "20-30%": {
+      "count": 59,
+      "avg_return_pct": 4.48,
+      "median_return_pct": 1.59,
+      "win_rate_pct": 52.54,
+      "avg_eval_pct": 24.56
+    },
+    "30-50%": {
+      "count": 52,
+      "avg_return_pct": -4.45,
+      "median_return_pct": -2.75,
+      "win_rate_pct": 38.46,
+      "avg_eval_pct": 39.31
+    },
+    "50-100%": {
+      "count": 17,
+      "avg_return_pct": -4.92,
+      "median_return_pct": -6.33,
+      "win_rate_pct": 29.41,
+      "avg_eval_pct": 61.12
+    },
+    "100%+": {
+      "count": 5,
+      "avg_return_pct": -9.56,
+      "median_return_pct": -17.39,
+      "win_rate_pct": 20.0,
+      "avg_eval_pct": 169.6
+    }
+  },
+  "by_rank": {
+    "1": {
+      "count": 123,
+      "avg_return_pct": 0.35,
+      "avg_eval_pct": 33.92,
+      "win_rate_pct": 43.9
+    },
+    "2": {
+      "count": 119,
+      "avg_return_pct": 3.61,
+      "avg_eval_pct": 18.12,
+      "win_rate_pct": 54.62
+    },
+    "3": {
+      "count": 113,
+      "avg_return_pct": 4.19,
+      "avg_eval_pct": 15.46,
+      "win_rate_pct": 52.21
+    }
+  },
+  "top_eval_only_strategy": {
+    "positions": 130,
+    "avg_return_pct": 0.24,
+    "total_return_pct": 0.24,
+    "win_rate_pct": 44.6
+  },
+  "high_eval_30plus_strategy": {
+    "positions": 77,
+    "avg_return_pct": -5.16,
+    "win_rate_pct": 35.1
+  },
+  "low_eval_under30_strategy": {
+    "positions": 278,
+    "avg_return_pct": 4.84,
+    "win_rate_pct": 54.3
+  }
+}
