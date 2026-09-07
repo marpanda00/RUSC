@@ -1,0 +1,714 @@
+HTTP Error 404: {"quoteSummary":{"result":null,"error":{"code":"Not Found","description":"Quote not found for symbol: GLTO"}}}
+$GLTO: possibly delisted; no timezone found
+HTTP Error 404: {"quoteSummary":{"result":null,"error":{"code":"Not Found","description":"Quote not found for symbol: CNTA"}}}
+$CNTA: possibly delisted; no timezone found
+$KALV: Data doesn't exist for startDate = 1774065600, endDate = 1778040000
+$ARS: possibly delisted; no price data found  (1d 2026-03-21 -> 2026-05-06)
+$APLS: possibly delisted; no timezone found
+$CNTA: possibly delisted; no timezone found
+$KRKG.LJ: possibly delisted; no price data found  (1d 2026-04-01 -> 2026-05-16)
+$02142.HK: possibly delisted; no timezone found
+$LEXO: possibly delisted; no price data found  (1d 2026-04-02 -> 2026-05-17)
+$PSTV: Data doesn't exist for startDate = 1775188800, endDate = 1779076800
+$PSTV: Data doesn't exist for startDate = 1775275200, endDate = 1779163200
+$PMN.TO: possibly delisted; no timezone found
+$PSTV: Data doesn't exist for startDate = 1775620800, endDate = 1779508800
+$4514.T: possibly delisted; no timezone found
+$HSTG: possibly delisted; no timezone found
+$NRGN: possibly delisted; no price data found  (1d 2026-04-12 -> 2026-05-27)
+$6464.TWO: possibly delisted; no timezone found
+$HLS: possibly delisted; no price data found  (1d 2026-04-17 -> 2026-06-01)
+$CPRX: Data doesn't exist for startDate = 1776484800, endDate = 1780372800
+$XOMA: Data doesn't exist for startDate = 1776830400, endDate = 1780718400
+$CPRX: Data doesn't exist for startDate = 1777521600, endDate = 1781496000
+$DAMO: possibly delisted; no timezone found
+$IPA.PA: possibly delisted; no timezone found
+$6446.TWO: possibly delisted; no timezone found
+$KRKG.LJ: possibly delisted; no price data found  (1d 2026-05-13 -> 2026-06-28)
+$CURAS.CO: possibly delisted; no price data found  (1d 2026-05-27 -> 2026-07-11)
+$6446.TWO: possibly delisted; no timezone found
+$6472.TWO: possibly delisted; no timezone found
+$6446.TWO: possibly delisted; no timezone found
+$DAMO: possibly delisted; no timezone found
+$CNTP: possibly delisted; no timezone found
+$DAMO: possibly delisted; no timezone found
+$DAMO: possibly delisted; no timezone found
+$DAMO: possibly delisted; no timezone found
+$KRKG.LJ: possibly delisted; no price data found  (1d 2026-07-05 -> 2026-08-20)
+$6464.TWO: possibly delisted; no timezone found
+$DAMO: possibly delisted; no timezone found
+$DAMO: possibly delisted; no timezone found
+$SNSE: possibly delisted; no timezone found
+$DAMO: possibly delisted; no timezone found
+$6464.TWO: possibly delisted; no timezone found
+$HLS: possibly delisted; no price data found  (1d 2026-07-16 -> 2026-08-31)
+$CRNA.ST: possibly delisted; no timezone found
+$IXB.AX: possibly delisted; no timezone found
+$ARS: possibly delisted; no price data found  (1d 2026-07-29 -> 2026-09-08)
+$NXR: possibly delisted; no timezone found
+$FAETH: possibly delisted; no timezone found
+$YD: possibly delisted; no price data found  (1d 2026-08-09 -> 2026-09-08)
+$6464.TWO: possibly delisted; no timezone found
+$ARS: possibly delisted; no price data found  (1d 2026-08-12 -> 2026-09-08)
+$6472.TWO: possibly delisted; no timezone found
+$02142.HK: possibly delisted; no timezone found
+$KRKG.LJ: possibly delisted; no price data found  (1d 2026-08-22 -> 2026-09-08)
+$GLTO: possibly delisted; no timezone found
+$CNTA: possibly delisted; no timezone found
+$KALV: Data doesn't exist for startDate = 1774065600, endDate = 1780632000
+$ARS: possibly delisted; no price data found  (1d 2026-03-21 -> 2026-06-05)
+$APLS: possibly delisted; no timezone found
+$CNTA: possibly delisted; no timezone found
+$KRKG.LJ: possibly delisted; no price data found  (1d 2026-04-01 -> 2026-06-16)
+$02142.HK: possibly delisted; no timezone found
+$LEXO: possibly delisted; no price data found  (1d 2026-04-02 -> 2026-06-17)
+$PSTV: Data doesn't exist for startDate = 1775188800, endDate = 1781755200
+$PSTV: Data doesn't exist for startDate = 1775275200, endDate = 1781841600
+$PMN.TO: possibly delisted; no timezone found
+$PSTV: Data doesn't exist for startDate = 1775620800, endDate = 1782187200
+$4514.T: possibly delisted; no timezone found
+$HSTG: possibly delisted; no timezone found
+$NRGN: possibly delisted; no price data found  (1d 2026-04-12 -> 2026-06-27)
+$6464.TWO: possibly delisted; no timezone found
+$HLS: possibly delisted; no price data found  (1d 2026-04-17 -> 2026-07-02)
+$CPRX: Data doesn't exist for startDate = 1776484800, endDate = 1783051200
+$XOMA: Data doesn't exist for startDate = 1776830400, endDate = 1783396800
+$CPRX: Data doesn't exist for startDate = 1777521600, endDate = 1784088000
+$DAMO: possibly delisted; no timezone found
+$IPA.PA: possibly delisted; no timezone found
+$6446.TWO: possibly delisted; no timezone found
+$KRKG.LJ: possibly delisted; no price data found  (1d 2026-05-13 -> 2026-07-28)
+$CURAS.CO: possibly delisted; no price data found  (1d 2026-05-27 -> 2026-08-11)
+$6446.TWO: possibly delisted; no timezone found
+$6472.TWO: possibly delisted; no timezone found
+$6446.TWO: possibly delisted; no timezone found
+$DAMO: possibly delisted; no timezone found
+$CNTP: possibly delisted; no timezone found
+$DAMO: possibly delisted; no timezone found
+$DAMO: possibly delisted; no timezone found
+$DAMO: possibly delisted; no timezone found
+$KRKG.LJ: possibly delisted; no price data found  (1d 2026-07-05 -> 2026-09-08)
+$6464.TWO: possibly delisted; no timezone found
+$DAMO: possibly delisted; no timezone found
+$DAMO: possibly delisted; no timezone found
+$SNSE: possibly delisted; no timezone found
+$DAMO: possibly delisted; no timezone found
+$6464.TWO: possibly delisted; no timezone found
+$HLS: possibly delisted; no price data found  (1d 2026-07-16 -> 2026-09-08)
+$CRNA.ST: possibly delisted; no timezone found
+$IXB.AX: possibly delisted; no timezone found
+$ARS: possibly delisted; no price data found  (1d 2026-07-29 -> 2026-09-08)
+$NXR: possibly delisted; no timezone found
+$FAETH: possibly delisted; no timezone found
+$YD: possibly delisted; no price data found  (1d 2026-08-09 -> 2026-09-08)
+$6464.TWO: possibly delisted; no timezone found
+$ARS: possibly delisted; no price data found  (1d 2026-08-12 -> 2026-09-08)
+$6472.TWO: possibly delisted; no timezone found
+$02142.HK: possibly delisted; no timezone found
+$KRKG.LJ: possibly delisted; no price data found  (1d 2026-08-22 -> 2026-09-08)
+Loaded 1375 positions (527 companies)
+Ticker coverage: 1372/1375
+
+Running 1-month hold backtest...
+  1M: processed 200/1375
+  1M: processed 400/1375
+  1M: processed 600/1375
+  1M: processed 800/1375
+  1M: processed 1000/1375
+  1M: processed 1200/1375
+Running 2-month hold backtest...
+  2M: processed 200/1375
+  2M: processed 400/1375
+  2M: processed 600/1375
+  2M: processed 800/1375
+  2M: processed 1000/1375
+  2M: processed 1200/1375
+
+======================================================================
+PHARMA BACKTEST V2 — 1 MONTH vs 2 MONTH
+======================================================================
+{
+  "1_month": {
+    "hold_months": 1,
+    "total_positions": 1375,
+    "unique_companies": 527,
+    "completed_trades": 1110,
+    "incomplete_trades": 209,
+    "missing_ticker": 0,
+    "failed_lookup": -1320,
+    "portfolio_all": {
+      "positions": 1110,
+      "invested_usd": 1110,
+      "end_value_usd": 1133.39,
+      "total_return_pct": 2.11,
+      "avg_return_pct": 2.11,
+      "median_return_pct": 0.58,
+      "win_rate_pct": 51.8
+    },
+    "eval_correlation": {
+      "pearson_r": -0.066,
+      "pearson_p": 0.028,
+      "spearman_r": -0.1116,
+      "spearman_p": 0.0002
+    },
+    "by_rank": {
+      "1": {
+        "count": 121,
+        "avg_return_pct": 0.74,
+        "avg_eval_pct": 34.5,
+        "win_rate_pct": 43.8
+      },
+      "2": {
+        "count": 99,
+        "avg_return_pct": 2.48,
+        "avg_eval_pct": 18.83,
+        "win_rate_pct": 55.56
+      },
+      "3": {
+        "count": 104,
+        "avg_return_pct": 4.87,
+        "avg_eval_pct": 15.87,
+        "win_rate_pct": 52.88
+      },
+      "4": {
+        "count": 113,
+        "avg_return_pct": 0.89,
+        "avg_eval_pct": 13.04,
+        "win_rate_pct": 51.33
+      },
+      "5": {
+        "count": 106,
+        "avg_return_pct": 1.73,
+        "avg_eval_pct": 11.3,
+        "win_rate_pct": 50.0
+      },
+      "6": {
+        "count": 111,
+        "avg_return_pct": -0.23,
+        "avg_eval_pct": 10.99,
+        "win_rate_pct": 49.55
+      },
+      "7": {
+        "count": 115,
+        "avg_return_pct": 0.2,
+        "avg_eval_pct": 10.25,
+        "win_rate_pct": 51.3
+      },
+      "8": {
+        "count": 109,
+        "avg_return_pct": 4.26,
+        "avg_eval_pct": 9.67,
+        "win_rate_pct": 55.05
+      },
+      "9": {
+        "count": 115,
+        "avg_return_pct": 1.68,
+        "avg_eval_pct": 9.07,
+        "win_rate_pct": 53.04
+      },
+      "10": {
+        "count": 117,
+        "avg_return_pct": 4.77,
+        "avg_eval_pct": 8.44,
+        "win_rate_pct": 56.41
+      }
+    },
+    "by_eval_bucket": {
+      "0-5%": {
+        "count": 178,
+        "avg_return_pct": 2.7,
+        "win_rate_pct": 60.67
+      },
+      "5-10%": {
+        "count": 393,
+        "avg_return_pct": 3.09,
+        "win_rate_pct": 54.96
+      },
+      "10-20%": {
+        "count": 343,
+        "avg_return_pct": 3.02,
+        "win_rate_pct": 49.27
+      },
+      "20-30%": {
+        "count": 107,
+        "avg_return_pct": -0.21,
+        "win_rate_pct": 46.73
+      },
+      "30-50%": {
+        "count": 66,
+        "avg_return_pct": -4.07,
+        "win_rate_pct": 37.88
+      },
+      "50-100%": {
+        "count": 18,
+        "avg_return_pct": -2.96,
+        "win_rate_pct": 33.33
+      },
+      "100%+": {
+        "count": 5,
+        "avg_return_pct": -9.56,
+        "win_rate_pct": 20.0
+      }
+    },
+    "rank_bands": {
+      "rank_1_top_mover": {
+        "count": 121,
+        "avg_return_pct": 0.74,
+        "win_rate_pct": 43.8,
+        "avg_eval_pct": 34.5
+      },
+      "rank_2_3": {
+        "count": 203,
+        "avg_return_pct": 3.7,
+        "win_rate_pct": 54.2,
+        "avg_eval_pct": 17.31
+      },
+      "rank_4_7_mid": {
+        "count": 445,
+        "avg_return_pct": 0.63,
+        "win_rate_pct": 50.6,
+        "avg_eval_pct": 11.4
+      },
+      "rank_8_10_bottom": {
+        "count": 341,
+        "avg_return_pct": 3.57,
+        "win_rate_pct": 54.8,
+        "avg_eval_pct": 9.05
+      }
+    },
+    "strategies": {
+      "all_rank_8_to_10": {
+        "positions": 341,
+        "invested_usd": 341,
+        "end_value_usd": 353.16,
+        "total_return_pct": 3.57,
+        "avg_return_pct": 3.57,
+        "median_return_pct": 1.79,
+        "win_rate_pct": 54.8
+      },
+      "rank_1_only": {
+        "positions": 121,
+        "invested_usd": 121,
+        "end_value_usd": 121.89,
+        "total_return_pct": 0.74,
+        "avg_return_pct": 0.74,
+        "median_return_pct": -0.88,
+        "win_rate_pct": 43.8
+      },
+      "eval_under_10pct": {
+        "positions": 515,
+        "invested_usd": 515,
+        "end_value_usd": 529.23,
+        "total_return_pct": 2.76,
+        "avg_return_pct": 2.76,
+        "median_return_pct": 1.89,
+        "win_rate_pct": 56.7
+      },
+      "eval_30plus": {
+        "positions": 94,
+        "invested_usd": 94,
+        "end_value_usd": 89.58,
+        "total_return_pct": -4.71,
+        "avg_return_pct": -4.71,
+        "median_return_pct": -4.17,
+        "win_rate_pct": 35.1
+      },
+      "lowest_rank_per_email": {
+        "positions": 129,
+        "invested_usd": 129,
+        "end_value_usd": 134.78,
+        "total_return_pct": 4.48,
+        "avg_return_pct": 4.48,
+        "median_return_pct": 3.73,
+        "win_rate_pct": 55.0
+      },
+      "highest_rank_per_email": {
+        "positions": 129,
+        "invested_usd": 129,
+        "end_value_usd": 130.02,
+        "total_return_pct": 0.79,
+        "avg_return_pct": 0.79,
+        "median_return_pct": -0.81,
+        "win_rate_pct": 45.7
+      }
+    }
+  },
+  "2_month": {
+    "hold_months": 2,
+    "total_positions": 1375,
+    "unique_companies": 527,
+    "completed_trades": 852,
+    "incomplete_trades": 467,
+    "missing_ticker": 0,
+    "failed_lookup": -1320,
+    "portfolio_all": {
+      "positions": 852,
+      "invested_usd": 852,
+      "end_value_usd": 899.66,
+      "total_return_pct": 5.59,
+      "avg_return_pct": 5.59,
+      "median_return_pct": 1.26,
+      "win_rate_pct": 51.5
+    },
+    "eval_correlation": {
+      "pearson_r": -0.1269,
+      "pearson_p": 0.0002,
+      "spearman_r": -0.1828,
+      "spearman_p": 0.0
+    },
+    "by_rank": {
+      "1": {
+        "count": 93,
+        "avg_return_pct": -1.7,
+        "avg_eval_pct": 35.66,
+        "win_rate_pct": 39.78
+      },
+      "2": {
+        "count": 77,
+        "avg_return_pct": 5.18,
+        "avg_eval_pct": 19.92,
+        "win_rate_pct": 59.74
+      },
+      "3": {
+        "count": 82,
+        "avg_return_pct": 9.16,
+        "avg_eval_pct": 16.45,
+        "win_rate_pct": 57.32
+      },
+      "4": {
+        "count": 85,
+        "avg_return_pct": 5.79,
+        "avg_eval_pct": 14.0,
+        "win_rate_pct": 48.24
+      },
+      "5": {
+        "count": 81,
+        "avg_return_pct": 3.3,
+        "avg_eval_pct": 11.93,
+        "win_rate_pct": 46.91
+      },
+      "6": {
+        "count": 86,
+        "avg_return_pct": 4.27,
+        "avg_eval_pct": 11.86,
+        "win_rate_pct": 52.33
+      },
+      "7": {
+        "count": 90,
+        "avg_return_pct": 3.61,
+        "avg_eval_pct": 10.83,
+        "win_rate_pct": 50.0
+      },
+      "8": {
+        "count": 82,
+        "avg_return_pct": 7.62,
+        "avg_eval_pct": 10.46,
+        "win_rate_pct": 46.34
+      },
+      "9": {
+        "count": 88,
+        "avg_return_pct": 7.42,
+        "avg_eval_pct": 9.73,
+        "win_rate_pct": 51.14
+      },
+      "10": {
+        "count": 88,
+        "avg_return_pct": 11.88,
+        "avg_eval_pct": 9.09,
+        "win_rate_pct": 64.77
+      }
+    },
+    "by_eval_bucket": {
+      "0-5%": {
+        "count": 132,
+        "avg_return_pct": 8.41,
+        "win_rate_pct": 61.36
+      },
+      "5-10%": {
+        "count": 268,
+        "avg_return_pct": 9.51,
+        "win_rate_pct": 58.96
+      },
+      "10-20%": {
+        "count": 283,
+        "avg_return_pct": 6.04,
+        "win_rate_pct": 48.41
+      },
+      "20-30%": {
+        "count": 91,
+        "avg_return_pct": 1.35,
+        "win_rate_pct": 39.56
+      },
+      "30-50%": {
+        "count": 60,
+        "avg_return_pct": -5.41,
+        "win_rate_pct": 38.33
+      },
+      "50-100%": {
+        "count": 15,
+        "avg_return_pct": -18.17,
+        "win_rate_pct": 26.67
+      },
+      "100%+": {
+        "count": 3,
+        "avg_return_pct": -42.46,
+        "win_rate_pct": 0.0
+      }
+    },
+    "rank_bands": {
+      "rank_1_top_mover": {
+        "count": 93,
+        "avg_return_pct": -1.7,
+        "win_rate_pct": 39.8,
+        "avg_eval_pct": 35.66
+      },
+      "rank_2_3": {
+        "count": 159,
+        "avg_return_pct": 7.24,
+        "win_rate_pct": 58.5,
+        "avg_eval_pct": 18.13
+      },
+      "rank_4_7_mid": {
+        "count": 342,
+        "avg_return_pct": 4.24,
+        "win_rate_pct": 49.4,
+        "avg_eval_pct": 12.14
+      },
+      "rank_8_10_bottom": {
+        "count": 258,
+        "avg_return_pct": 9.0,
+        "win_rate_pct": 54.3,
+        "avg_eval_pct": 9.74
+      }
+    },
+    "strategies": {
+      "all_rank_8_to_10": {
+        "positions": 258,
+        "invested_usd": 258,
+        "end_value_usd": 281.23,
+        "total_return_pct": 9.0,
+        "avg_return_pct": 9.0,
+        "median_return_pct": 2.83,
+        "win_rate_pct": 54.3
+      },
+      "rank_1_only": {
+        "positions": 93,
+        "invested_usd": 93,
+        "end_value_usd": 91.42,
+        "total_return_pct": -1.7,
+        "avg_return_pct": -1.7,
+        "median_return_pct": -6.4,
+        "win_rate_pct": 39.8
+      },
+      "eval_under_10pct": {
+        "positions": 356,
+        "invested_usd": 356,
+        "end_value_usd": 383.85,
+        "total_return_pct": 7.82,
+        "avg_return_pct": 7.82,
+        "median_return_pct": 5.0,
+        "win_rate_pct": 57.6
+      },
+      "eval_30plus": {
+        "positions": 82,
+        "invested_usd": 82,
+        "end_value_usd": 73.73,
+        "total_return_pct": -10.08,
+        "avg_return_pct": -10.08,
+        "median_return_pct": -16.74,
+        "win_rate_pct": 32.9
+      },
+      "lowest_rank_per_email": {
+        "positions": 100,
+        "invested_usd": 100,
+        "end_value_usd": 109.33,
+        "total_return_pct": 9.33,
+        "avg_return_pct": 9.33,
+        "median_return_pct": 5.59,
+        "win_rate_pct": 60.0
+      },
+      "highest_rank_per_email": {
+        "positions": 100,
+        "invested_usd": 100,
+        "end_value_usd": 97.79,
+        "total_return_pct": -2.21,
+        "avg_return_pct": -2.21,
+        "median_return_pct": -6.92,
+        "win_rate_pct": 39.0
+      }
+    }
+  },
+  "comparison": {
+    "1_month_total_return_pct": 2.11,
+    "2_month_total_return_pct": 5.59,
+    "better_hold_period": "2_month",
+    "1_month_win_rate": 51.8,
+    "2_month_win_rate": 51.5,
+    "rank_bands_1m": {
+      "rank_1_top_mover": {
+        "count": 121,
+        "avg_return_pct": 0.74,
+        "win_rate_pct": 43.8,
+        "avg_eval_pct": 34.5
+      },
+      "rank_2_3": {
+        "count": 203,
+        "avg_return_pct": 3.7,
+        "win_rate_pct": 54.2,
+        "avg_eval_pct": 17.31
+      },
+      "rank_4_7_mid": {
+        "count": 445,
+        "avg_return_pct": 0.63,
+        "win_rate_pct": 50.6,
+        "avg_eval_pct": 11.4
+      },
+      "rank_8_10_bottom": {
+        "count": 341,
+        "avg_return_pct": 3.57,
+        "win_rate_pct": 54.8,
+        "avg_eval_pct": 9.05
+      }
+    },
+    "rank_bands_2m": {
+      "rank_1_top_mover": {
+        "count": 93,
+        "avg_return_pct": -1.7,
+        "win_rate_pct": 39.8,
+        "avg_eval_pct": 35.66
+      },
+      "rank_2_3": {
+        "count": 159,
+        "avg_return_pct": 7.24,
+        "win_rate_pct": 58.5,
+        "avg_eval_pct": 18.13
+      },
+      "rank_4_7_mid": {
+        "count": 342,
+        "avg_return_pct": 4.24,
+        "win_rate_pct": 49.4,
+        "avg_eval_pct": 12.14
+      },
+      "rank_8_10_bottom": {
+        "count": 258,
+        "avg_return_pct": 9.0,
+        "win_rate_pct": 54.3,
+        "avg_eval_pct": 9.74
+      }
+    },
+    "strategies_1m": {
+      "all_rank_8_to_10": {
+        "positions": 341,
+        "invested_usd": 341,
+        "end_value_usd": 353.16,
+        "total_return_pct": 3.57,
+        "avg_return_pct": 3.57,
+        "median_return_pct": 1.79,
+        "win_rate_pct": 54.8
+      },
+      "rank_1_only": {
+        "positions": 121,
+        "invested_usd": 121,
+        "end_value_usd": 121.89,
+        "total_return_pct": 0.74,
+        "avg_return_pct": 0.74,
+        "median_return_pct": -0.88,
+        "win_rate_pct": 43.8
+      },
+      "eval_under_10pct": {
+        "positions": 515,
+        "invested_usd": 515,
+        "end_value_usd": 529.23,
+        "total_return_pct": 2.76,
+        "avg_return_pct": 2.76,
+        "median_return_pct": 1.89,
+        "win_rate_pct": 56.7
+      },
+      "eval_30plus": {
+        "positions": 94,
+        "invested_usd": 94,
+        "end_value_usd": 89.58,
+        "total_return_pct": -4.71,
+        "avg_return_pct": -4.71,
+        "median_return_pct": -4.17,
+        "win_rate_pct": 35.1
+      },
+      "lowest_rank_per_email": {
+        "positions": 129,
+        "invested_usd": 129,
+        "end_value_usd": 134.78,
+        "total_return_pct": 4.48,
+        "avg_return_pct": 4.48,
+        "median_return_pct": 3.73,
+        "win_rate_pct": 55.0
+      },
+      "highest_rank_per_email": {
+        "positions": 129,
+        "invested_usd": 129,
+        "end_value_usd": 130.02,
+        "total_return_pct": 0.79,
+        "avg_return_pct": 0.79,
+        "median_return_pct": -0.81,
+        "win_rate_pct": 45.7
+      }
+    },
+    "strategies_2m": {
+      "all_rank_8_to_10": {
+        "positions": 258,
+        "invested_usd": 258,
+        "end_value_usd": 281.23,
+        "total_return_pct": 9.0,
+        "avg_return_pct": 9.0,
+        "median_return_pct": 2.83,
+        "win_rate_pct": 54.3
+      },
+      "rank_1_only": {
+        "positions": 93,
+        "invested_usd": 93,
+        "end_value_usd": 91.42,
+        "total_return_pct": -1.7,
+        "avg_return_pct": -1.7,
+        "median_return_pct": -6.4,
+        "win_rate_pct": 39.8
+      },
+      "eval_under_10pct": {
+        "positions": 356,
+        "invested_usd": 356,
+        "end_value_usd": 383.85,
+        "total_return_pct": 7.82,
+        "avg_return_pct": 7.82,
+        "median_return_pct": 5.0,
+        "win_rate_pct": 57.6
+      },
+      "eval_30plus": {
+        "positions": 82,
+        "invested_usd": 82,
+        "end_value_usd": 73.73,
+        "total_return_pct": -10.08,
+        "avg_return_pct": -10.08,
+        "median_return_pct": -16.74,
+        "win_rate_pct": 32.9
+      },
+      "lowest_rank_per_email": {
+        "positions": 100,
+        "invested_usd": 100,
+        "end_value_usd": 109.33,
+        "total_return_pct": 9.33,
+        "avg_return_pct": 9.33,
+        "median_return_pct": 5.59,
+        "win_rate_pct": 60.0
+      },
+      "highest_rank_per_email": {
+        "positions": 100,
+        "invested_usd": 100,
+        "end_value_usd": 97.79,
+        "total_return_pct": -2.21,
+        "avg_return_pct": -2.21,
+        "median_return_pct": -6.92,
+        "win_rate_pct": 39.0
+      }
+    }
+  }
+}
+
+Missing tickers (2): see /workspace/pharma-backtest/output_v2/missing_tickers.txt
