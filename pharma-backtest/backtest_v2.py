@@ -20,6 +20,50 @@ DATA_PATH = Path(__file__).parent / "company_data.tsv"
 OUTPUT_DIR = Path(__file__).parent / "output_v2"
 TODAY = pd.Timestamp("2026-09-07")
 
+# Non-US exchange suffixes on Yahoo Finance tickers
+FOREIGN_TICKER_PATTERN = re.compile(
+    r"\.(T|HK|KS|KQ|TW|SS|SZ|PA|DE|SW|L|AX|NS|BO|MI|CO|ST|TO|IS|IR|HE|OL|MX|C|LJ|SI|MC)$",
+    re.I,
+)
+
+# Named focused signal filters (applied after enrich_positions)
+FOCUSED_SIGNALS: dict[str, dict] = {
+    "us_rank_8_10": {
+        "label": "US ranks 8-10 (baseline)",
+        "description": "US-listed, rank 8-10",
+    },
+    "us_rank_10_eval_lte_8": {
+        "label": "Rank 10 + eval ≤ 8%",
+        "description": "US-listed, rank 10, evaluation ≤ 8%",
+        "rank": 10,
+        "eval_max": 8,
+    },
+    "us_daily_rank_10_eval_lte_7": {
+        "label": "Daily + rank 10 + eval ≤ 7%",
+        "description": "US Daily email, rank 10, evaluation ≤ 7%",
+        "daily": True,
+        "rank": 10,
+        "eval_max": 7,
+    },
+    "us_daily_eval_4_8": {
+        "label": "Daily + eval 4-8% (ranks 8-10)",
+        "description": "US Daily email, ranks 8-10, evaluation 4-8%",
+        "daily": True,
+        "rank_min": 8,
+        "rank_max": 10,
+        "eval_min": 4,
+        "eval_max": 8,
+    },
+    "us_daily_rank_8_10_eval_lte_8": {
+        "label": "Daily + eval ≤ 8% (ranks 8-10)",
+        "description": "US Daily email, ranks 8-10, evaluation ≤ 8% (recommended)",
+        "daily": True,
+        "rank_min": 8,
+        "rank_max": 10,
+        "eval_max": 8,
+    },
+}
+
 # Skip rows where company name is clearly corrupted (parsing artifacts)
 GARBAGE_PATTERNS = [
     r"^\d+ ",
@@ -80,7 +124,47 @@ def load_positions(path: Path) -> pd.DataFrame:
     df = df.dropna(subset=["company", "eval_pct", "rank"])
     df["company"] = df["company"].astype(str)
     df["ticker"] = df["company"].map(TICKER_MAP)
-    return df.reset_index(drop=True)
+    return enrich_positions(df.reset_index(drop=True))
+
+
+def is_us_ticker(ticker: str | None) -> bool:
+    if not ticker or pd.isna(ticker):
+        return False
+    return not bool(FOREIGN_TICKER_PATTERN.search(str(ticker)))
+
+
+def enrich_positions(df: pd.DataFrame) -> pd.DataFrame:
+    """Add columns used by focused signal filters."""
+    df = df.copy()
+    df["is_us"] = df["ticker"].map(is_us_ticker)
+    df["is_daily"] = df["email_subject"].str.contains("Daily", case=False, na=False)
+    df["is_weekly"] = df["email_subject"].str.contains("Weekly", case=False, na=False)
+    df["is_asia"] = df["email_subject"].str.contains("Asia", case=False, na=False)
+    return df
+
+
+def apply_focused_filter(df: pd.DataFrame, signal: str) -> pd.DataFrame:
+    """Return rows matching a named focused signal."""
+    if signal not in FOCUSED_SIGNALS:
+        raise ValueError(f"Unknown signal '{signal}'. Choose from: {list(FOCUSED_SIGNALS)}")
+
+    spec = FOCUSED_SIGNALS[signal]
+    mask = df["is_us"]
+    if spec.get("daily"):
+        mask &= df["is_daily"]
+    if "rank" in spec:
+        mask &= df["rank"] == spec["rank"]
+    if "rank_min" in spec:
+        mask &= df["rank"] >= spec["rank_min"]
+    if "rank_max" in spec:
+        mask &= df["rank"] <= spec["rank_max"]
+    if "eval_min" in spec:
+        mask &= df["eval_pct"] >= spec["eval_min"]
+    if "eval_max" in spec:
+        mask &= df["eval_pct"] <= spec["eval_max"]
+    if signal == "us_rank_8_10":
+        mask &= df["rank"].between(8, 10)
+    return df[mask].copy()
 
 
 def nearest_price_on_or_after(series: pd.Series, target: pd.Timestamp):
@@ -287,6 +371,113 @@ def build_summary(df: pd.DataFrame, months: int) -> dict:
     return summary
 
 
+def simulate_budget(
+    ok: pd.DataFrame,
+    budget: float = 1000,
+    per_trade: float | None = None,
+    federal_rate: float = 0.24,
+    ma_rate: float = 0.12,
+    sec_fee: float = 0.000145,
+) -> dict:
+    """Simulate fixed budget with 2-month holds, recycling capital on sell."""
+    sub = ok.copy()
+    sub["email_date"] = pd.to_datetime(sub["email_date"]).dt.normalize()
+    sub["sell_date"] = pd.to_datetime(sub["sell_date"], utc=True).dt.tz_localize(None).dt.normalize()
+    sub["return_pct"] = sub["return_pct"].astype(float)
+
+    def tax_on_gain(gain: float) -> float:
+        if gain <= 0:
+            return 0.0
+        ma_tax = gain * ma_rate
+        fed_tax = gain * federal_rate - ma_tax * federal_rate
+        return fed_tax + ma_tax
+
+    cash = budget
+    lots: list[dict] = []
+    trade_size = per_trade
+
+    days = pd.date_range(sub["email_date"].min(), sub["sell_date"].max(), freq="D")
+    for day in days:
+        for lot in lots[:]:
+            if lot["sell_date"] <= day:
+                principal = lot["principal"]
+                proceeds = principal * (1 + lot["return_pct"] / 100)
+                fee = proceeds * sec_fee
+                gain = proceeds - principal - fee
+                cash += proceeds - fee - tax_on_gain(gain)
+                lots.remove(lot)
+
+        buys = sub[sub["email_date"] == day]
+        if len(buys) == 0 or cash < 1:
+            continue
+        if trade_size is None:
+            amount_each = cash / len(buys)
+        else:
+            amount_each = trade_size
+        for _, row in buys.iterrows():
+            if cash < amount_each:
+                break
+            cash -= amount_each
+            lots.append(
+                {
+                    "sell_date": row["sell_date"],
+                    "principal": amount_each,
+                    "return_pct": row["return_pct"],
+                }
+            )
+
+    for lot in lots:
+        principal = lot["principal"]
+        proceeds = principal * (1 + lot["return_pct"] / 100)
+        fee = proceeds * sec_fee
+        gain = proceeds - principal - fee
+        cash += proceeds - fee - tax_on_gain(gain)
+
+    net_profit = cash - budget
+    return {
+        "budget_usd": budget,
+        "per_trade_usd": per_trade,
+        "trades_available": len(sub),
+        "end_balance_usd": round(cash, 2),
+        "net_profit_usd": round(net_profit, 2),
+        "net_return_pct": round(net_profit / budget * 100, 2),
+        "tax_assumption": f"MA {ma_rate:.0%} + federal {federal_rate:.0%} on gains",
+    }
+
+
+def focused_signal_analysis(results: pd.DataFrame, hold_months: int, budget: float = 1000) -> dict:
+    """Analyze all focused signals on completed backtest results."""
+    ok = results[results["status"] == "ok"].copy()
+    ok = enrich_positions(ok)
+    ok["return_pct"] = ok["return_pct"].astype(float)
+    ok["eval_pct"] = ok["eval_pct"].astype(float)
+    ok["rank"] = ok["rank"].astype(int)
+
+    out: dict = {"hold_months": hold_months, "signals": {}}
+    for key, spec in FOCUSED_SIGNALS.items():
+        sub = apply_focused_filter(ok, key)
+        if len(sub) < 1:
+            continue
+        stats = portfolio_stats(sub)
+        # Find best fixed $/trade for budget simulation
+        best_net = -float("inf")
+        best_pt = 10
+        for pt in range(5, 101, 5):
+            sim = simulate_budget(sub, budget=budget, per_trade=pt)
+            if sim["net_profit_usd"] > best_net:
+                best_net = sim["net_profit_usd"]
+                best_pt = pt
+        out["signals"][key] = {
+            "label": spec["label"],
+            "description": spec["description"],
+            "stats": stats,
+            "budget_sim_10usd": simulate_budget(sub, budget=budget, per_trade=10),
+            "budget_sim_optimal": simulate_budget(sub, budget=budget, per_trade=best_pt),
+            "optimal_per_trade_usd": best_pt,
+        }
+    return out
+
+
 def compare_holds(s1: dict, s2: dict) -> dict:
     p1 = s1.get("portfolio_all", {})
     p2 = s2.get("portfolio_all", {})
@@ -303,13 +494,61 @@ def compare_holds(s1: dict, s2: dict) -> dict:
     }
 
 
+def print_focused_summary(focused: dict) -> None:
+    print("\n" + "=" * 70)
+    print(f"FOCUSED SIGNALS — {focused['hold_months']}-MONTH HOLD ($1,000 budget, MA tax)")
+    print("=" * 70)
+    for key, sig in focused["signals"].items():
+        s = sig["stats"]
+        sim = sig["budget_sim_optimal"]
+        print(f"\n[{key}] {sig['label']}")
+        print(f"  {sig['description']}")
+        print(f"  Trades: {s.get('positions', 0)} | Avg return: {s.get('avg_return_pct', 0):.1f}% | Win rate: {s.get('win_rate_pct', 0):.1f}%")
+        print(
+            f"  $1,000 budget @ ${sig['optimal_per_trade_usd']}/trade: "
+            f"net ${sim['net_profit_usd']:.2f} ({sim['net_return_pct']:+.1f}%)"
+        )
+
+
 def main():
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description="Pharma market movers backtest v2")
     parser.add_argument("--data", default=str(DATA_PATH))
+    parser.add_argument(
+        "--filter",
+        choices=list(FOCUSED_SIGNALS),
+        help="Run backtest on a focused signal subset only",
+    )
+    parser.add_argument(
+        "--analyze-focused",
+        action="store_true",
+        help="Analyze focused signals from existing results (no price fetch)",
+    )
+    parser.add_argument("--budget", type=float, default=1000, help="Budget for simulations")
     args = parser.parse_args()
 
     OUTPUT_DIR.mkdir(exist_ok=True)
+
+    if args.analyze_focused:
+        r1_path = OUTPUT_DIR / "results_1month.csv"
+        r2_path = OUTPUT_DIR / "results_2month.csv"
+        if not r1_path.exists() or not r2_path.exists():
+            print("Results not found. Run full backtest first.")
+            return
+        r1 = pd.read_csv(r1_path)
+        r2 = pd.read_csv(r2_path)
+        f1 = focused_signal_analysis(r1, 1, budget=args.budget)
+        f2 = focused_signal_analysis(r2, 2, budget=args.budget)
+        focused = {"1_month": f1, "2_month": f2}
+        with open(OUTPUT_DIR / "focused_signals.json", "w") as f:
+            json.dump(focused, f, indent=2, default=str)
+        print_focused_summary(f2)
+        print(f"\nSaved: {OUTPUT_DIR / 'focused_signals.json'}")
+        return
+
     positions = load_positions(Path(args.data))
+    if args.filter:
+        positions = apply_focused_filter(positions, args.filter)
+        print(f"Filter: {args.filter} ({FOCUSED_SIGNALS[args.filter]['label']})")
     print(f"Loaded {len(positions)} positions ({positions['company'].nunique()} companies)")
     print(f"Ticker coverage: {positions['ticker'].notna().sum()}/{len(positions)}")
 
@@ -324,14 +563,24 @@ def main():
     r2.to_csv(OUTPUT_DIR / "results_2month.csv", index=False)
 
     comparison = compare_holds(s1, s2)
-    full = {"1_month": s1, "2_month": s2, "comparison": comparison}
+    f1 = focused_signal_analysis(r1, 1, budget=args.budget)
+    f2 = focused_signal_analysis(r2, 2, budget=args.budget)
+    full = {
+        "1_month": s1,
+        "2_month": s2,
+        "comparison": comparison,
+        "focused_signals": {"1_month": f1, "2_month": f2},
+    }
     with open(OUTPUT_DIR / "summary_v2.json", "w") as f:
         json.dump(full, f, indent=2, default=str)
+    with open(OUTPUT_DIR / "focused_signals.json", "w") as f:
+        json.dump({"1_month": f1, "2_month": f2}, f, indent=2, default=str)
 
     print("\n" + "=" * 70)
     print("PHARMA BACKTEST V2 — 1 MONTH vs 2 MONTH")
     print("=" * 70)
     print(json.dumps(full, indent=2, default=str))
+    print_focused_summary(f2)
 
     missing = sorted(positions.loc[positions["ticker"].isna(), "company"].unique())
     if missing:
