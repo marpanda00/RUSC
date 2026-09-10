@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Appartamento 4 Camere — Proposta di Ristrutturazione</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: #1a1a2e; color: #eee; }
+    header { background: linear-gradient(135deg, #1a5276, #2980b9); padding: 20px 30px; }
+    header h1 { font-size: 1.5rem; }
+    header p { opacity: 0.85; margin-top: 6px; font-size: 0.9rem; }
+    .tabs { display: flex; gap: 0; background: #16213e; }
+    .tab { padding: 12px 24px; cursor: pointer; border: none; background: transparent;
+           color: #aaa; font-size: 0.95rem; transition: all 0.2s; }
+    .tab.active { background: #0f3460; color: #fff; border-bottom: 3px solid #e94560; }
+    .tab:hover { color: #fff; }
+    .panel { display: none; padding: 20px; }
+    .panel.active { display: block; }
+    #canvas3d { width: 100%; height: 70vh; border-radius: 8px; background: #0a0a1a; }
+    .plan-img { max-width: 100%; border-radius: 8px; box-shadow: 0 4px 20px rgba(0,0,0,0.4); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+    @media (max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+    .card { background: #16213e; border-radius: 10px; padding: 20px; }
+    .card h3 { color: #e94560; margin-bottom: 12px; }
+    .card ul { padding-left: 20px; line-height: 1.8; }
+    .legend { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 15px; }
+    .legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.85rem; }
+    .legend-color { width: 16px; height: 16px; border-radius: 3px; }
+    .controls { margin: 10px 0; display: flex; gap: 10px; flex-wrap: wrap; }
+    .controls button { padding: 8px 16px; background: #e94560; color: white; border: none;
+                       border-radius: 6px; cursor: pointer; font-size: 0.85rem; }
+    .controls button:hover { background: #c0392b; }
+    .room-label { position: absolute; pointer-events: none; }
+    .info-bar { background: #0f3460; padding: 10px 20px; font-size: 0.85rem; display: flex;
+                justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Proposta Ristrutturazione — 4 Camere da Letto</h1>
+    <p>Appartamento ~110 m² · Bagni fissi · Cucina spostata in open space · Pareti interne non portanti</p>
+  </header>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showPanel('plan2d')">Pianta 2D</button>
+    <button class="tab" onclick="showPanel('plan3d')">Modello 3D</button>
+    <button class="tab" onclick="showPanel('details')">Dettagli Progetto</button>
+  </div>
+
+  <div class="info-bar">
+    <span>🛏️ 4 Camere · 🛁 2 Bagni (fissi) · 🍳 Cucina open · 🛋️ Soggiorno ~50 m²</span>
+    <span>Trascina per ruotare la vista 3D · Scroll per zoom</span>
+  </div>
+
+  <!-- 2D Panel -->
+  <div id="plan2d" class="panel active">
+    <div class="grid-2">
+      <div class="card">
+        <h3>Piano Attuale</h3>
+        <img class="plan-img" src="output/01_current_floor_plan.png" alt="Piano attuale">
+      </div>
+      <div class="card">
+        <h3>Piano Proposto — 4 Camere</h3>
+        <img class="plan-img" src="output/02_proposed_4bed_floor_plan.png" alt="Piano proposto">
+      </div>
+    </div>
+    <div class="card" style="margin-top:20px">
+      <h3>Confronto</h3>
+      <img class="plan-img" src="output/03_comparison.png" alt="Confronto">
+    </div>
+  </div>
+
+  <!-- 3D Panel -->
+  <div id="plan3d" class="panel">
+    <div class="controls">
+      <button onclick="setView('top')">Vista dall'alto</button>
+      <button onclick="setView('iso')">Vista isometrica</button>
+      <button onclick="setView('walk')">Vista ingresso</button>
+      <button onclick="toggleWalls()">Mostra/Nascondi pareti</button>
+      <button onclick="toggleLabels()">Etichette stanze</button>
+    </div>
+    <canvas id="canvas3d"></canvas>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-color" style="background:#C8D8F0"></div> Camere</div>
+      <div class="legend-item"><div class="legend-color" style="background:#A8C4E8"></div> Camera 4 (nuova)</div>
+      <div class="legend-item"><div class="legend-color" style="background:#F5E6C8"></div> Soggiorno</div>
+      <div class="legend-item"><div class="legend-color" style="background:#FFE0B2"></div> Cucina</div>
+      <div class="legend-item"><div class="legend-color" style="background:#B8E0D2"></div> Bagni</div>
+      <div class="legend-item"><div class="legend-color" style="background:#E8E8E8"></div> Ingresso</div>
+    </div>
+  </div>
+
+  <!-- Details Panel -->
+  <div id="details" class="panel">
+    <div class="grid-2">
+      <div class="card">
+        <h3>Strategia di Ristrutturazione</h3>
+        <ul>
+          <li><strong>Camera 4</strong> — L'ex cucina (12.6 m²) diventa la quarta camera: ha finestra e balcone proprio, requisiti minimi per camera da letto.</li>
+          <li><strong>Cucina open</strong> — Spostata nel soggiorno, zona nord-ovest (~7 m²) con isola/penisola verso il pranzo.</li>
+          <li><strong>Soggiorno</strong> — Resta ampio (~50 m² open space) con accesso al grande balcone panoramico.</li>
+          <li><strong>Bagni</strong> — Bagno e WC restano nelle posizioni attuali (impianti fissi).</li>
+          <li><strong>Pareti</strong> — Si demolisce il muro tra ingresso e soggiorno; si chiude l'apertura cucina-veranda per isolare Camera 4.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Distribuzione Camere</h3>
+        <ul>
+          <li><strong>Camera 1 (Master)</strong> — 12.6 m², balcone panoramico superiore</li>
+          <li><strong>Camera 2</strong> — 11.4 m², balcone superiore</li>
+          <li><strong>Camera 3</strong> — 16.1 m², balcone laterale sinistro</li>
+          <li><strong>Camera 4 (nuova)</strong> — 12.6 m², balcone destro (ex cucina)</li>
+        </ul>
+        <h3 style="margin-top:20px">Vantaggi</h3>
+        <ul>
+          <li>Ogni camera ha luce naturale e finestra</li>
+          <li>3 camere con accesso diretto a balcone</li>
+          <li>Open space moderno per zona giorno</li>
+          <li>Costi contenuti: nessuno spostamento impianti bagno</li>
+          <li>Camera 4 ideale per ospiti, studio o ragazzo</li>
+        </ul>
+      </div>
+    </div>
+    <div class="card" style="margin-top:20px">
+      <h3>Alternative Considerate</h3>
+      <ul>
+        <li><strong>Opzione B — Partizionare il soggiorno:</strong> Creare Camera 4 tagliando ~12 m² dal soggiorno verso il disimpegno. Pro: cucina resta separata. Contro: soggiorno più piccolo, camera senza balcone.</li>
+        <li><strong>Opzione C — Camera nel disimpegno:</strong> Ridurre il corridoio e creare una camera compatta. Contro: dimensioni ridotte (~9 m²), finestra piccola.</li>
+        <li><strong>Scelta consigliata — Opzione A (ex cucina):</strong> Massimizza qualità delle camere, mantiene soggiorno generoso, costi impianto cucina moderati (spostamento tubature su distanza breve).</li>
+      </ul>
+    </div>
+  </div>
+
+  <script type="importmap">
+  { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } }
+  </script>
+  <script type="module">
+    import * as THREE from 'three';
+    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+    let scene, camera, renderer, controls, wallsVisible = true, labelsVisible = true;
+    const labels = [];
+    const WALL_H = 2.7;
+    const SCALE = 1;
+
+    const ROOMS = [
+      { name: 'Camera 1', x: 0, z: 0, w: 4.2, d: 3.0, color: 0xC8D8F0, h: WALL_H },
+      { name: 'Camera 2', x: 4.2, z: 0, w: 3.8, d: 3.0, color: 0xC8D8F0, h: WALL_H },
+      { name: 'Camera 3', x: 0, z: 3.8, w: 3.5, d: 4.6, color: 0xC8D8F0, h: WALL_H },
+      { name: 'Camera 4', x: 8.8, z: 7.3, w: 3.6, d: 3.5, color: 0xA8C4E8, h: WALL_H },
+      { name: 'Bagno', x: 3.5, z: 3.8, w: 2.2, d: 2.8, color: 0xB8E0D2, h: WALL_H },
+      { name: 'WC', x: 0, z: 8.4, w: 1.8, d: 2.4, color: 0xB8E0D2, h: WALL_H },
+      { name: 'Ingresso', x: 1.8, z: 7.6, w: 4.0, d: 3.2, color: 0xE8E8E8, h: WALL_H },
+      { name: 'Soggiorno', x: 5.8, z: 0, w: 6.6, d: 7.6, color: 0xF5E6C8, h: WALL_H },
+      { name: 'Cucina', x: 5.9, z: 0.1, w: 2.8, d: 2.4, color: 0xFFE0B2, h: WALL_H },
+    ];
+
+    // Z is flipped for Three.js (z goes into screen)
+    function init3D() {
+      const canvas = document.getElementById('canvas3d');
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x0a0a1a);
+      scene.fog = new THREE.Fog(0x0a0a1a, 20, 40);
+
+      camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
+      camera.position.set(8, 12, 14);
+
+      renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+      renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+
+      controls = new OrbitControls(camera, canvas);
+      controls.target.set(6, 0, 5);
+      controls.enableDamping = true;
+      controls.maxPolarAngle = Math.PI / 2.1;
+
+      // Lights
+      scene.add(new THREE.AmbientLight(0xffffff, 0.5));
+      const sun = new THREE.DirectionalLight(0xfff5e6, 0.8);
+      sun.position.set(10, 15, 5);
+      sun.castShadow = true;
+      scene.add(sun);
+      const fill = new THREE.DirectionalLight(0x8888ff, 0.3);
+      fill.position.set(-5, 8, -5);
+      scene.add(fill);
+
+      // Floor base
+      const floorGeo = new THREE.PlaneGeometry(13, 11.5);
+      const floorMat = new THREE.MeshStandardMaterial({ color: 0x3d3d3d, roughness: 0.9 });
+      const floor = new THREE.Mesh(floorGeo, floorMat);
+      floor.rotation.x = -Math.PI / 2;
+      floor.position.set(6.2, -0.01, 5.5);
+      floor.receiveShadow = true;
+      scene.add(floor);
+
+      // Grid
+      const grid = new THREE.GridHelper(14, 28, 0x444466, 0x333355);
+      grid.position.set(6.2, 0, 5.5);
+      scene.add(grid);
+
+      // Build rooms
+      const wallGroup = new THREE.Group();
+      wallGroup.name = 'walls';
+
+      ROOMS.forEach(room => {
+        const rz = 10.8 - room.z - room.d; // flip Z
+
+        // Floor
+        const floorMesh = new THREE.Mesh(
+          new THREE.PlaneGeometry(room.w - 0.1, room.d - 0.1),
+          new THREE.MeshStandardMaterial({ color: room.color, roughness: 0.7, side: THREE.DoubleSide })
+        );
+        floorMesh.rotation.x = -Math.PI / 2;
+        floorMesh.position.set(room.x + room.w/2, 0.01, rz + room.d/2);
+        floorMesh.receiveShadow = true;
+        scene.add(floorMesh);
+
+        // Walls (3 sides, open front for visibility)
+        const wallMat = new THREE.MeshStandardMaterial({
+          color: 0xf5f5f0, roughness: 0.8, transparent: true, opacity: 0.85
+        });
+        const wallThickness = 0.12;
+
+        // Back wall
+        const backWall = new THREE.Mesh(
+          new THREE.BoxGeometry(room.w, room.h, wallThickness), wallMat
+        );
+        backWall.position.set(room.x + room.w/2, room.h/2, rz);
+        backWall.castShadow = true;
+        wallGroup.add(backWall);
+
+        // Left wall
+        const leftWall = new THREE.Mesh(
+          new THREE.BoxGeometry(wallThickness, room.h, room.d), wallMat
+        );
+        leftWall.position.set(room.x, room.h/2, rz + room.d/2);
+        leftWall.castShadow = true;
+        wallGroup.add(leftWall);
+
+        // Right wall
+        const rightWall = new THREE.Mesh(
+          new THREE.BoxGeometry(wallThickness, room.h, room.d), wallMat
+        );
+        rightWall.position.set(room.x + room.w, room.h/2, rz + room.d/2);
+        rightWall.castShadow = true;
+        wallGroup.add(rightWall);
+
+        // Label sprite
+        const canvas2d = document.createElement('canvas');
+        canvas2d.width = 256; canvas2d.height = 64;
+        const ctx = canvas2d.getContext('2d');
+        ctx.fillStyle = 'rgba(0,0,0,0.6)';
+        ctx.fillRect(0, 0, 256, 64);
+        ctx.fillStyle = '#fff';
+        ctx.font = 'bold 22px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.fillText(room.name, 128, 40);
+        const tex = new THREE.CanvasTexture(canvas2d);
+        const spriteMat = new THREE.SpriteMaterial({ map: tex, transparent: true });
+        const sprite = new THREE.Sprite(spriteMat);
+        sprite.position.set(room.x + room.w/2, room.h + 0.3, rz + room.d/2);
+        sprite.scale.set(2.5, 0.6, 1);
+        sprite.visible = labelsVisible;
+        labels.push(sprite);
+        scene.add(sprite);
+      });
+
+      scene.add(wallGroup);
+
+      // Balconies
+      const balcMat = new THREE.MeshStandardMaterial({ color: 0x90c695, roughness: 0.8 });
+      [[-0.5, 9, 1.5, 2], [-0.5, 4.5, 1, 2.5], [4, 11, 8, 0.8], [12.5, 7, 0.8, 2.5]].forEach(([bx, bz, bw, bd]) => {
+        const bz2 = 10.8 - bz - bd;
+        const balc = new THREE.Mesh(new THREE.BoxGeometry(bw, 0.1, bd), balcMat);
+        balc.position.set(bx + bw/2, 0.05, bz2 + bd/2);
+        scene.add(balc);
+      });
+
+      animate();
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    window.setView = function(type) {
+      const t = { x: 6, y: 0, z: 5 };
+      if (type === 'top') { camera.position.set(6, 18, 5.5); }
+      else if (type === 'iso') { camera.position.set(14, 10, 14); }
+      else if (type === 'walk') { camera.position.set(4, 1.7, 9); }
+      controls.target.copy(new THREE.Vector3(t.x, t.y, t.z));
+    };
+
+    window.toggleWalls = function() {
+      wallsVisible = !wallsVisible;
+      const g = scene.getObjectByName('walls');
+      if (g) g.visible = wallsVisible;
+    };
+
+    window.toggleLabels = function() {
+      labelsVisible = !labelsVisible;
+      labels.forEach(l => l.visible = labelsVisible);
+    };
+
+    window.showPanel = function(id) {
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      event.target.classList.add('active');
+      if (id === 'plan3d' && !scene) {
+        setTimeout(init3D, 100);
+      }
+    };
+
+    window.addEventListener('resize', () => {
+      if (!renderer) return;
+      const c = document.getElementById('canvas3d');
+      camera.aspect = c.clientWidth / c.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(c.clientWidth, c.clientHeight);
+    });
+  </script>
+</body>
+</html>
