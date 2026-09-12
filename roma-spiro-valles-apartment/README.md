@@ -1,0 +1,49 @@
+# Roma, via Spiro Valles — SketchUp model
+
+3D model of the cadastral apartment plan (Catasto Edilizio Urbano, Roma, via Spiro Valles, piano interno **H 2.80 m**, scala 1:100).
+
+**File to open in SketchUp Web Free:** [`Roma_Via_Spiro_Valles.skp`](Roma_Via_Spiro_Valles.skp)
+
+SketchUp Web Free only imports `.skp` (not STL/DAE/OBJ). This file is SketchUp 2017 format, which the free web app can open.
+
+## How to import (SketchUp Web Free)
+
+1. Open [app.sketchup.com](https://app.sketchup.com) and sign in with a free Trimble account.
+2. On the home screen choose **Open** → **Computer** (or drag the `.skp` onto the page).
+3. Select `Roma_Via_Spiro_Valles.skp`.
+
+If the model looks huge or tiny, set units to metres: **Window / Model info → Units → Meters** (or the Web equivalent under the model info panel). Internal coordinates are real metres stored in SketchUp’s native inches, so **2.80 m walls should read as 2.80 m**.
+
+## What is in the model
+
+| Group | Contents |
+|---|---|
+| 01 Murature | Exterior (~30 cm) and interior (~15 cm) walls, with door and window openings |
+| 02 Parapetti terrazzi | Terrace railings, 1.10 m |
+| 03 Pavimenti | Room floors, colour-coded |
+| 04 Porte | Door leaves, slightly open as on the cadastral drawing |
+| 05 Vetri terrazzi | Glass in porta-finestre and windows |
+| 06 Scala | U-stair to the upper landing |
+| 07 Vano ascensore | Lift / technical shaft |
+| 08 Soffitti | Ceilings (layer **hidden** by default) |
+| 09 Solaio | Floor slab |
+| 10 Planimetria di riferimento | Scanned cadastral sheet under the model (layer **hidden** by default — turn it on to compare) |
+| 11 Orientamento Nord | North arrow. On the sheet, north points **down the page**, so in the model geographic north is **−Y** |
+
+Room numbers follow the cadastral vani (1–5), plus the two bathrooms, disimpegno, terraces, stair, and the *interno* courtyard.
+
+Turn layers on/off from the **Tags / Layers** panel. Ceilings start hidden so you can look into the rooms from above.
+
+## Accuracy
+
+The model is traced from the scan of the planimetria, not from a measured survey. Wall positions match the drawing topology (rooms, doors, terraces, stair, shaft). Expect roughly **±10–20 cm** versus the paper original. Use it as a working SketchUp massing you can refine, not as a legal cadastral document.
+
+## Regenerating the file
+
+```bash
+pip install openskp pillow opencv-python-headless numpy
+python3 build_skp.py
+python3 render_preview.py
+```
+
+`layout.py` holds the metre coordinates. `assets/planimetria.png` is the source sheet.
