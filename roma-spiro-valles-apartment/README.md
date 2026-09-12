@@ -2,15 +2,24 @@
 
 3D model of the cadastral apartment plan (Catasto Edilizio Urbano, Roma, via Spiro Valles, piano interno **H 2.80 m**, scala 1:100).
 
-**File to open in SketchUp Web Free:** [`Roma_Via_Spiro_Valles.skp`](Roma_Via_Spiro_Valles.skp)
+**Files to download:**
 
-SketchUp Web Free only imports `.skp` (not STL/DAE/OBJ). This file is SketchUp 2017 format, which the free web app can open.
+- [`Roma_Via_Spiro_Valles.zip`](Roma_Via_Spiro_Valles.zip) — easiest from GitHub (unzip, then open the `.skp`)
+- [`Roma_Via_Spiro_Valles.skp`](Roma_Via_Spiro_Valles.skp) — SketchUp 2017 file for SketchUp Web Free
+
+Direct links (use **Save link as…** if the browser tries to preview the file):
+
+- Zip: https://github.com/marpanda00/RUSC/raw/cursor/roma-apartment-sketchup-66e2/roma-spiro-valles-apartment/Roma_Via_Spiro_Valles.zip
+- SKP: https://github.com/marpanda00/RUSC/raw/cursor/roma-apartment-sketchup-66e2/roma-spiro-valles-apartment/Roma_Via_Spiro_Valles.skp
+
+SketchUp Web Free only imports `.skp` (not STL/DAE/OBJ).
 
 ## How to import (SketchUp Web Free)
 
-1. Open [app.sketchup.com](https://app.sketchup.com) and sign in with a free Trimble account.
-2. On the home screen choose **Open** → **Computer** (or drag the `.skp` onto the page).
-3. Select `Roma_Via_Spiro_Valles.skp`.
+1. Unzip `Roma_Via_Spiro_Valles.zip` if you downloaded the zip.
+2. Open [app.sketchup.com](https://app.sketchup.com) and sign in with a free Trimble account.
+3. On the home screen choose **Open** → **Computer** (or drag the `.skp` onto the page).
+4. Select `Roma_Via_Spiro_Valles.skp`.
 
 If the model looks huge or tiny, set units to metres: **Window / Model info → Units → Meters** (or the Web equivalent under the model info panel). Internal coordinates are real metres stored in SketchUp’s native inches, so **2.80 m walls should read as 2.80 m**.
 
