@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+preview_metadata.json
+preview.glb
+preview.obj
+preview.mtl
