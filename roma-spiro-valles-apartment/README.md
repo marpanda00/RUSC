@@ -2,6 +2,8 @@
 
 3D model of the cadastral apartment plan (Catasto Edilizio Urbano, Roma, via Spiro Valles, piano interno **H 2.80 m**, scala 1:100).
 
+This is the **modified** layout: two entrance disimpegno splitting the house, camera nord with the bathroom, sala angolo cottura in the old vano 2, camera sud in half of the old soggiorno. West wing unchanged.
+
 **Files to download:**
 
 - [`Roma_Via_Spiro_Valles.zip`](Roma_Via_Spiro_Valles.zip) — easiest from GitHub (unzip, then open the `.skp`)

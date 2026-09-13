@@ -23,6 +23,7 @@ from layout import (
     SHAFT,
     SLAB,
     WALLS,
+    wall_solids,
 )
 
 IN = 39.37007874015748  # inches per metre
@@ -64,63 +65,6 @@ def add_poly(target, points, material=None, layer=None, holes=None):
         for hole in holes:
             hole_pts.append([m(*p) if len(p) == 3 else m(p[0], p[1], 0.0) for p in hole])
     target.add_face(pts, material=material, layer=layer, holes=hole_pts)
-
-
-def wall_solids(wx0, wy0, wx1, wy1, wz0, wz1, openings):
-    """Split an axis-aligned wall around door/window openings."""
-    hits = []
-    for o in openings:
-        _kind, ox0, oy0, ox1, oy1, oz0, oz1 = o
-        ix0, ix1 = max(wx0, ox0), min(wx1, ox1)
-        iy0, iy1 = max(wy0, oy0), min(wy1, oy1)
-        iz0, iz1 = max(wz0, oz0), min(wz1, oz1)
-        if ix1 - ix0 < 0.05 or iy1 - iy0 < 0.05 or iz1 - iz0 < 0.05:
-            continue
-        hits.append((ix0, iy0, ix1, iy1, max(wz0, oz0), min(wz1, oz1)))
-    if not hits:
-        return [(wx0, wy0, wx1, wy1, wz0, wz1)]
-
-    dx, dy = wx1 - wx0, wy1 - wy0
-    solids = []
-    if dx >= dy:
-        xs = [wx0]
-        for h in hits:
-            xs.extend([h[0], h[2]])
-        xs.append(wx1)
-        xs = sorted(set(round(v, 4) for v in xs))
-        for a, b in zip(xs, xs[1:]):
-            if b - a < 0.02:
-                continue
-            covering = [h for h in hits if h[0] <= a + 0.01 and h[2] >= b - 0.01]
-            if not covering:
-                solids.append((a, wy0, b, wy1, wz0, wz1))
-                continue
-            oz0 = min(h[4] for h in covering)
-            oz1 = max(h[5] for h in covering)
-            if oz0 - wz0 > 0.04:
-                solids.append((a, wy0, b, wy1, wz0, oz0))
-            if wz1 - oz1 > 0.04:
-                solids.append((a, wy0, b, wy1, oz1, wz1))
-    else:
-        ys = [wy0]
-        for h in hits:
-            ys.extend([h[1], h[3]])
-        ys.append(wy1)
-        ys = sorted(set(round(v, 4) for v in ys))
-        for a, b in zip(ys, ys[1:]):
-            if b - a < 0.02:
-                continue
-            covering = [h for h in hits if h[1] <= a + 0.01 and h[3] >= b - 0.01]
-            if not covering:
-                solids.append((wx0, a, wx1, b, wz0, wz1))
-                continue
-            oz0 = min(h[4] for h in covering)
-            oz1 = max(h[5] for h in covering)
-            if oz0 - wz0 > 0.04:
-                solids.append((wx0, a, wx1, b, wz0, oz0))
-            if wz1 - oz1 > 0.04:
-                solids.append((wx0, a, wx1, b, oz1, wz1))
-    return solids
 
 
 def door_leaf_box(x, y, w, h, rot_deg, thickness=0.04):
@@ -221,6 +165,7 @@ def build():
     # --- materials (must come first) ---
     wall_int = builder.add_material("Intonaco", (245, 239, 228))
     wall_ext = builder.add_material("Muratura esterna", (228, 218, 200))
+    wall_new = builder.add_material("Muratura nuova", (196, 120, 96))
     parapet = builder.add_material("Parapetto", (236, 232, 224))
     wood = builder.add_material("Legno porte", (128, 90, 58))
     glass = builder.add_material("Vetro", (170, 205, 220), opacity=0.35)
@@ -235,16 +180,18 @@ def build():
         "Terrazzo sud": builder.add_material("Pav. terrazzo sud", (186, 118, 82)),
         "Terrazzo nord-ovest": builder.add_material("Pav. terrazzo NO", (186, 118, 82)),
         "Terrazzo nord": builder.add_material("Pav. terrazzo N", (186, 118, 82)),
-        "Vano 1": builder.add_material("Pav. vano 1", (198, 164, 118)),
-        "Vano 2": builder.add_material("Pav. vano 2", (186, 154, 112)),
-        "Vano 3 soggiorno": builder.add_material("Pav. soggiorno", (176, 172, 164)),
-        "Vano 4 loggia": builder.add_material("Pav. loggia", (168, 160, 148)),
-        "Vano 5": builder.add_material("Pav. vano 5", (204, 170, 122)),
+        "Camera 1": builder.add_material("Pav. camera 1", (198, 164, 118)),
+        "Camera 5": builder.add_material("Pav. camera 5", (204, 170, 122)),
+        "Sala angolo cottura": builder.add_material("Pav. sala cottura", (210, 168, 120)),
+        "Camera sud": builder.add_material("Pav. camera sud", (186, 150, 118)),
+        "Camera nord": builder.add_material("Pav. camera nord", (176, 148, 116)),
+        "Camera nord (lato bagno)": builder.add_material("Pav. camera nord 2", (176, 148, 116)),
         "Bagno ovest": builder.add_material("Pav. bagno O", (214, 218, 222)),
         "Bagno centrale": builder.add_material("Pav. bagno C", (214, 218, 222)),
-        "Disimpegno sud": builder.add_material("Pav. disimpegno S", (196, 190, 178)),
-        "Disimpegno": builder.add_material("Pav. disimpegno", (196, 190, 178)),
-        "Passaggio terrazzo nord": builder.add_material("Pav. passaggio", (196, 190, 178)),
+        "Corridoio ovest": builder.add_material("Pav. corr ovest", (196, 190, 178)),
+        "Disimpegno centrale": builder.add_material("Pav. dis centrale", (196, 190, 178)),
+        "Disimpegno A": builder.add_material("Pav. dis A", (188, 184, 176)),
+        "Disimpegno B": builder.add_material("Pav. dis B", (180, 176, 168)),
         "Scala": builder.add_material("Pav. pianerottolo", (168, 164, 158)),
         "Interno / cortile": grass,
     }
@@ -279,7 +226,7 @@ def build():
             if kind == "parapet":
                 continue
             z1 = CEILING
-            mat = wall_ext if kind == "ext" else wall_int
+            mat = wall_ext if kind == "ext" else (wall_new if kind == "new" else wall_int)
             for solid in wall_solids(x0, y0, x1, y1, 0.0, z1, OPENINGS):
                 add_box(g, *solid, material=mat, layer=lyr_walls)
 
@@ -296,7 +243,7 @@ def build():
             lyr = lyr_site if name.startswith("Interno") else lyr_floors
             z = 0.01
             holes = []
-            if name == "Vano 3 soggiorno":
+            if name == "Camera nord":
                 sx0, sy0, sx1, sy1 = SHAFT
                 holes.append([(sx0, sy0, z), (sx1, sy0, z), (sx1, sy1, z), (sx0, sy1, z)])
             add_poly(
@@ -340,7 +287,7 @@ def build():
             holes = []
             if name == "Scala":
                 continue  # stairwell open above
-            if name == "Vano 3 soggiorno":
+            if name == "Camera nord":
                 sx0, sy0, sx1, sy1 = SHAFT
                 holes.append([(sx0, sy0, z), (sx1, sy0, z), (sx1, sy1, z), (sx0, sy1, z)])
             add_poly(
