@@ -177,16 +177,126 @@ def isometric(scale=34, size=(1600, 1200), title="Progetto modificato — vista 
     return img
 
 
+def from_above(scale=72, size=(1800, 2200)) -> np.ndarray:
+    """Bird's-eye 3D view looking down into the rooms. No ceiling."""
+    w, h = size
+    img = np.full((h, w, 3), 250, np.uint8)
+
+    def raw(x, y, z):
+        # Nearly vertical; a little height so walls still read as 3D
+        px = x * scale
+        py = -y * scale - z * scale * 0.16
+        return px, py
+
+    pts = []
+    for name, (x0, y0, x1, y1) in ROOMS.items():
+        if name.startswith("Interno"):
+            continue
+        for x, y, z in ((x0, y0, 0), (x1, y0, 0), (x1, y1, CEILING), (x0, y1, 0)):
+            pts.append(raw(x, y, z))
+    xs = [p[0] for p in pts]
+    ys = [p[1] for p in pts]
+    ox = w / 2 - (min(xs) + max(xs)) / 2
+    oy = h / 2 - (min(ys) + max(ys)) / 2 + 20
+
+    def proj(x, y, z):
+        px, py = raw(x, y, z)
+        return int(ox + px), int(oy + py)
+
+    def quad(corners, color, outline=(70, 70, 70)):
+        arr = np.array(corners, np.int32)
+        cv2.fillConvexPoly(img, arr, color)
+        cv2.polylines(img, [arr], True, outline, 1, cv2.LINE_AA)
+
+    # floors
+    for name, (x0, y0, x1, y1) in ROOMS.items():
+        if name.startswith("Interno"):
+            continue
+        c = ROOM_COLORS.get(name, (200, 200, 200))
+        quad([proj(x0, y0, 0), proj(x1, y0, 0), proj(x1, y1, 0), proj(x0, y1, 0)], c, (140, 140, 140))
+
+    solids = []
+    for kind, x0, y0, x1, y1 in WALLS:
+        z1 = PARAPET_H if kind == "parapet" else CEILING
+        if kind == "new":
+            col = (96, 110, 196)
+        elif kind == "parapet":
+            col = (200, 196, 188)
+        elif kind == "ext":
+            col = (214, 204, 188)
+        else:
+            col = (232, 226, 214)
+        for s in wall_solids(x0, y0, x1, y1, 0.0, z1, OPENINGS):
+            solids.append((kind, col, s))
+
+    # far (north / +Y) first so nearer south faces paint on top
+    solids.sort(key=lambda item: -(item[2][1] + item[2][3]) / 2)
+
+    for kind, col, (sx0, sy0, sx1, sy1, sz0, sz1) in solids:
+        top = tuple(int(v * 0.94) for v in col)
+        south = tuple(int(v * 0.62) for v in col)
+        east = tuple(int(v * 0.74) for v in col)
+        # top of wall (no ceiling — this is what you see from above)
+        quad([proj(sx0, sy0, sz1), proj(sx1, sy0, sz1), proj(sx1, sy1, sz1), proj(sx0, sy1, sz1)], top, (90, 90, 90))
+        # south face (height)
+        quad([proj(sx0, sy0, sz0), proj(sx1, sy0, sz0), proj(sx1, sy0, sz1), proj(sx0, sy0, sz1)], south, (60, 60, 60))
+        # east face
+        quad([proj(sx1, sy0, sz0), proj(sx1, sy1, sz0), proj(sx1, sy1, sz1), proj(sx1, sy0, sz1)], east, (60, 60, 60))
+
+    for kind, x0, y0, x1, y1, z0, z1 in OPENINGS:
+        if kind not in ("pf", "window"):
+            continue
+        gcol = (210, 205, 150)
+        dx, dy = x1 - x0, y1 - y0
+        t = 0.03
+        if dx >= dy:
+            ym = (y0 + y1) / 2
+            quad(
+                [proj(x0, ym, z0), proj(x1, ym, z0), proj(x1, ym, z1), proj(x0, ym, z1)],
+                gcol,
+                (150, 140, 80),
+            )
+        else:
+            xm = (x0 + x1) / 2
+            quad(
+                [proj(xm, y0, z0), proj(xm, y1, z0), proj(xm, y1, z1), proj(xm, y0, z1)],
+                gcol,
+                (150, 140, 80),
+            )
+
+    sx0, sy0, sx1, sy1 = SHAFT
+    quad(
+        [proj(sx0, sy0, 0.02), proj(sx1, sy0, 0.02), proj(sx1, sy1, 0.02), proj(sx0, sy1, 0.02)],
+        (80, 80, 80),
+        (40, 40, 40),
+    )
+
+    # crop to the building with a small margin
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    mask = gray < 248
+    ys, xs = np.where(mask)
+    if len(xs) and len(ys):
+        pad = 48
+        x0c, x1c = max(0, xs.min() - pad), min(w, xs.max() + pad)
+        y0c, y1c = max(0, ys.min() - pad), min(h, ys.max() + pad)
+        img = img[y0c:y1c, x0c:x1c].copy()
+    return img
+
+
 def main():
     OUT.mkdir(exist_ok=True)
     top = top_view()
     iso = isometric()
+    above = from_above()
     cv2.imwrite(str(OUT / "preview_plan.png"), top)
     cv2.imwrite(str(OUT / "preview_iso.png"), iso)
     cv2.imwrite(str(OUT / "rendering_plan.png"), top)
     cv2.imwrite(str(OUT / "rendering_3d.png"), iso)
+    above_path = OUT / "rendering_from_above.png"
+    cv2.imwrite(str(above_path), above)
     print("wrote", OUT / "preview_plan.png", top.shape)
     print("wrote", OUT / "preview_iso.png", iso.shape)
+    print("wrote", above_path, above.shape)
 
 
 if __name__ == "__main__":
