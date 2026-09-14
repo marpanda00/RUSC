@@ -27,6 +27,8 @@ FOREIGN_TICKER_PATTERN = re.compile(
 )
 
 # Named focused signal filters (applied after enrich_positions)
+PRIMARY_SIGNAL = "us_daily_rank_8_10_eval_lte_8"
+
 FOCUSED_SIGNALS: dict[str, dict] = {
     "us_rank_8_10": {
         "label": "US ranks 8-10 (baseline)",
@@ -141,6 +143,78 @@ def enrich_positions(df: pd.DataFrame) -> pd.DataFrame:
     df["is_weekly"] = df["email_subject"].str.contains("Weekly", case=False, na=False)
     df["is_asia"] = df["email_subject"].str.contains("Asia", case=False, na=False)
     return df
+
+
+def pick_matches_signal(row: pd.Series, signal: str) -> bool:
+    """True if a single enriched row matches a focused signal."""
+    if signal not in FOCUSED_SIGNALS:
+        raise ValueError(f"Unknown signal '{signal}'. Choose from: {list(FOCUSED_SIGNALS)}")
+    return len(apply_focused_filter(pd.DataFrame([row]), signal)) == 1
+
+
+def score_pick(
+    company: str,
+    rank: int,
+    eval_pct: float,
+    email_subject: str = "Daily Market Movers: Global Majors & Industry",
+    ticker: str | None = None,
+) -> dict:
+    """Score one email row: BUY/SKIP vs focused signals."""
+    cleaned = clean_company(company)
+    if not cleaned:
+        return {"verdict": "SKIP", "reason": "Invalid or corrupted company name", "company": company}
+
+    ticker = ticker or TICKER_MAP.get(cleaned)
+    row = enrich_positions(
+        pd.DataFrame(
+            [
+                {
+                    "company": cleaned,
+                    "rank": rank,
+                    "eval_pct": eval_pct,
+                    "email_subject": email_subject,
+                    "ticker": ticker,
+                    "email_date": pd.Timestamp.today(),
+                }
+            ]
+        )
+    ).iloc[0]
+
+    reasons: list[str] = []
+    if not row["is_us"]:
+        reasons.append("not US-listed (or unknown ticker)")
+    if not row["is_daily"]:
+        reasons.append("not Daily email")
+    if not (8 <= rank <= 10):
+        reasons.append(f"rank {rank} outside 8–10")
+    if eval_pct > 8:
+        reasons.append(f"eval {eval_pct}% > 8%")
+
+    matched = [key for key in FOCUSED_SIGNALS if pick_matches_signal(row, key)]
+    primary = PRIMARY_SIGNAL in matched
+
+    if primary:
+        verdict = "BUY"
+        reason = FOCUSED_SIGNALS[PRIMARY_SIGNAL]["description"]
+    elif matched:
+        verdict = "MAYBE"
+        reason = f"Matches {', '.join(matched)} but not primary ({PRIMARY_SIGNAL})"
+    else:
+        verdict = "SKIP"
+        reason = "; ".join(reasons) if reasons else "No focused signal match"
+
+    return {
+        "verdict": verdict,
+        "reason": reason,
+        "company": cleaned,
+        "ticker": ticker,
+        "rank": rank,
+        "eval_pct": eval_pct,
+        "is_us": bool(row["is_us"]),
+        "is_daily": bool(row["is_daily"]),
+        "matched_signals": matched,
+        "primary_signal": PRIMARY_SIGNAL,
+    }
 
 
 def apply_focused_filter(df: pd.DataFrame, signal: str) -> pd.DataFrame:
@@ -494,6 +568,93 @@ def compare_holds(s1: dict, s2: dict) -> dict:
     }
 
 
+def compare_strategies(
+    r1: pd.DataFrame,
+    r2: pd.DataFrame,
+    budget: float = 1000,
+    per_trade_amounts: list[int] | None = None,
+) -> dict:
+    """Side-by-side comparison of all focused signals (1M vs 2M)."""
+    if per_trade_amounts is None:
+        per_trade_amounts = [75, 90, 100]
+    f1 = focused_signal_analysis(r1, 1, budget=budget)
+    f2 = focused_signal_analysis(r2, 2, budget=budget)
+
+    rows: list[dict] = []
+    for key in FOCUSED_SIGNALS:
+        s1 = f1["signals"].get(key)
+        s2 = f2["signals"].get(key)
+        if not s1 and not s2:
+            continue
+        row: dict = {
+            "signal": key,
+            "label": FOCUSED_SIGNALS[key]["label"],
+            "primary": key == PRIMARY_SIGNAL,
+        }
+        for hold, sig in [("1m", s1), ("2m", s2)]:
+            if not sig:
+                continue
+            st = sig["stats"]
+            row[f"{hold}_trades"] = st.get("positions", 0)
+            row[f"{hold}_avg_return_pct"] = st.get("avg_return_pct")
+            row[f"{hold}_win_rate_pct"] = st.get("win_rate_pct")
+            row[f"{hold}_optimal_per_trade"] = sig.get("optimal_per_trade_usd")
+            opt = sig.get("budget_sim_optimal", {})
+            row[f"{hold}_net_profit_usd"] = opt.get("net_profit_usd")
+            row[f"{hold}_net_return_pct"] = opt.get("net_return_pct")
+        for pt in per_trade_amounts:
+            sub2 = apply_focused_filter(
+                enrich_positions(r2[r2["status"] == "ok"].copy()), key
+            )
+            if len(sub2):
+                sim = simulate_budget(sub2, budget=budget, per_trade=pt)
+                row[f"2m_budget_${pt}_net"] = sim["net_profit_usd"]
+        rows.append(row)
+
+    return {
+        "budget_usd": budget,
+        "per_trade_amounts": per_trade_amounts,
+        "primary_signal": PRIMARY_SIGNAL,
+        "strategies": rows,
+    }
+
+
+def print_strategy_comparison(comp: dict) -> None:
+    print("\n" + "=" * 90)
+    print(f"STRATEGY COMPARISON — $1,000 budget (primary: {comp['primary_signal']})")
+    print("=" * 90)
+    header = (
+        f"{'Signal':<32} {'2M Trades':>9} {'2M Avg%':>8} {'2M Win%':>8} "
+        f"{'2M Opt$':>7} {'2M Net$':>8} {'2M Net%':>7}"
+    )
+    print(header)
+    print("-" * 90)
+    for row in comp["strategies"]:
+        marker = " *" if row.get("primary") else "  "
+        print(
+            f"{marker}{row['label'][:30]:<30} "
+            f"{row.get('2m_trades', 0):>9} "
+            f"{row.get('2m_avg_return_pct', 0) or 0:>7.1f}% "
+            f"{row.get('2m_win_rate_pct', 0) or 0:>7.1f}% "
+            f"{row.get('2m_optimal_per_trade', 0) or 0:>6.0f} "
+            f"{row.get('2m_net_profit_usd', 0) or 0:>7.0f} "
+            f"{row.get('2m_net_return_pct', 0) or 0:>+6.1f}%"
+        )
+    pts = comp.get("per_trade_amounts", [])
+    if pts:
+        print("\n2-month budget sim at fixed $/trade:")
+        subheader = f"{'Signal':<32}" + "".join(f" ${p:>3}" for p in pts)
+        print(subheader)
+        print("-" * (32 + 5 * len(pts)))
+        for row in comp["strategies"]:
+            marker = " *" if row.get("primary") else "  "
+            vals = "".join(
+                f" {row.get(f'2m_budget_${p}_net', 0) or 0:>4.0f}" for p in pts
+            )
+            print(f"{marker}{row['label'][:30]:<30}{vals}")
+    print("\n* = recommended primary signal")
+
+
 def print_focused_summary(focused: dict) -> None:
     print("\n" + "=" * 70)
     print(f"FOCUSED SIGNALS — {focused['hold_months']}-MONTH HOLD ($1,000 budget, MA tax)")
@@ -524,11 +685,16 @@ def main():
         help="Analyze focused signals from existing results (no price fetch)",
     )
     parser.add_argument("--budget", type=float, default=1000, help="Budget for simulations")
+    parser.add_argument(
+        "--compare-strategies",
+        action="store_true",
+        help="Compare all focused signals side-by-side (uses existing CSVs)",
+    )
     args = parser.parse_args()
 
     OUTPUT_DIR.mkdir(exist_ok=True)
 
-    if args.analyze_focused:
+    if args.analyze_focused or args.compare_strategies:
         r1_path = OUTPUT_DIR / "results_1month.csv"
         r2_path = OUTPUT_DIR / "results_2month.csv"
         if not r1_path.exists() or not r2_path.exists():
@@ -536,6 +702,14 @@ def main():
             return
         r1 = pd.read_csv(r1_path)
         r2 = pd.read_csv(r2_path)
+        if args.compare_strategies:
+            comp = compare_strategies(r1, r2, budget=args.budget)
+            with open(OUTPUT_DIR / "strategy_comparison.json", "w") as f:
+                json.dump(comp, f, indent=2, default=str)
+            print_strategy_comparison(comp)
+            print(f"\nSaved: {OUTPUT_DIR / 'strategy_comparison.json'}")
+            if not args.analyze_focused:
+                return
         f1 = focused_signal_analysis(r1, 1, budget=args.budget)
         f2 = focused_signal_analysis(r2, 2, budget=args.budget)
         focused = {"1_month": f1, "2_month": f2}
