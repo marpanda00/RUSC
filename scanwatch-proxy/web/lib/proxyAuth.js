@@ -1,7 +1,7 @@
 import { timingSafeEqual } from "node:crypto";
 
 export function proxyAuthorized(request) {
-  const expected = process.env.MARIOPHONE_PROXY_TOKEN?.trim() ?? "";
+  const expected = process.env.SCANWATCH_SECRET?.trim() ?? "";
   if (!expected) {
     return !process.env.CURSOR_APP_ID;
   }

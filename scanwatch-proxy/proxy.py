@@ -572,7 +572,10 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--account-id", type=int, default=int(os.environ.get("SCANWATCH_ACCOUNT_ID", "1")))
     parser.add_argument("--cooldown", type=float, default=float(os.environ.get("SCANWATCH_COOLDOWN", DEFAULT_COOLDOWN_S)))
     parser.add_argument("--inbox", default=os.environ.get("MARIOPHONE_INBOX_URL") or None)
-    parser.add_argument("--inbox-token", default=os.environ.get("MARIOPHONE_PROXY_TOKEN") or None)
+    parser.add_argument(
+        "--inbox-token",
+        default=os.environ.get("MARIOPHONE_PROXY_TOKEN") or os.environ.get("SCANWATCH_SECRET") or None,
+    )
     parser.add_argument("--dry-run", action="store_true", help="HTTP only; print WPP frames, do not open BLE")
     parser.add_argument("--demo", type=int, choices=(1, 2, 3), help="print the vibrator frame for a floor and exit")
     return parser

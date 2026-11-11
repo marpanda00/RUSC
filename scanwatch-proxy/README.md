@@ -33,17 +33,18 @@ On a Raspberry Pi or Linux laptop with Bluetooth, one host per floor:
 ```bash
 cd scanwatch-proxy
 python3 -m pip install -r requirements.txt
-export SCANWATCH_SECRET='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'   # 32 ASCII chars
-export SCANWATCH_MAC='aa:bb:cc:dd:ee:ff'                    # optional
+export SCANWATCH_SECRET  # already set: 32-char klSecret from the BLE trace
+export SCANWATCH_MAC='aa:bb:cc:dd:ee:ff'     # optional
 export PROXY_FLOOR=2
-export MARIOPHONE_INBOX_URL='https://missed-mariophone.apps.grok.bot'
-export MARIOPHONE_PROXY_TOKEN='…'                           # same token on every floor
 python3 proxy.py
 ```
 
+`SCANWATCH_SECRET` is the association key already taken from the watch trace;
+keep it as an environment variable on the Pi, not a separate website token.
 `MARIOPHONE_MAC` is optional if the phone advertises the name `MarioPhone`.
-Shared inbox URL + token lets a proxy that only sees the watch still know the
-floor another proxy recorded from the phone.
+
+Optional: `MARIOPHONE_INBOX_URL` lets proxies share the last phone floor. That
+call uses the same `SCANWATCH_SECRET`; no extra token.
 
 `python3 proxy.py --dry-run` serves status HTTP without opening BLE.
 `python3 proxy.py --demo 2` prints the two-vibration frame.
