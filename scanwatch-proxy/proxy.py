@@ -14,9 +14,12 @@ from dataclasses import asdict, dataclass
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from threading import Lock
 from typing import Optional
+from urllib.error import URLError
 from urllib.parse import parse_qs, urlparse
+from urllib.request import Request, urlopen
 
 from policy import MissedAlert, PhoneSighting, missed_alert, parse_floor
+from visibility import PresenceGate, advertisement_kind
 from wpp import (
     CMD_ASSOCIATION_KEYS_SET,
     CMD_ERROR,
@@ -51,7 +54,8 @@ LINK_TIMEOUT_S = 20.0
 @dataclass
 class ProxyState:
     floor: Optional[int] = None
-    watch_connected: bool = False
+    phone_visible: bool = False
+    watch_visible: bool = False
     last_phone_at: Optional[float] = None
     last_alert: Optional[dict] = None
     last_error: Optional[str] = None
@@ -143,52 +147,84 @@ class ScanwatchProxy:
         account_id: int,
         cooldown_s: float,
         ble_connect=None,
+        proxy_floor: Optional[int] = None,
+        phone_mac: Optional[str] = None,
+        inbox_url: Optional[str] = None,
+        inbox_token: Optional[str] = None,
     ):
         self.mac = mac
         self.secret = secret
         self.account_id = account_id
         self.cooldown_s = cooldown_s
         self._ble_connect = ble_connect
+        self.proxy_floor = proxy_floor
+        self.phone_mac = phone_mac
+        self.inbox_url = (inbox_url or "").rstrip("/")
+        self.inbox_token = inbox_token or ""
         self._lock = Lock()
         self.state = ProxyState()
+        self.gate = PresenceGate()
         self._last_sent_at = 0.0
 
     def snapshot(self) -> dict:
         with self._lock:
             data = asdict(self.state)
         data["watch_mac"] = self.mac
+        data["phone_mac"] = self.phone_mac
+        data["proxy_floor"] = self.proxy_floor
         data["cooldown_s"] = self.cooldown_s
+        data["inbox"] = bool(self.inbox_url and self.inbox_token)
         return data
 
-    def note_phone(self, floor: Optional[int], watch_connected: bool) -> Optional[MissedAlert]:
+    def _sync_state(self) -> None:
+        self.state.floor = self.gate.floor
+        self.state.phone_visible = self.gate.phone_visible
+        self.state.watch_visible = self.gate.watch_visible
+
+    def note_phone(self, floor: Optional[int], watch_connected: bool = False) -> None:
+        """Record MarioPhone visibility. Never queues a vibration."""
+        del watch_connected
+        if floor is None:
+            floor = self.proxy_floor
+        if floor is None:
+            raise WppError("need a floor (1, 2 or 3) from this proxy or the report")
+        now = time.time()
         with self._lock:
-            was_connected = self.state.watch_connected
-            previous_floor = self.state.floor
-            first_report = self.state.last_phone_at is None
-            if floor is not None:
-                self.state.floor = floor
-            self.state.watch_connected = watch_connected
-            self.state.last_phone_at = time.time()
-            sighting = PhoneSighting(self.state.floor, watch_connected)
-        if watch_connected:
+            self.gate.record_floor(parse_floor(floor), now)
+            self.state.last_phone_at = now
+            self._sync_state()
+
+    def note_watch_seen(self, now: Optional[float] = None) -> Optional[MissedAlert]:
+        now = time.time() if now is None else now
+        with self._lock:
+            self.gate.note_watch(now)
+            buzz = self.gate.consider_buzz(now)
+            self._sync_state()
+            floor = None if buzz is None else buzz.floor
+        if floor is None:
             return None
-        alert = missed_alert(sighting)
-        if alert is None:
+        return missed_alert(PhoneSighting(floor, watch_connected=False))
+
+    def buzz_if_watch_visible(self, now: Optional[float] = None) -> Optional[MissedAlert]:
+        now = time.time() if now is None else now
+        with self._lock:
+            buzz = self.gate.consider_buzz(now)
+            self._sync_state()
+            floor = None if buzz is None else buzz.floor
+        if floor is None:
             return None
-        lost_watch = was_connected and not watch_connected
-        floor_changed = floor is not None and floor != previous_floor
-        if lost_watch or first_report or floor_changed:
-            return alert
-        return None
+        return missed_alert(PhoneSighting(floor, watch_connected=False))
 
     def force_missed(self, floor: Optional[int] = None) -> MissedAlert:
+        """Build the alert payload from a recorded floor. Does not deliver."""
         with self._lock:
             if floor is not None:
-                self.state.floor = floor
-            sighting = PhoneSighting(self.state.floor, watch_connected=False)
+                self.gate.record_floor(parse_floor(floor), time.time())
+                self._sync_state()
+            sighting = PhoneSighting(self.gate.floor, watch_connected=False)
         alert = missed_alert(sighting)
         if alert is None:
-            raise WppError("need a floor (1, 2 or 3) before vibrating")
+            raise WppError("need a floor (1, 2 or 3) from phone visibility before vibrating")
         return alert
 
     async def deliver(self, alert: MissedAlert) -> dict:
@@ -234,6 +270,109 @@ class ScanwatchProxy:
             with self._lock:
                 self.state.vibrating = False
 
+    def _inbox_request(self, method: str, path: str, payload: Optional[dict] = None) -> Optional[dict]:
+        if not self.inbox_url or not self.inbox_token:
+            return None
+        body = None if payload is None else json.dumps(payload).encode("utf-8")
+        req = Request(
+            self.inbox_url + path,
+            data=body,
+            method=method,
+            headers={
+                "authorization": f"Bearer {self.inbox_token}",
+                "content-type": "application/json",
+                "accept": "application/json",
+            },
+        )
+        try:
+            with urlopen(req, timeout=8) as resp:
+                raw = resp.read().decode("utf-8")
+        except URLError as exc:
+            with self._lock:
+                self.state.last_error = f"inbox: {exc}"
+            return None
+        if not raw:
+            return {}
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError:
+            return None
+        if isinstance(data, dict) and data.get("floor") is not None:
+            with self._lock:
+                self.gate.floor = parse_floor(data["floor"])
+                self._sync_state()
+        return data if isinstance(data, dict) else None
+
+    async def pull_inbox(self) -> Optional[dict]:
+        return await asyncio.to_thread(self._inbox_request, "GET", "/api/inbox")
+
+    async def push_phone_floor(self) -> Optional[dict]:
+        with self._lock:
+            floor = self.gate.floor
+        if floor is None:
+            return None
+        return await asyncio.to_thread(
+            self._inbox_request, "POST", "/api/inbox/phone", {"floor": floor}
+        )
+
+    async def ack_cloud(self, error: Optional[str]) -> Optional[dict]:
+        payload = {} if not error else {"error": error}
+        return await asyncio.to_thread(self._inbox_request, "POST", "/api/inbox/ack", payload)
+
+    def classify_device(self, name: Optional[str], address: Optional[str], service_uuids=None) -> Optional[str]:
+        return advertisement_kind(
+            name,
+            address,
+            service_uuids,
+            phone_mac=self.phone_mac,
+            watch_mac=self.mac,
+        )
+
+
+async def presence_loop(proxy: ScanwatchProxy) -> None:
+    from bleak import BleakScanner
+
+    events: asyncio.Queue = asyncio.Queue()
+    loop = asyncio.get_running_loop()
+
+    def on_detect(device, adv) -> None:
+        kind = proxy.classify_device(
+            device.name or getattr(adv, "local_name", None),
+            device.address,
+            getattr(adv, "service_uuids", None),
+        )
+        if kind:
+            loop.call_soon_threadsafe(events.put_nowait, kind)
+
+    async with BleakScanner(detection_callback=on_detect):
+        while True:
+            kind = await events.get()
+            alert = None
+            if kind == "phone":
+                try:
+                    proxy.note_phone(proxy.proxy_floor)
+                    await proxy.push_phone_floor()
+                    alert = proxy.buzz_if_watch_visible()
+                except WppError as exc:
+                    with proxy._lock:
+                        proxy.state.last_error = str(exc)
+            elif kind == "watch":
+                await proxy.pull_inbox()
+                alert = proxy.note_watch_seen()
+            if alert is None:
+                continue
+            try:
+                await proxy.deliver(alert)
+                await proxy.ack_cloud(None)
+            except Exception as exc:
+                await proxy.ack_cloud(str(exc))
+
+
+async def inbox_poll_loop(proxy: ScanwatchProxy) -> None:
+    while True:
+        await proxy.pull_inbox()
+        await asyncio.sleep(4)
+
 
 async def connect_and_vibrate(proxy: ScanwatchProxy, alert: MissedAlert) -> None:
     from bleak import BleakClient, BleakScanner
@@ -278,30 +417,16 @@ INDEX_PAGE = """<!doctype html>
 <title>Missed MarioPhone</title>
 <style>
  body { font-family: sans-serif; max-width: 28rem; margin: 1.5rem auto; padding: 0 1rem; }
- button, label { display: block; width: 100%; margin: .4rem 0; padding: .8rem; font-size: 1rem; }
  pre { background: #111; color: #eee; padding: .8rem; overflow: auto; }
 </style>
 <h1>Missed MarioPhone</h1>
-<p>When the watch can be reached and the phone cannot, the proxy vibrates once per floor.</p>
-<button data-floor="1">First floor — 1 vibration</button>
-<button data-floor="2">Second floor — 2 vibrations</button>
-<button data-floor="3">Third floor — 3 vibrations</button>
-<label><input type="checkbox" id="connected"> Watch still connected to the phone</label>
-<button id="missed">Phone is out of reach — buzz the watch</button>
+<p>This proxy records the floor when it sees MarioPhone, and buzzes the ScanWatch only when the watch itself comes into BLE range. Taps do not vibrate.</p>
 <pre id="out">loading…</pre>
 <script>
 async function refresh() {
   const r = await fetch('/status');
   out.textContent = JSON.stringify(await r.json(), null, 2);
 }
-async function send(path, body) {
-  const r = await fetch(path, {method:'POST', headers:{'content-type':'application/json'}, body: JSON.stringify(body)});
-  out.textContent = JSON.stringify(await r.json(), null, 2);
-}
-document.querySelectorAll('[data-floor]').forEach(btn => btn.onclick = () => send('/phone', {
-  floor: Number(btn.dataset.floor), watch_connected: connected.checked
-}));
-missed.onclick = () => send('/missed', {watch_connected: false});
 refresh();
 setInterval(refresh, 4000);
 </script>
@@ -368,20 +493,35 @@ def make_handler(proxy: ScanwatchProxy, loop: asyncio.AbstractEventLoop):
             try:
                 if path == "/phone":
                     floor = parse_floor(merged["floor"]) if "floor" in merged else None
-                    watch_connected = truthy(merged.get("watch_connected", merged.get("in_range")))
-                    alert = proxy.note_phone(floor, watch_connected)
+                    proxy.note_phone(floor, truthy(merged.get("watch_connected", merged.get("in_range"))))
+                    asyncio.run_coroutine_threadsafe(proxy.push_phone_floor(), loop).result(timeout=8)
+                    self._write(200, {"ok": True, "state": proxy.snapshot(), "buzzed": False})
+                    return
+                if path == "/missed":
+                    floor = parse_floor(merged["floor"]) if "floor" in merged else None
+                    proxy.note_phone(floor)
+                    asyncio.run_coroutine_threadsafe(proxy.push_phone_floor(), loop).result(timeout=8)
+                    self._write(
+                        200,
+                        {
+                            "ok": True,
+                            "buzzed": False,
+                            "note": "Taps do not vibrate. The watch buzzes when a proxy sees it.",
+                            "state": proxy.snapshot(),
+                        },
+                    )
+                    return
+                if path == "/watch-seen":
+                    alert = proxy.note_watch_seen()
                     delivered = None
                     if alert is not None:
                         delivered = asyncio.run_coroutine_threadsafe(
                             proxy.deliver(alert), loop
                         ).result()
-                    self._write(200, {"ok": True, "state": proxy.snapshot(), "alert": delivered})
-                    return
-                if path == "/missed":
-                    floor = parse_floor(merged["floor"]) if "floor" in merged else None
-                    alert = proxy.force_missed(floor)
-                    delivered = asyncio.run_coroutine_threadsafe(proxy.deliver(alert), loop).result()
-                    self._write(200, {"ok": True, "alert": delivered, "state": proxy.snapshot()})
+                    self._write(
+                        200,
+                        {"ok": True, "buzzed": delivered is not None, "alert": delivered, "state": proxy.snapshot()},
+                    )
                     return
                 self._write(404, {"error": "not found"})
             except (WppError, ValueError) as exc:
@@ -420,9 +560,19 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--host", default="0.0.0.0")
     parser.add_argument("--port", type=int, default=int(os.environ.get("SCANWATCH_PROXY_PORT", DEFAULT_PORT)))
     parser.add_argument("--mac", default=os.environ.get("SCANWATCH_MAC") or None)
+    parser.add_argument("--phone-mac", default=os.environ.get("MARIOPHONE_MAC") or None)
+    parser.add_argument(
+        "--floor",
+        type=int,
+        choices=(1, 2, 3),
+        default=int(os.environ["PROXY_FLOOR"]) if os.environ.get("PROXY_FLOOR") else None,
+        help="floor this proxy sits on; phone sightings record this floor",
+    )
     parser.add_argument("--secret", default=env_secret())
     parser.add_argument("--account-id", type=int, default=int(os.environ.get("SCANWATCH_ACCOUNT_ID", "1")))
     parser.add_argument("--cooldown", type=float, default=float(os.environ.get("SCANWATCH_COOLDOWN", DEFAULT_COOLDOWN_S)))
+    parser.add_argument("--inbox", default=os.environ.get("MARIOPHONE_INBOX_URL") or None)
+    parser.add_argument("--inbox-token", default=os.environ.get("MARIOPHONE_PROXY_TOKEN") or None)
     parser.add_argument("--dry-run", action="store_true", help="HTTP only; print WPP frames, do not open BLE")
     parser.add_argument("--demo", type=int, choices=(1, 2, 3), help="print the vibrator frame for a floor and exit")
     return parser
@@ -437,7 +587,17 @@ def main(argv: Optional[list[str]] = None) -> int:
         return 0
 
     ble_connect = None if args.dry_run else connect_and_vibrate
-    proxy = ScanwatchProxy(args.mac, args.secret, args.account_id, args.cooldown, ble_connect)
+    proxy = ScanwatchProxy(
+        args.mac,
+        args.secret,
+        args.account_id,
+        args.cooldown,
+        ble_connect,
+        proxy_floor=args.floor,
+        phone_mac=args.phone_mac,
+        inbox_url=args.inbox,
+        inbox_token=args.inbox_token,
+    )
     loop = asyncio.new_event_loop()
 
     def run_loop() -> None:
@@ -447,11 +607,17 @@ def main(argv: Optional[list[str]] = None) -> int:
     import threading
 
     threading.Thread(target=run_loop, daemon=True).start()
+    if not args.dry_run:
+        asyncio.run_coroutine_threadsafe(presence_loop(proxy), loop)
+    if proxy.inbox_url and proxy.inbox_token:
+        asyncio.run_coroutine_threadsafe(inbox_poll_loop(proxy), loop)
     server = ThreadingHTTPServer((args.host, args.port), make_handler(proxy, loop))
     mode = "dry-run" if args.dry_run else "BLE"
-    print(f"Missed MarioPhone proxy ({mode}). Open one of these from the phone Wi-Fi:")
+    floor = f" floor {args.floor}" if args.floor else ""
+    print(f"Missed MarioPhone proxy ({mode}{floor}). Status URLs:")
     for url in listen_urls(args.port):
         print(f"  {url}")
+    print("Buzzes only when this host sees the ScanWatch. Floor comes from MarioPhone visibility.")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

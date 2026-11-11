@@ -19,7 +19,7 @@ export async function POST(request) {
     });
   } catch (error) {
     return Response.json(
-      { error: error.message || "Could not queue a buzz" },
+      { error: error.message || "Could not record the floor" },
       { status: 400, headers: { "cache-control": "private, no-store" } },
     );
   }

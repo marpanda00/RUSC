@@ -28,3 +28,7 @@ export function parseFloor(value) {
 export function missedMessage(floor) {
   return `Missed MarioPhone on ${FLOOR_NAMES[parseFloor(floor)]}`;
 }
+
+export function visibleMessage(floor) {
+  return `MarioPhone visible on ${FLOOR_NAMES[parseFloor(floor)]}`;
+}

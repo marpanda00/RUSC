@@ -40,7 +40,7 @@ h1 {
   font-size: 1.02rem;
 }
 
-button {
+.floor-card {
   display: block;
   width: 100%;
   margin: 0.55rem 0;
@@ -49,20 +49,19 @@ button {
   border-radius: 0.9rem;
   background: var(--card);
   color: var(--ink);
-  font: inherit;
   font-size: 1.12rem;
   font-weight: 650;
-  text-align: left;
 }
 
-button.primary {
+.floor-card.current {
   background: var(--accent);
   color: var(--accent-ink);
   border-color: var(--accent);
 }
 
-button:disabled {
-  opacity: 0.6;
+.floor-card.current .count {
+  color: var(--accent-ink);
+  opacity: 0.85;
 }
 
 .status {

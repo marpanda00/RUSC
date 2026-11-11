@@ -2,7 +2,7 @@ import "./globals.css";
 
 export const metadata = {
   title: "Missed MarioPhone",
-  description: "Buzz the ScanWatch once per floor when the phone is out of reach",
+  description: "Buzz the ScanWatch from house proxies using MarioPhone visibility",
 };
 
 export const viewport = {
