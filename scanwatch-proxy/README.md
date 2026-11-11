@@ -14,6 +14,16 @@ The watch must already be associated with this proxy (same 32-character
 `klSecret` as [withouthings](https://github.com/DavidVentura/withouthings)). A
 watch still owned by Health Mate will refuse the probe.
 
+## Open the floor buttons
+
+Do **not** type a placeholder like `<pi-ip>`. Use one of these:
+
+1. **On the iPhone:** run `pythonista_reporter.py` in Pythonista. Tap First / Second / Third floor. That screen does not need a web address.
+2. **From Cursor:** open the Missed MarioPhone app pill on this chat (published from `web/`).
+3. **On home Wi-Fi after `python3 proxy.py`:** the process prints real URLs, for example `http://192.168.1.23:8787`. Open the printed address, not a template.
+
+Buzzing the watch still needs `proxy.py` on a computer with Bluetooth near the watch. The phone UI only chooses the floor.
+
 ## Run the house proxy
 
 On a Raspberry Pi or Linux laptop with Bluetooth:
@@ -26,23 +36,8 @@ export SCANWATCH_MAC='aa:bb:cc:dd:ee:ff'                    # optional
 python3 proxy.py
 ```
 
-Open `http://<pi-ip>:8787` on any phone on the LAN. Mark the floor, then tap
-**Phone is out of reach — buzz the watch**.
-
 `python3 proxy.py --dry-run` serves the same HTTP API and prints the WPP frame
 without opening BLE. `python3 proxy.py --demo 2` prints the two-vibration frame.
-
-## Phone reporter (Pythonista)
-
-Edit `PROXY` and `FLOOR` in `pythonista_reporter.py`, then run it on the iPhone.
-It posts whether the ScanWatch is still in `retrieveConnectedPeripherals`. When
-that flips to disconnected, the proxy vibrates once per stored floor.
-
-```bash
-curl -s http://<pi-ip>:8787/phone \
-  -H 'content-type: application/json' \
-  -d '{"floor":2,"watch_connected":false}'
-```
 
 ## Tests
 

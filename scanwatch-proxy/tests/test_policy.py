@@ -2,7 +2,7 @@ import asyncio
 import unittest
 
 from policy import UnknownFloor, missed_alert, missed_message, parse_floor, vibrations_for_floor, PhoneSighting
-from proxy import ScanwatchProxy
+from proxy import ScanwatchProxy, listen_urls
 from wpp import WppError, vibrator_frame
 
 
@@ -80,6 +80,11 @@ class ProxyAlertTests(unittest.TestCase):
     def test_force_without_floor_fails(self):
         with self.assertRaises(WppError):
             self.proxy.force_missed()
+
+    def test_listen_urls_include_localhost(self):
+        urls = listen_urls(8787)
+        self.assertIn("http://127.0.0.1:8787", urls)
+        self.assertTrue(all("<" not in url for url in urls))
 
 
 if __name__ == "__main__":

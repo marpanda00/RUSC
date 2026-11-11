@@ -1,0 +1,84 @@
+:root {
+  color-scheme: light;
+  --bg: #f4f1ea;
+  --ink: #1c1914;
+  --muted: #5c564c;
+  --card: #fffdf8;
+  --line: #d9d0c2;
+  --accent: #1f4b3a;
+  --accent-ink: #f4f1ea;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+}
+
+main {
+  max-width: 28rem;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 2.5rem;
+}
+
+h1 {
+  font-size: 1.65rem;
+  line-height: 1.15;
+  margin: 0 0 0.4rem;
+}
+
+.lede {
+  margin: 0 0 1.25rem;
+  color: var(--muted);
+  font-size: 1.02rem;
+}
+
+button {
+  display: block;
+  width: 100%;
+  margin: 0.55rem 0;
+  padding: 1.05rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 0.9rem;
+  background: var(--card);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1.12rem;
+  font-weight: 650;
+  text-align: left;
+}
+
+button.primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+
+button:disabled {
+  opacity: 0.6;
+}
+
+.status {
+  margin-top: 1.25rem;
+  padding: 0.9rem 1rem;
+  border-radius: 0.9rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+  white-space: pre-wrap;
+  font-size: 0.95rem;
+}
+
+.count {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}

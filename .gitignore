@@ -11,6 +11,8 @@ build/
 
 # Node.js
 node_modules/
+.next/
+.next/
 
 # OSM tile disk cache (regenerated on demand)
 backend/cache/

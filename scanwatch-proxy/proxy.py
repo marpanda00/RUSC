@@ -7,6 +7,8 @@ import argparse
 import asyncio
 import json
 import os
+import socket
+import subprocess
 import time
 from dataclasses import asdict, dataclass
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -397,6 +399,22 @@ def env_secret() -> str:
     return "CHANGE_ME_TO_32_CHAR_ASCII_SECRET"
 
 
+def listen_urls(port: int) -> list[str]:
+    urls = [f"http://127.0.0.1:{port}"]
+    seen = {"127.0.0.1"}
+    try:
+        for ip in subprocess.check_output(["hostname", "-I"], text=True).split():
+            if ip and ip not in seen and ":" not in ip:
+                seen.add(ip)
+                urls.append(f"http://{ip}:{port}")
+    except (OSError, subprocess.CalledProcessError):
+        pass
+    host = socket.gethostname()
+    if host and host != "localhost":
+        urls.append(f"http://{host}.local:{port}")
+    return urls
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--host", default="0.0.0.0")
@@ -431,7 +449,9 @@ def main(argv: Optional[list[str]] = None) -> int:
     threading.Thread(target=run_loop, daemon=True).start()
     server = ThreadingHTTPServer((args.host, args.port), make_handler(proxy, loop))
     mode = "dry-run" if args.dry_run else "BLE"
-    print(f"Missed MarioPhone proxy on http://{args.host}:{args.port} ({mode})")
+    print(f"Missed MarioPhone proxy ({mode}). Open one of these from the phone Wi-Fi:")
+    for url in listen_urls(args.port):
+        print(f"  {url}")
     try:
         server.serve_forever()
     except KeyboardInterrupt:
