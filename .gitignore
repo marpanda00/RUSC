@@ -23,6 +23,10 @@ backend/cache/
 # ESP-IDF generated config backups
 sdkconfig.old
 
+# Python
+__pycache__/
+*.pyc
+
 # OS / editor
 .DS_Store
 Thumbs.db
