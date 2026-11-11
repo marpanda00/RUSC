@@ -136,7 +136,12 @@ def find_protocol_characteristic(services) -> object:
                 return char
             if "notify" in getattr(char, "properties", ()) and "write" in getattr(char, "properties", ()):
                 return char
-    raise WppError("no Withings WPP characteristic found")
+    found = []
+    for service in services:
+        for char in service.characteristics:
+            found.append(f"{service.uuid} {char.uuid} {getattr(char, 'properties', ())}")
+    detail = "; ".join(found) or "no GATT services"
+    raise WppError(f"no Withings WPP characteristic found ({detail})")
 
 
 class ScanwatchProxy:
@@ -165,6 +170,9 @@ class ScanwatchProxy:
         self.state = ProxyState()
         self.gate = PresenceGate()
         self._last_sent_at = 0.0
+        if proxy_floor is not None:
+            self.gate.floor = parse_floor(proxy_floor)
+            self.state.floor = self.gate.floor
 
     def snapshot(self) -> dict:
         with self._lock:
@@ -194,10 +202,19 @@ class ScanwatchProxy:
             self.state.last_phone_at = now
             self._sync_state()
 
+    def _fallback_floor(self) -> int:
+        if self.gate.floor is not None:
+            return self.gate.floor
+        if self.proxy_floor is not None:
+            return parse_floor(self.proxy_floor)
+        return 1
+
     def note_watch_seen(self, now: Optional[float] = None) -> Optional[MissedAlert]:
         now = time.time() if now is None else now
         with self._lock:
             self.gate.note_watch(now)
+            if self.gate.floor is None:
+                self.gate.floor = self._fallback_floor()
             buzz = self.gate.consider_buzz(now)
             self._sync_state()
             floor = None if buzz is None else buzz.floor
@@ -227,7 +244,7 @@ class ScanwatchProxy:
             raise WppError("need a floor (1, 2 or 3) from phone visibility before vibrating")
         return alert
 
-    async def deliver(self, alert: MissedAlert) -> dict:
+    async def deliver(self, alert: MissedAlert, device=None) -> dict:
         now = time.time()
         with self._lock:
             if self.state.vibrating:
@@ -247,7 +264,7 @@ class ScanwatchProxy:
                     "frame_hex": vibrator_frame(alert.vibrations).to_bytes().hex(),
                 }
             else:
-                await self._ble_connect(self, alert)
+                await self._ble_connect(self, alert, device)
                 result = {
                     "delivered": True,
                     "dry_run": False,
@@ -342,13 +359,14 @@ async def presence_loop(proxy: ScanwatchProxy) -> None:
             getattr(adv, "service_uuids", None),
         )
         if kind:
-            loop.call_soon_threadsafe(events.put_nowait, kind)
+            loop.call_soon_threadsafe(events.put_nowait, (kind, device))
 
     async with BleakScanner(detection_callback=on_detect):
         while True:
-            kind = await events.get()
+            kind, device = await events.get()
             alert = None
             if kind == "phone":
+                print(f"saw MarioPhone {getattr(device, 'address', '')}")
                 try:
                     proxy.note_phone(proxy.proxy_floor)
                     await proxy.push_phone_floor()
@@ -357,14 +375,17 @@ async def presence_loop(proxy: ScanwatchProxy) -> None:
                     with proxy._lock:
                         proxy.state.last_error = str(exc)
             elif kind == "watch":
+                print(f"saw ScanWatch {getattr(device, 'name', '')} {getattr(device, 'address', '')}")
                 await proxy.pull_inbox()
                 alert = proxy.note_watch_seen()
             if alert is None:
                 continue
+            print(f"vibrating {alert.vibrations} time(s): {alert.message}")
             try:
-                await proxy.deliver(alert)
+                await proxy.deliver(alert, device)
                 await proxy.ack_cloud(None)
             except Exception as exc:
+                print(f"vibrate failed: {exc}")
                 await proxy.ack_cloud(str(exc))
 
 
@@ -374,11 +395,10 @@ async def inbox_poll_loop(proxy: ScanwatchProxy) -> None:
         await asyncio.sleep(4)
 
 
-async def connect_and_vibrate(proxy: ScanwatchProxy, alert: MissedAlert) -> None:
+async def connect_and_vibrate(proxy: ScanwatchProxy, alert: MissedAlert, device=None) -> None:
     from bleak import BleakClient, BleakScanner
 
-    device = None
-    if proxy.mac:
+    if device is None and proxy.mac:
         device = await BleakScanner.find_device_by_address(proxy.mac, timeout=8.0)
     if device is None:
         for candidate in await BleakScanner.discover(timeout=8.0):
@@ -388,6 +408,7 @@ async def connect_and_vibrate(proxy: ScanwatchProxy, alert: MissedAlert) -> None
                 break
     if device is None:
         raise WppError("ScanWatch not advertising; phone may still own the link")
+    print(f"connecting to {getattr(device, 'name', None) or device} {getattr(device, 'address', '')}")
 
     incoming: asyncio.Queue = asyncio.Queue()
     assembler = FrameAssembler()
@@ -407,9 +428,11 @@ async def connect_and_vibrate(proxy: ScanwatchProxy, alert: MissedAlert) -> None
                 await client.write_gatt_char(char, payload[offset : offset + chunk], response=True)
 
         session = WatchSession(writer, incoming, proxy.secret, proxy.account_id)
-        await session.authenticate()
+        mac = await session.authenticate()
+        print(f"authenticated {mac}; sending {alert.vibrations} vibration(s)")
         await session.vibrate(alert.vibrations)
-        await asyncio.sleep(alert.vibrations * 0.7)
+        await asyncio.sleep(max(alert.vibrations * 0.7, 1.5))
+        print("vibrator command sent")
 
 
 INDEX_PAGE = """<!doctype html>
@@ -516,7 +539,7 @@ def make_handler(proxy: ScanwatchProxy, loop: asyncio.AbstractEventLoop):
                     delivered = None
                     if alert is not None:
                         delivered = asyncio.run_coroutine_threadsafe(
-                            proxy.deliver(alert), loop
+                            proxy.deliver(alert, None), loop
                         ).result()
                     self._write(
                         200,
@@ -578,6 +601,12 @@ def build_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument("--dry-run", action="store_true", help="HTTP only; print WPP frames, do not open BLE")
     parser.add_argument("--demo", type=int, choices=(1, 2, 3), help="print the vibrator frame for a floor and exit")
+    parser.add_argument(
+        "--buzz-now",
+        action="store_true",
+        help="connect to an advertising ScanWatch and vibrate now",
+    )
+    parser.add_argument("--loops", type=int, choices=(1, 2, 3), default=None, help="vibration count for --buzz-now")
     return parser
 
 
@@ -587,6 +616,30 @@ def main(argv: Optional[list[str]] = None) -> int:
         frame = vibrator_frame(args.demo)
         print(missed_alert(PhoneSighting(args.demo, False)).message)
         print(frame.to_bytes().hex())
+        return 0
+
+    if args.buzz_now:
+        loops = args.loops or args.floor or 1
+        secret = args.secret
+        if len(secret) != 32:
+            print("SCANWATCH_SECRET must be the 32-character klSecret from the BLE trace")
+            return 2
+        proxy = ScanwatchProxy(
+            args.mac,
+            secret,
+            args.account_id,
+            0,
+            connect_and_vibrate,
+            proxy_floor=args.floor or loops,
+            phone_mac=args.phone_mac,
+        )
+        alert = missed_alert(PhoneSighting(loops, False))
+        print(alert.message)
+        try:
+            asyncio.run(connect_and_vibrate(proxy, alert))
+        except Exception as exc:
+            print(f"vibrate failed: {exc}")
+            return 1
         return 0
 
     ble_connect = None if args.dry_run else connect_and_vibrate

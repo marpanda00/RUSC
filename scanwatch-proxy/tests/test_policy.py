@@ -114,6 +114,10 @@ class ProxyAlertTests(unittest.TestCase):
         self.assertEqual(alert.message, "Missed MarioPhone on third floor")
         self.assertIsNone(self.proxy.note_watch_seen(11.0))
 
+    def test_watch_sighting_without_phone_still_buzzes_this_floor(self):
+        alert = self.proxy.note_watch_seen(1.0)
+        self.assertEqual(alert.vibrations, 2)
+
     def test_this_proxy_floor_is_used_when_the_phone_is_seen(self):
         self.proxy.note_phone(None)
         self.assertEqual(self.proxy.state.floor, 2)
@@ -144,7 +148,8 @@ class ProxyAlertTests(unittest.TestCase):
     def test_http_taps_do_not_deliver(self):
         delivered = []
 
-        async def ble(_proxy, alert):
+        async def ble(_proxy, alert, device=None):
+            del device
             delivered.append(alert.vibrations)
 
         proxy = ScanwatchProxy(

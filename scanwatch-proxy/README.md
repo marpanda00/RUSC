@@ -46,6 +46,9 @@ keep it as an environment variable on the Pi, not a separate website token.
 Optional: `MARIOPHONE_INBOX_URL` lets proxies share the last phone floor. That
 call uses the same `SCANWATCH_SECRET`; no extra token.
 
+`python3 proxy.py --buzz-now` connects to an advertising ScanWatch and vibrates
+immediately (uses `--floor` / `--loops`, default 1).
+
 `python3 proxy.py --dry-run` serves status HTTP without opening BLE.
 `python3 proxy.py --demo 2` prints the two-vibration frame.
 
