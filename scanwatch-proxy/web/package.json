@@ -1,0 +1,16 @@
+{
+  "name": "missed-mariophone",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -H 127.0.0.1 -p 3005",
+    "build": "next build && node scripts/migrate.mjs",
+    "start": "next start -H 127.0.0.1 -p 3005"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.3.14",
+    "next": "^14.2.33",
+    "pg": "^8.16.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}

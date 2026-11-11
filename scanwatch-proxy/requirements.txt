@@ -1,0 +1,2 @@
+# BLE host only (Raspberry Pi / Linux laptop). HTTP dry-run needs nothing extra.
+bleak>=0.22.0
